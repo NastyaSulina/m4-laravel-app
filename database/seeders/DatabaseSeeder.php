@@ -17,11 +17,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Selection::factory(5)->has(Accommodation::factory(10))->create();
-
-        User::factory()->create([
+        $users = User::factory(10)->create();
+        $testUser = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        $users->push($testUser);
+
+        foreach ($users as $user) {
+            Selection::factory(5)
+                ->for($user, 'owner')
+                ->has(Accommodation::factory(10))
+                ->create();
+        }
     }
 }

@@ -1,17 +1,21 @@
 <?php
 
 use App\Models\Selection;
+use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\seed;
 
-test('factory creates a selection without a user', function () {
-    $selection = Selection::factory()->create();
+test('factory creates a selection for an existing owner without adding users', function () {
+    $owner = User::factory()->create();
+
+    $selection = Selection::factory()->for($owner, 'owner')->create();
 
     assertModelExists($selection);
-    assertDatabaseCount('users', 0);
+    assertDatabaseCount('users', 1);
+    expect($selection->owner->id)->toBe($owner->id);
     if ($selection->start_date !== null && $selection->end_date !== null) {
         expect(strtotime($selection->end_date) > strtotime($selection->start_date))->toBeTrue();
     }
@@ -19,6 +23,7 @@ test('factory creates a selection without a user', function () {
 
 test('selection can be saved with only required fields', function () {
     $selection = new Selection;
+    $selection->owner()->associate(User::factory()->create());
     $selection->title = 'Summer in Madrid';
     $selection->search_type = 'trip';
     $selection->save();
@@ -46,13 +51,16 @@ test('selection preserves its dates', function (?string $startDate, ?string $end
     'neither date' => [null, null],
 ]);
 
-test('database seeder creates five selections', function () {
+test('database seeder creates selections and accommodations for its eleven users', function () {
     seed(DatabaseSeeder::class);
 
-    assertDatabaseCount('selections', 5);
-    assertDatabaseCount('accommodations', 50);
+    assertDatabaseCount('users', 11);
+    assertDatabaseCount('selections', 55);
+    assertDatabaseCount('accommodations', 550);
+    foreach (User::all() as $user) {
+        expect($user->selections()->count())->toBe(5);
+    }
     foreach (Selection::all() as $selection) {
         expect($selection->accommodations()->count())->toBe(10);
     }
-    assertDatabaseCount('users', 1);
 });

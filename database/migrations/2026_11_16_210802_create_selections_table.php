@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('selections', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('owner_id');
             $table->string('title');
             $table->string('search_type');
             $table->string('status')->default('active');

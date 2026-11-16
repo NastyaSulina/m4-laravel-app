@@ -1,5 +1,6 @@
 <x-base-layout :title="$selection->title">
     <article class="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 sm:p-8">
+        <p>Added by {{ $selection->owner->name }}</p>
         <h1 class="break-words text-3xl font-semibold tracking-tight text-slate-900">{{ $selection->title }}</h1>
 
         <p>Search type: {{ $selection->search_type }}</p>

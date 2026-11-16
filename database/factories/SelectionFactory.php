@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Selection;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,7 @@ class SelectionFactory extends Factory
         $endDate = $startDate->copy()->addDays(fake()->numberBetween(1, 30));
 
         return [
+            'owner_id' => User::factory(),
             'title' => fake()->city().' accommodation',
             'search_type' => fake()->randomElement(['trip', 'long_term']),
             'status' => 'active',
