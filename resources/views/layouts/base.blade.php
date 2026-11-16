@@ -6,6 +6,8 @@
     <title>{{ $title }}</title>
 </head>
 <body>
+    <x-layout.header />
     {{ $slot }}
+    <x-layout.footer />
 </body>
 </html>
