@@ -19,4 +19,28 @@
             &larr; Back to selections
         </a>
     </article>
+
+    <h2>Accommodations</h2>
+
+    <div>
+        @forelse ($selection->accommodations as $accommodation)
+            <article>
+                <h3>{{ $accommodation->title }}</h3>
+                <p>Address: {{ $accommodation->address }}</p>
+                <p>Status: {{ $accommodation->status }}</p>
+                @if ($accommodation->property_type)
+                    <p>Property type: {{ $accommodation->property_type }}</p>
+                @endif
+                <a
+                    href="{{ route('accommodations.show', $accommodation) }}"
+                >
+                    View accommodation &rarr;
+                </a>
+            </article>
+        @empty
+            <p>
+                No accommodations yet.
+            </p>
+        @endforelse
+    </div>
 </x-base-layout>

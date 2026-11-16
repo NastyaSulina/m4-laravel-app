@@ -16,6 +16,8 @@ class SelectionController extends Controller
 
     public function show(Selection $selection): View
     {
+        $selection->load('accommodations');
+
         return view('selections.show', compact('selection'));
     }
 }
