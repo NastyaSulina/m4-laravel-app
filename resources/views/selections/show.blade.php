@@ -1,4 +1,4 @@
-<div>
+<x-base-layout>
     <h1>{{ $selection->title }}</h1>
 
     <p>Search type: {{ $selection->search_type }}</p>
@@ -12,4 +12,4 @@
 
     <a href="{{ route('selections.index') }}">Back to selections</a>
 
-</div>
+</x-base-layout>
