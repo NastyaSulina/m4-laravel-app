@@ -20,12 +20,12 @@
         </a>
     </article>
 
-    <h2>Accommodations</h2>
+    <h2 class="mb-5 mt-10 text-2xl font-semibold text-slate-900">Accommodations</h2>
 
-    <div>
+    <div class="grid gap-5 sm:grid-cols-2">
         @forelse ($selection->accommodations as $accommodation)
-            <article>
-                <h3>{{ $accommodation->title }}</h3>
+            <article class="flex min-w-0 flex-col gap-3 rounded-xl border border-slate-200 bg-white p-6">
+                <h3 class="break-words text-xl font-semibold text-slate-900">{{ $accommodation->title }}</h3>
                 <p>Address: {{ $accommodation->address }}</p>
                 <p>Status: {{ $accommodation->status }}</p>
                 @if ($accommodation->property_type)
@@ -33,12 +33,14 @@
                 @endif
                 <a
                     href="{{ route('accommodations.show', $accommodation) }}"
+                    class="mt-auto self-start rounded-sm pt-3 font-medium text-teal-700 underline-offset-4 hover:underline
+                           focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
                 >
                     View accommodation &rarr;
                 </a>
             </article>
         @empty
-            <p>
+            <p class="rounded-xl border border-dashed border-slate-300 p-8 text-center text-slate-500 sm:col-span-2">
                 No accommodations yet.
             </p>
         @endforelse
