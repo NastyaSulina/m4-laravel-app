@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
  * Public Website routes
  */
 Route::get('/', WelcomeController::class)->name('welcome');
+Route::get('/selections', [\App\Http\Controllers\SelectionController::class, 'index'])->name('selections.index');
 
 // Todo: add your public routes here
 
