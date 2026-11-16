@@ -50,5 +50,9 @@ test('database seeder creates five selections', function () {
     seed(DatabaseSeeder::class);
 
     assertDatabaseCount('selections', 5);
+    assertDatabaseCount('accommodations', 50);
+    foreach (Selection::all() as $selection) {
+        expect($selection->accommodations()->count())->toBe(10);
+    }
     assertDatabaseCount('users', 1);
 });
