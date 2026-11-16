@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Selection::class, 'owner_id');
     }
+
+    public function accommodations(): HasMany
+    {
+        return $this->hasMany(Accommodation::class);
+    }
 }

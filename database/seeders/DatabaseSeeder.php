@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         foreach ($users as $user) {
             Selection::factory(5)
                 ->for($user, 'owner')
-                ->has(Accommodation::factory(10))
+                ->has(Accommodation::factory(10)->for($user))
                 ->create();
         }
     }

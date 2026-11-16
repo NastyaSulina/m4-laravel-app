@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('accommodations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
             $table->foreignId('selection_id');
             $table->string('title');
             $table->text('source_url');

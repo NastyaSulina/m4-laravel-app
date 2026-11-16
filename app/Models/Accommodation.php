@@ -11,6 +11,11 @@ class Accommodation extends Model
     /** @use HasFactory<\Database\Factories\AccommodationFactory> */
     use HasFactory;
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function selection(): BelongsTo
     {
         return $this->belongsTo(Selection::class);

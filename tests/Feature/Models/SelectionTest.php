@@ -62,5 +62,6 @@ test('database seeder creates selections and accommodations for its eleven users
     }
     foreach (Selection::all() as $selection) {
         expect($selection->accommodations()->count())->toBe(10);
+        expect($selection->accommodations()->where('user_id', $selection->owner_id)->count())->toBe(10);
     }
 });
