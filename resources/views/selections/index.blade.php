@@ -1,4 +1,4 @@
-<x-base-layout>
+<x-base-layout title="Selections">
     <h1>Selections</h1>
 
     @forelse ($selections as $selection)

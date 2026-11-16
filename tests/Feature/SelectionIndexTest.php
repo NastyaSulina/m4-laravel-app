@@ -11,6 +11,7 @@ test('selections page displays all selections', function () {
     get(route('selections.index'))
         ->assertOk()
         ->assertSeeText('Summer in Madrid')
+        ->assertSee('<title>Selections</title>', false)
         ->assertSee(route('selections.show', $selection))
         ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false)
         ->assertDontSee('<script>alert(1)</script>', false);

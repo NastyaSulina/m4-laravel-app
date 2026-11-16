@@ -1,4 +1,4 @@
-<x-base-layout>
+<x-base-layout :title="$selection->title">
     <h1>{{ $selection->title }}</h1>
 
     <p>Search type: {{ $selection->search_type }}</p>
