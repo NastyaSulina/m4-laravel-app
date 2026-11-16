@@ -11,6 +11,7 @@
         @if ($selection->end_date)
             <p>End date: {{ $selection->end_date }}</p>
         @endif
+        <a href="{{ route('selections.show', $selection) }}">View selection</a>
     </div>
 @empty
     <p>No selections yet.</p>

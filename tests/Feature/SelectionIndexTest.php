@@ -5,12 +5,13 @@ use App\Models\Selection;
 use function Pest\Laravel\get;
 
 test('selections page displays all selections', function () {
-    Selection::factory()->create(['title' => 'Summer in Madrid']);
+    $selection = Selection::factory()->create(['title' => 'Summer in Madrid']);
     Selection::factory()->create(['title' => '<script>alert(1)</script>']);
 
     get(route('selections.index'))
         ->assertOk()
         ->assertSeeText('Summer in Madrid')
+        ->assertSee(route('selections.show', $selection))
         ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false)
         ->assertDontSee('<script>alert(1)</script>', false);
 });

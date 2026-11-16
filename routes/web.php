@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
  */
 Route::get('/', WelcomeController::class)->name('welcome');
 Route::get('/selections', [\App\Http\Controllers\SelectionController::class, 'index'])->name('selections.index');
+Route::get('/selections/{selection}', [\App\Http\Controllers\SelectionController::class, 'show'])->name('selections.show');
 
 // Todo: add your public routes here
 

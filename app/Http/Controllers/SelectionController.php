@@ -13,4 +13,9 @@ class SelectionController extends Controller
 
         return view('selections.index', compact('selections'));
     }
+
+    public function show(Selection $selection): View
+    {
+        return view('selections.show', compact('selection'));
+    }
 }
