@@ -31,6 +31,11 @@
                            {{ $criterion->is_required ? 'border-teal-200 bg-teal-50 text-teal-800' : 'border-slate-200 bg-slate-100 text-slate-600' }}"
                 >
                     {{ $criterion->title }} — {{ $criterion->is_required ? 'Required' : 'Optional' }}
+                    <form action="{{ route('userzone.criteria.destroy', $criterion) }}" method="post">
+                        @method('delete')
+                        @csrf
+                        <button type="submit">Delete</button>
+                    </form>
                 </li>
             @endforeach
         </ul>

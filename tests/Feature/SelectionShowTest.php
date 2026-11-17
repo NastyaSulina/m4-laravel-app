@@ -63,7 +63,7 @@ test('selection page lists only its own criteria with their requirement', functi
     actingAs($user);
 
     $selection = Selection::factory()->for($user, 'owner')->create();
-    Criterion::factory()->for($selection)->create(['title' => 'Wi-Fi', 'is_required' => true]);
+    $criterion = Criterion::factory()->for($selection)->create(['title' => 'Wi-Fi', 'is_required' => true]);
     Criterion::factory()->for($selection)->create(['title' => 'Balcony', 'is_required' => false]);
     Criterion::factory()->create(['title' => 'Unrelated criterion']);
 
@@ -71,6 +71,10 @@ test('selection page lists only its own criteria with their requirement', functi
         ->assertOk()
         ->assertSeeText('Wi-Fi — Required')
         ->assertSeeText('Balcony — Optional')
+        ->assertSee('action="'.route('userzone.criteria.destroy', $criterion).'"', false)
+        ->assertSee('name="_method" value="delete"', false)
+        ->assertSee('name="_token"', false)
+        ->assertSeeText('Delete')
         ->assertDontSeeText('Unrelated criterion');
 });
 
