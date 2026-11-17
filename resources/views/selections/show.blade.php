@@ -1,6 +1,6 @@
 <x-base-layout :title="$selection->title">
     <article class="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 sm:p-8">
-        <p>Added by {{ $selection->owner->name }}</p>
+        <p class="text-sm text-slate-500">Added by {{ $selection->owner->name }}</p>
         <h1 class="break-words text-3xl font-semibold tracking-tight text-slate-900">{{ $selection->title }}</h1>
 
         <p>Search type: {{ $selection->search_type }}</p>
@@ -22,11 +22,16 @@
     </article>
 
     @if ($selection->criteria->isNotEmpty())
-        <h2>Criteria</h2>
+        <h2 class="mb-3 mt-8 text-lg font-semibold text-slate-900">Criteria</h2>
 
-        <ul>
+        <ul class="flex flex-wrap gap-2">
             @foreach ($selection->criteria as $criterion)
-                <li>{{ $criterion->title }} — {{ $criterion->is_required ? 'Required' : 'Optional' }}</li>
+                <li
+                    class="rounded-full border px-4 py-2 text-sm
+                           {{ $criterion->is_required ? 'border-teal-200 bg-teal-50 text-teal-800' : 'border-slate-200 bg-slate-100 text-slate-600' }}"
+                >
+                    {{ $criterion->title }} — {{ $criterion->is_required ? 'Required' : 'Optional' }}
+                </li>
             @endforeach
         </ul>
     @endif

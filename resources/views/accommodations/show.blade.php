@@ -1,6 +1,6 @@
 <x-base-layout :title="$accommodation->title">
     <article class="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 sm:p-8">
-        <p>Added by {{ $accommodation->user->name }}</p>
+        <p class="text-sm text-slate-500">Added by {{ $accommodation->user->name }}</p>
         <h1 class="break-words text-3xl font-semibold tracking-tight text-slate-900">{{ $accommodation->title }}</h1>
 
         <p>Address: {{ $accommodation->address }}</p>
