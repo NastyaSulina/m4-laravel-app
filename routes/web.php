@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AccommodationController;
-use App\Http\Controllers\SelectionController;
+use App\Http\Controllers\Userzone\AccommodationController;
+use App\Http\Controllers\Userzone\SelectionController;
 use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\ProfileController;
 use App\Http\Controllers\WelcomeController;
@@ -15,7 +15,6 @@ Route::get('/selections', [SelectionController::class, 'index'])->name('selectio
 Route::get('/selections/{selection}', [SelectionController::class, 'show'])->name('selections.show');
 Route::get('/accommodations/{accommodation}', [AccommodationController::class, 'show'])->name('accommodations.show');
 
-// Todo: add your public routes here
 
 /*
  * Authentication routes
@@ -28,8 +27,6 @@ require __DIR__.'/auth.php';
 Route::middleware('auth')->group(function () {
     // For the user's dashboard (after login)
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
-
-    // Todo: add your Userzone routes here
 
     // For the user's profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

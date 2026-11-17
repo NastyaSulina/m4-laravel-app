@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Userzone;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Selection;
 use Illuminate\View\View;
@@ -11,13 +13,13 @@ class SelectionController extends Controller
     {
         $selections = Selection::all();
 
-        return view('selections.index', compact('selections'));
+        return view('userzone.selections.index', compact('selections'));
     }
 
     public function show(Selection $selection): View
     {
         $selection->load('accommodations', 'criteria');
 
-        return view('selections.show', compact('selection'));
+        return view('userzone.selections.show', compact('selection'));
     }
 }
