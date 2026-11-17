@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Criterion;
 use App\Models\Accommodation;
 use App\Models\Selection;
 
@@ -46,6 +47,28 @@ test('selection page displays the selected selection', function (?string $startD
 
 test('selection page returns 404 for a missing selection', function () {
     get(route('selections.show', 999))->assertNotFound();
+});
+
+test('selection page lists only its own criteria with their requirement', function () {
+    $selection = Selection::factory()->create();
+    Criterion::factory()->for($selection)->create(['title' => 'Wi-Fi', 'is_required' => true]);
+    Criterion::factory()->for($selection)->create(['title' => 'Balcony', 'is_required' => false]);
+    Criterion::factory()->create(['title' => 'Unrelated criterion']);
+
+    get(route('selections.show', $selection))
+        ->assertOk()
+        ->assertSeeText('Wi-Fi — Required')
+        ->assertSeeText('Balcony — Optional')
+        ->assertDontSeeText('Unrelated criterion');
+});
+
+test('selection page hides the criteria section when it has no criteria', function () {
+    $selection = Selection::factory()->create();
+
+    get(route('selections.show', $selection))
+        ->assertOk()
+        ->assertDontSeeText('Criteria')
+        ->assertDontSeeText('No criteria yet.');
 });
 
 test('selection page lists only its own accommodations', function () {

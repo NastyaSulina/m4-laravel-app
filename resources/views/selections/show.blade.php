@@ -21,6 +21,16 @@
         </a>
     </article>
 
+    @if ($selection->criteria->isNotEmpty())
+        <h2>Criteria</h2>
+
+        <ul>
+            @foreach ($selection->criteria as $criterion)
+                <li>{{ $criterion->title }} — {{ $criterion->is_required ? 'Required' : 'Optional' }}</li>
+            @endforeach
+        </ul>
+    @endif
+
     <h2 class="mb-5 mt-10 text-2xl font-semibold text-slate-900">Accommodations</h2>
 
     <div class="grid gap-5 sm:grid-cols-2">
