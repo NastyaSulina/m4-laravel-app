@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\SelectionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Selection extends Model
 {
-    /** @use HasFactory<\Database\Factories\SelectionFactory> */
+    /** @use HasFactory<SelectionFactory> */
     use HasFactory;
 
     public function accommodations(): HasMany

@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Selection;
 use App\Models\Accommodation;
+use App\Models\Selection;
 
 use function Pest\Laravel\get;
 

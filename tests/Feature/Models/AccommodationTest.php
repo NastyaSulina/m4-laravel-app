@@ -1,9 +1,10 @@
 <?php
 
 use App\Models\Accommodation;
+use App\Models\Selection;
 
-use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\assertDatabaseCount;
+use function Pest\Laravel\assertModelExists;
 
 test('factory creates an accommodation belonging to a selection', function () {
     $accommodation = Accommodation::factory()->create();
@@ -16,7 +17,7 @@ test('factory creates an accommodation belonging to a selection', function () {
 });
 
 test('accommodation can be saved with only required fields', function () {
-    $selection = \App\Models\Selection::factory()->create();
+    $selection = Selection::factory()->create();
     $accommodation = new Accommodation;
     $accommodation->selection()->associate($selection);
     $accommodation->user()->associate($selection->owner);
@@ -33,7 +34,7 @@ test('accommodation can be saved with only required fields', function () {
 });
 
 test('factory can attach an accommodation to an existing selection', function () {
-    $selection = \App\Models\Selection::factory()->create();
+    $selection = Selection::factory()->create();
 
     $accommodation = Accommodation::factory()->for($selection)->for($selection->owner)->create();
 

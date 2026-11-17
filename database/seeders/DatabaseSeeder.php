@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Selection;
 use App\Models\Accommodation;
+use App\Models\Selection;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

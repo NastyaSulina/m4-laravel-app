@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AccommodationController;
+use App\Http\Controllers\SelectionController;
 use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\ProfileController;
 use App\Http\Controllers\WelcomeController;
@@ -9,9 +11,9 @@ use Illuminate\Support\Facades\Route;
  * Public Website routes
  */
 Route::get('/', WelcomeController::class)->name('welcome');
-Route::get('/selections', [\App\Http\Controllers\SelectionController::class, 'index'])->name('selections.index');
-Route::get('/selections/{selection}', [\App\Http\Controllers\SelectionController::class, 'show'])->name('selections.show');
-Route::get('/accommodations/{accommodation}', [\App\Http\Controllers\AccommodationController::class, 'show'])->name('accommodations.show');
+Route::get('/selections', [SelectionController::class, 'index'])->name('selections.index');
+Route::get('/selections/{selection}', [SelectionController::class, 'show'])->name('selections.show');
+Route::get('/accommodations/{accommodation}', [AccommodationController::class, 'show'])->name('accommodations.show');
 
 // Todo: add your public routes here
 
@@ -19,7 +21,6 @@ Route::get('/accommodations/{accommodation}', [\App\Http\Controllers\Accommodati
  * Authentication routes
  */
 require __DIR__.'/auth.php';
-
 
 /*
  * Userzone routes

@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\AccommodationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Accommodation extends Model
 {
-    /** @use HasFactory<\Database\Factories\AccommodationFactory> */
+    /** @use HasFactory<AccommodationFactory> */
     use HasFactory;
 
     public function user(): BelongsTo
