@@ -24,7 +24,7 @@ class SelectionFactory extends Factory
         return [
             'owner_id' => User::factory(),
             'title' => fake()->city().' accommodation',
-            'search_type' => fake()->randomElement(['trip', 'long_term']),
+            'search_type' => fake()->randomElement(['short_stay', 'long_term']),
             'status' => 'active',
             'start_date' => fake()->boolean() ? $startDate->toDateString() : null,
             'end_date' => fake()->boolean() ? $endDate->toDateString() : null,
