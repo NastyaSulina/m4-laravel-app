@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Userzone\AccommodationController;
+use App\Http\Controllers\Userzone\CriterionController;
 use App\Http\Controllers\Userzone\SelectionController;
 use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\ProfileController;
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/selections', [SelectionController::class, 'index'])->name('userzone.selections.index');
     Route::get('/user/selections/{selection}', [SelectionController::class, 'show'])->name('userzone.selections.show');
     Route::get('/user/accommodations/{accommodation}', [AccommodationController::class, 'show'])->name('userzone.accommodations.show');
+    Route::delete('/user/criteria/{criterion}', [CriterionController::class, 'destroy'])->name('userzone.criteria.destroy');
 
     // For the user's profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
