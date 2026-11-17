@@ -14,7 +14,7 @@
                 <p>End date: {{ $selection->end_date }}</p>
             @endif
             <a
-                href="{{ route('selections.show', $selection) }}"
+                href="{{ route('userzone.selections.show', $selection) }}"
                 class="mt-auto self-start rounded-sm pt-3 font-medium text-teal-700 underline-offset-4 hover:underline
                        focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
             >

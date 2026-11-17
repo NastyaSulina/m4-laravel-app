@@ -13,7 +13,7 @@
         @endif
 
         <a
-            href="{{ route('selections.index') }}"
+            href="{{ route('userzone.selections.index') }}"
             class="mt-4 self-start rounded-sm font-medium text-teal-700 underline-offset-4 hover:underline
                    focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
         >
@@ -48,7 +48,7 @@
                     <p>Property type: {{ $accommodation->property_type }}</p>
                 @endif
                 <a
-                    href="{{ route('accommodations.show', $accommodation) }}"
+                    href="{{ route('userzone.accommodations.show', $accommodation) }}"
                     class="mt-auto self-start rounded-sm pt-3 font-medium text-teal-700 underline-offset-4 hover:underline
                            focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
                 >

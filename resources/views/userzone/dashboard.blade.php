@@ -10,6 +10,7 @@
             <div class="bg-white overflow-hidden shadow-xs sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     You're logged in!
+                    <a href="{{ route('userzone.selections.index') }}">Selections</a>
                 </div>
             </div>
         </div>

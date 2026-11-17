@@ -1,11 +1,19 @@
 <?php
 
 use App\Models\Accommodation;
+use App\Models\Selection;
 
+use App\Models\User;
+
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 test('accommodation page displays its details', function (?string $propertyType, ?string $note) {
-    $accommodation = Accommodation::factory()->create([
+    $user = User::factory()->create();
+    actingAs($user);
+
+    $selection = Selection::factory()->for($user, 'owner')->create();
+    $accommodation = Accommodation::factory()->for($selection)->for($user)->create([
         'title' => 'Madrid apartment',
         'address' => 'Calle Mayor 1',
         'status' => 'shortlisted',
@@ -14,13 +22,13 @@ test('accommodation page displays its details', function (?string $propertyType,
         'note' => $note,
     ]);
 
-    $response = get(route('accommodations.show', $accommodation))
+    $response = get(route('userzone.accommodations.show', $accommodation))
         ->assertOk()
         ->assertSee('<title>Madrid apartment</title>', false)
         ->assertSeeText('Address: Calle Mayor 1')
         ->assertSeeText('Status: shortlisted')
         ->assertSeeText('Source: https://example.com/listing/1')
-        ->assertSee(route('selections.show', $accommodation->selection_id));
+        ->assertSee(route('userzone.selections.show', $accommodation->selection_id));
 
     if ($propertyType !== null) {
         $response->assertSeeText('Property type: '.$propertyType);
@@ -42,5 +50,8 @@ test('accommodation page displays its details', function (?string $propertyType,
 ]);
 
 test('accommodation page returns 404 for a missing accommodation', function () {
-    get(route('accommodations.show', 999))->assertNotFound();
+    $user = User::factory()->create();
+    actingAs($user);
+
+    get(route('userzone.accommodations.show', 999))->assertNotFound();
 });

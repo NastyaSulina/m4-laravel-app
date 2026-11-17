@@ -4,19 +4,25 @@ use App\Models\Criterion;
 use App\Models\Accommodation;
 use App\Models\Selection;
 
+use App\Models\User;
+
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 test('selection page displays the selected selection', function (?string $startDate, ?string $endDate) {
-    $selection = Selection::factory()->create([
+    $user = User::factory()->create();
+    actingAs($user);
+
+    $selection = Selection::factory()->for($user, 'owner')->create([
         'title' => '<script>alert(1)</script>',
         'search_type' => 'trip',
         'status' => 'active',
         'start_date' => $startDate,
         'end_date' => $endDate,
     ]);
-    Selection::factory()->create(['title' => 'Another selection']);
+    Selection::factory()->for($user, 'owner')->create(['title' => 'Another selection']);
 
-    $response = get(route('selections.show', $selection))
+    $response = get(route('userzone.selections.show', $selection))
         ->assertOk()
         ->assertSee('<title>&lt;script&gt;alert(1)&lt;/script&gt;</title>', false)
         ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false)
@@ -24,7 +30,7 @@ test('selection page displays the selected selection', function (?string $startD
         ->assertSeeText('Search type: trip')
         ->assertSeeText('Status: active')
         ->assertDontSeeText('Another selection')
-        ->assertSee(route('selections.index'));
+        ->assertSee(route('userzone.selections.index'));
     $response->assertSeeText('No accommodations yet.');
 
     if ($startDate !== null) {
@@ -46,16 +52,22 @@ test('selection page displays the selected selection', function (?string $startD
 ]);
 
 test('selection page returns 404 for a missing selection', function () {
-    get(route('selections.show', 999))->assertNotFound();
+    $user = User::factory()->create();
+    actingAs($user);
+
+    get(route('userzone.selections.show', 999))->assertNotFound();
 });
 
 test('selection page lists only its own criteria with their requirement', function () {
-    $selection = Selection::factory()->create();
+    $user = User::factory()->create();
+    actingAs($user);
+
+    $selection = Selection::factory()->for($user, 'owner')->create();
     Criterion::factory()->for($selection)->create(['title' => 'Wi-Fi', 'is_required' => true]);
     Criterion::factory()->for($selection)->create(['title' => 'Balcony', 'is_required' => false]);
     Criterion::factory()->create(['title' => 'Unrelated criterion']);
 
-    get(route('selections.show', $selection))
+    get(route('userzone.selections.show', $selection))
         ->assertOk()
         ->assertSeeText('Wi-Fi — Required')
         ->assertSeeText('Balcony — Optional')
@@ -63,16 +75,22 @@ test('selection page lists only its own criteria with their requirement', functi
 });
 
 test('selection page hides the criteria section when it has no criteria', function () {
-    $selection = Selection::factory()->create();
+    $user = User::factory()->create();
+    actingAs($user);
 
-    get(route('selections.show', $selection))
+    $selection = Selection::factory()->for($user, 'owner')->create();
+
+    get(route('userzone.selections.show', $selection))
         ->assertOk()
         ->assertDontSeeText('Criteria')
         ->assertDontSeeText('No criteria yet.');
 });
 
 test('selection page lists only its own accommodations', function () {
-    $selection = Selection::factory()->create();
+    $user = User::factory()->create();
+    actingAs($user);
+
+    $selection = Selection::factory()->for($user, 'owner')->create();
     $accommodation = Accommodation::factory()->for($selection)->create([
         'title' => 'Madrid apartment',
         'address' => 'Calle Mayor 1',
@@ -81,12 +99,12 @@ test('selection page lists only its own accommodations', function () {
     ]);
     Accommodation::factory()->create(['title' => 'Unrelated accommodation']);
 
-    get(route('selections.show', $selection))
+    get(route('userzone.selections.show', $selection))
         ->assertOk()
         ->assertSeeText('Madrid apartment')
         ->assertSeeText('Address: Calle Mayor 1')
         ->assertSeeText('Status: shortlisted')
         ->assertSeeText('Property type: apartment')
-        ->assertSee(route('accommodations.show', $accommodation))
+        ->assertSee(route('userzone.accommodations.show', $accommodation))
         ->assertDontSeeText('Unrelated accommodation');
 });

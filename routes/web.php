@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\Route;
  * Public Website routes
  */
 Route::get('/', WelcomeController::class)->name('welcome');
-Route::get('/selections', [SelectionController::class, 'index'])->name('selections.index');
-Route::get('/selections/{selection}', [SelectionController::class, 'show'])->name('selections.show');
-Route::get('/accommodations/{accommodation}', [AccommodationController::class, 'show'])->name('accommodations.show');
 
 
 /*
@@ -27,6 +24,10 @@ require __DIR__.'/auth.php';
 Route::middleware('auth')->group(function () {
     // For the user's dashboard (after login)
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+    Route::get('/user/selections', [SelectionController::class, 'index'])->name('userzone.selections.index');
+    Route::get('/user/selections/{selection}', [SelectionController::class, 'show'])->name('userzone.selections.show');
+    Route::get('/user/accommodations/{accommodation}', [AccommodationController::class, 'show'])->name('userzone.accommodations.show');
 
     // For the user's profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -17,7 +17,7 @@ class Header extends Component
     {
         $this->menu = [
             'Home' => route('welcome'),
-            'Selections' => route('selections.index'),
+            'Selections' => route('userzone.selections.index'),
         ];
     }
 
