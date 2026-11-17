@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Accommodation;
+use App\Models\Criterion;
 use App\Models\Selection;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -29,6 +30,7 @@ class DatabaseSeeder extends Seeder
             Selection::factory(5)
                 ->for($user, 'owner')
                 ->has(Accommodation::factory(10)->for($user))
+                ->has(Criterion::factory(5))
                 ->create();
         }
     }

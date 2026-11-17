@@ -51,16 +51,18 @@ test('selection preserves its dates', function (?string $startDate, ?string $end
     'neither date' => [null, null],
 ]);
 
-test('database seeder creates selections and accommodations for its eleven users', function () {
+test('database seeder creates selections with accommodations and criteria for its eleven users', function () {
     seed(DatabaseSeeder::class);
 
     assertDatabaseCount('users', 11);
     assertDatabaseCount('selections', 55);
     assertDatabaseCount('accommodations', 550);
+    assertDatabaseCount('criteria', 275);
     foreach (User::all() as $user) {
         expect($user->selections()->count())->toBe(5);
     }
     foreach (Selection::all() as $selection) {
+        expect($selection->criteria()->count())->toBe(5);
         expect($selection->accommodations()->count())->toBe(10);
         expect($selection->accommodations()->where('user_id', $selection->owner_id)->count())->toBe(10);
     }

@@ -18,6 +18,11 @@ class Selection extends Model
         return $this->hasMany(Accommodation::class);
     }
 
+    public function criteria(): HasMany
+    {
+        return $this->hasMany(Criterion::class);
+    }
+
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);
