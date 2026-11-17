@@ -74,7 +74,7 @@ test('selection page lists only its own criteria with their requirement', functi
         ->assertSee('action="'.route('userzone.criteria.destroy', $criterion).'"', false)
         ->assertSee('name="_method" value="delete"', false)
         ->assertSee('name="_token"', false)
-        ->assertSeeText('Delete')
+        ->assertSee('aria-label="Delete criterion: Wi-Fi"', false)
         ->assertDontSeeText('Unrelated criterion');
 });
 
