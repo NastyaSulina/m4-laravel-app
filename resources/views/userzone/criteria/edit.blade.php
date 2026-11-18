@@ -21,10 +21,10 @@
     </form>
 
     <a
-        href="{{ route('userzone.selections.show', $selection) }}"
+        href="{{ route('userzone.selections.criteria.index', $selection) }}"
         class="mt-5 inline-block rounded-sm font-medium text-teal-700 underline-offset-4 hover:underline
                focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
     >
-        Back to selection
+        Back to criteria
     </a>
 </x-base-layout>

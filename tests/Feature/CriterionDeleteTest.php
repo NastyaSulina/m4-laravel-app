@@ -9,7 +9,7 @@ use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\assertModelMissing;
 use function Pest\Laravel\delete;
 
-test('a user can delete a criterion and return to its selection', function () {
+test('a user can delete a criterion and return to its criteria list', function () {
     $user = User::factory()->create();
     $selection = Selection::factory()->for($user, 'owner')->create();
     $criterion = Criterion::factory()->for($selection)->create();
@@ -17,7 +17,7 @@ test('a user can delete a criterion and return to its selection', function () {
     actingAs($user);
 
     delete(route('userzone.selections.criteria.destroy', [$criterion->selection_id, $criterion]))
-        ->assertRedirect(route('userzone.selections.show', $selection));
+        ->assertRedirect(route('userzone.selections.criteria.index', $selection));
 
     assertModelMissing($criterion);
     assertModelExists($otherCriterion);

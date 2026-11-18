@@ -11,6 +11,13 @@ use Illuminate\View\View;
 
 class CriterionController extends Controller
 {
+    public function index(Selection $selection): View
+    {
+        $criteria = $selection->criteria()->get();
+
+        return view('userzone.criteria.index', compact('selection', 'criteria'));
+    }
+
     public function store(Request $request, Selection $selection): RedirectResponse
     {
         $request->validate([
@@ -23,7 +30,7 @@ class CriterionController extends Controller
         $criterion->is_required = $request->boolean('is_required');
         $selection->criteria()->save($criterion);
 
-        return redirect()->route('userzone.selections.show', $selection);
+        return redirect()->route('userzone.selections.criteria.index', $selection);
     }
 
     public function edit(Selection $selection, Criterion $criterion): View
@@ -42,13 +49,13 @@ class CriterionController extends Controller
         $criterion->is_required = $request->boolean('is_required');
         $criterion->save();
 
-        return redirect()->route('userzone.selections.show', $selection);
+        return redirect()->route('userzone.selections.criteria.index', $selection);
     }
 
     public function destroy(Selection $selection, Criterion $criterion): RedirectResponse
     {
         $criterion->delete();
 
-        return redirect()->route('userzone.selections.show', $criterion->selection_id);
+        return redirect()->route('userzone.selections.criteria.index', $selection);
     }
 }

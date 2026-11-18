@@ -69,16 +69,17 @@ test('selection page lists only its own criteria with their requirement', functi
 
     get(route('userzone.selections.show', $selection))
         ->assertOk()
-        ->assertSeeText('Wi-Fi — Required')
-        ->assertSeeText('Balcony — Optional')
-        ->assertSee('action="'.route('userzone.selections.criteria.destroy', [$criterion->selection_id, $criterion]).'"', false)
-        ->assertSee('name="_method" value="delete"', false)
-        ->assertSee('name="_token"', false)
-        ->assertSee('aria-label="Delete criterion: Wi-Fi"', false)
+        ->assertSeeText('Wi-Fi')
+        ->assertSeeText('Balcony')
+        ->assertSee('aria-label="Required"', false)
+        ->assertSee(route('userzone.selections.criteria.index', $selection))
+        ->assertDontSeeText('Edit')
+        ->assertDontSeeText('Add criterion')
+        ->assertDontSee('name="_method"', false)
         ->assertDontSeeText('Unrelated criterion');
 });
 
-test('selection page hides the criteria section when it has no criteria', function () {
+test('selection page offers criteria management when it has no criteria', function () {
     $user = User::factory()->create();
     actingAs($user);
 
@@ -86,7 +87,7 @@ test('selection page hides the criteria section when it has no criteria', functi
 
     get(route('userzone.selections.show', $selection))
         ->assertOk()
-        ->assertDontSeeText('Criteria')
+        ->assertSeeText('Manage criteria')
         ->assertDontSeeText('No criteria yet.');
 });
 
