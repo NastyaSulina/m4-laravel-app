@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/user/selections', [SelectionController::class, 'index'])->name('userzone.selections.index');
+    Route::get('/user/selections/create', [SelectionController::class, 'create'])->name('userzone.selections.create');
+    Route::post('/user/selections', [SelectionController::class, 'store'])->name('userzone.selections.store');
     Route::get('/user/selections/{selection}', [SelectionController::class, 'show'])->name('userzone.selections.show');
     Route::prefix('/user/selections/{selection}')->name('userzone.selections.')->scopeBindings()->group(function () {
         Route::get('/accommodations/{accommodation}', [AccommodationController::class, 'show'])->name('accommodations.show');
