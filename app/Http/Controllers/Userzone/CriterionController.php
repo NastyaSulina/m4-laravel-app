@@ -19,7 +19,7 @@ class CriterionController extends Controller
     public function update(Request $request, Selection $selection, Criterion $criterion): RedirectResponse
     {
         $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'min:3', 'max:255'],
             'is_required' => ['boolean'],
         ]);
 

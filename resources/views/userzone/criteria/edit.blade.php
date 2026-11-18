@@ -5,20 +5,8 @@
         @method('PUT')
         @csrf
 
-        <label for="title">Title</label>
-        <input id="title" name="title" type="text" value="{{ old('title', $criterion->title) }}" maxlength="255" required>
-        @error('title')
-            <p>{{ $message }}</p>
-        @enderror
-
-        <input type="hidden" name="is_required" value="0">
-        <label>
-            <input type="checkbox" name="is_required" value="1" @checked(old('is_required', $criterion->is_required))>
-            Required
-        </label>
-        @error('is_required')
-            <p>{{ $message }}</p>
-        @enderror
+        <x-form.textinput name="title" label="Title" :value="$criterion->title" minlength="3" maxlength="255" required />
+        <x-form.checkbox name="is_required" label="Required" :checked="$criterion->is_required" />
 
         <button type="submit">Update criterion</button>
     </form>
