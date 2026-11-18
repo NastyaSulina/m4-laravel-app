@@ -13,12 +13,9 @@
             <p class="whitespace-pre-line break-words">Note: {{ $accommodation->note }}</p>
         @endif
 
-        <a
-            href="{{ route('userzone.selections.show', $accommodation->selection_id) }}"
-            class="mt-4 self-start rounded-sm font-medium text-teal-700 underline-offset-4 hover:underline
-                   focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
-        >
-            &larr; Back to selection
-        </a>
+        <x-ui.button
+            :href="route('userzone.selections.show', $accommodation->selection_id)"
+            variant="tertiary" class="mt-4 self-start"
+        >Back to selection</x-ui.button>
     </article>
 </x-base-layout>

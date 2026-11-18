@@ -13,20 +13,8 @@
         <x-form.textinput name="start_date" label="Start date" type="date" />
         <x-form.textinput name="end_date" label="End date" type="date" />
 
-        <button
-            type="submit"
-            class="self-start cursor-pointer rounded-lg bg-teal-700 px-4 py-2 font-medium text-white hover:bg-teal-800
-                   focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
-        >
-            Add selection
-        </button>
+        <x-ui.button type="submit" class="self-start">Add selection</x-ui.button>
     </form>
 
-    <a
-        href="{{ route('userzone.selections.index') }}"
-        class="mt-5 inline-block rounded-sm font-medium text-teal-700 underline-offset-4 hover:underline
-               focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
-    >
-        Back to selections
-    </a>
+    <x-ui.button :href="route('userzone.selections.index')" variant="tertiary" class="mt-5">Back to selections</x-ui.button>
 </x-base-layout>

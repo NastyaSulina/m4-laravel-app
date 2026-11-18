@@ -1,13 +1,7 @@
 <x-base-layout title="Selections">
     <h1 class="mb-6 text-3xl font-semibold tracking-tight text-slate-900">Selections</h1>
 
-    <a
-        href="{{ route('userzone.selections.create') }}"
-        class="mb-6 inline-block rounded-lg bg-teal-700 px-4 py-2 font-medium text-white hover:bg-teal-800
-               focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
-    >
-        New selection
-    </a>
+    <x-ui.button :href="route('userzone.selections.create')" class="mb-6">New selection</x-ui.button>
 
     <div class="grid gap-5 sm:grid-cols-2">
     @forelse ($selections as $selection)
@@ -21,13 +15,7 @@
             @if ($selection->end_date)
                 <p>End date: {{ $selection->end_date }}</p>
             @endif
-            <a
-                href="{{ route('userzone.selections.show', $selection) }}"
-                class="mt-auto self-start rounded-sm pt-3 font-medium text-teal-700 underline-offset-4 hover:underline
-                       focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
-            >
-                View selection &rarr;
-            </a>
+            <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="mt-auto self-start pt-3">View selection</x-ui.button>
         </div>
     @empty
         <p class="rounded-xl border border-dashed border-slate-300 p-8 text-center text-slate-500 sm:col-span-2">No selections yet.</p>

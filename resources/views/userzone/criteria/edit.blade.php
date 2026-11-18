@@ -11,20 +11,8 @@
         <x-form.textinput name="title" label="Title" :value="$criterion->title" minlength="3" maxlength="255" required />
         <x-form.checkbox name="is_required" label="Required" :checked="$criterion->is_required" />
 
-        <button
-            type="submit"
-            class="self-start cursor-pointer rounded-lg bg-teal-700 px-4 py-2 font-medium text-white hover:bg-teal-800
-                   focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
-        >
-            Update criterion
-        </button>
+        <x-ui.button type="submit" class="self-start">Update criterion</x-ui.button>
     </form>
 
-    <a
-        href="{{ route('userzone.selections.criteria.index', $selection) }}"
-        class="mt-5 inline-block rounded-sm font-medium text-teal-700 underline-offset-4 hover:underline
-               focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
-    >
-        Back to criteria
-    </a>
+    <x-ui.button :href="route('userzone.selections.criteria.index', $selection)" variant="tertiary" class="mt-5">Back to criteria</x-ui.button>
 </x-base-layout>
