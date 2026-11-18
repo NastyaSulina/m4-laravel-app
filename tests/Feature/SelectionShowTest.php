@@ -67,16 +67,21 @@ test('selection page lists only its own criteria with their requirement', functi
     Criterion::factory()->for($selection)->create(['title' => 'Balcony', 'is_required' => false]);
     Criterion::factory()->create(['title' => 'Unrelated criterion']);
 
-    get(route('userzone.selections.show', $selection))
+    $requiredMarker = '<span title="Required" aria-hidden="true">*</span>';
+
+    $response = get(route('userzone.selections.show', $selection))
         ->assertOk()
         ->assertSeeText('Wi-Fi')
         ->assertSeeText('Balcony')
-        ->assertSee('aria-label="Required"', false)
+        ->assertSee('<span class="sr-only">Required</span>', false)
+        ->assertSeeInOrder(['Wi-Fi', $requiredMarker, 'Balcony'], false)
         ->assertSee(route('userzone.selections.criteria.index', $selection))
         ->assertDontSeeText('Edit')
         ->assertDontSeeText('Add criterion')
         ->assertDontSee('name="_method"', false)
         ->assertDontSeeText('Unrelated criterion');
+
+    expect(substr_count($response->getContent(), $requiredMarker))->toBe(1);
 });
 
 test('selection page offers criteria management when it has no criteria', function () {

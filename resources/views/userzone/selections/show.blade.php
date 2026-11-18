@@ -22,7 +22,13 @@
     </article>
 
     <h2 class="mb-3 mt-8 text-lg font-semibold text-slate-900">Criteria</h2>
-    <a href="{{ route('userzone.selections.criteria.index', $selection) }}">Manage criteria</a>
+    <a
+        href="{{ route('userzone.selections.criteria.index', $selection) }}"
+        class="mb-4 inline-block rounded-sm text-sm font-medium text-teal-700 underline-offset-4 hover:underline
+               focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
+    >
+        Manage criteria
+    </a>
 
     @if ($selection->criteria->isNotEmpty())
         <ul class="flex flex-wrap gap-2">
@@ -33,7 +39,8 @@
                 >
                     {{ $criterion->title }}
                     @if ($criterion->is_required)
-                        <span title="Required" aria-label="Required">★</span>
+                        <span title="Required" aria-hidden="true">*</span>
+                        <span class="sr-only">Required</span>
                     @endif
                 </li>
             @endforeach
