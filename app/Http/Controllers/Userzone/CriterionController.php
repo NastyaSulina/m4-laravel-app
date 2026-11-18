@@ -11,6 +11,21 @@ use Illuminate\View\View;
 
 class CriterionController extends Controller
 {
+    public function store(Request $request, Selection $selection): RedirectResponse
+    {
+        $request->validate([
+            'title' => ['required', 'string', 'min:3', 'max:255'],
+            'is_required' => ['boolean'],
+        ]);
+
+        $criterion = new Criterion;
+        $criterion->title = $request->title;
+        $criterion->is_required = $request->boolean('is_required');
+        $selection->criteria()->save($criterion);
+
+        return redirect()->route('userzone.selections.show', $selection);
+    }
+
     public function edit(Selection $selection, Criterion $criterion): View
     {
         return view('userzone.criteria.edit', compact('selection', 'criterion'));
