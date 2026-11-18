@@ -12,7 +12,7 @@ use function Pest\Laravel\seed;
 
 test('guests are redirected to login from userzone content', function (string $path) {
     get($path)->assertRedirect(route('login'));
-})->with(['/user/selections', '/user/selections/1', '/user/accommodations/1']);
+})->with(['/user/selections', '/user/selections/1', '/user/selections/1/accommodations/1']);
 
 test('authenticated users can open a selection by its URL', function () {
     $user = User::factory()->create();
@@ -27,7 +27,7 @@ test('authenticated users can open an accommodation by its URL', function () {
     $accommodation = Accommodation::factory()->for($user)->create();
     actingAs($user);
 
-    get(route('userzone.accommodations.show', $accommodation))->assertOk();
+    get(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))->assertOk();
 });
 
 test('seeded test user can log in and browse their selection and accommodation', function () {
@@ -42,9 +42,23 @@ test('seeded test user can log in and browse their selection and accommodation',
 
     get(route('userzone.selections.index'))->assertOk()->assertSeeText($selection->title);
     get(route('userzone.selections.show', $selection))->assertOk()->assertSeeText($accommodation->title);
-    get(route('userzone.accommodations.show', $accommodation))->assertOk();
+    get(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))->assertOk();
 });
 
 test('old public content routes are unavailable', function (string $path) {
     get($path)->assertNotFound();
 })->with(['/selections', '/selections/1', '/accommodations/1']);
+
+test('nested routes reject records from another selection', function () {
+    $user = User::factory()->create();
+    $selection = Selection::factory()->for($user, 'owner')->create();
+    $otherSelection = Selection::factory()->for($user, 'owner')->create();
+    $criterion = \App\Models\Criterion::factory()->for($otherSelection)->create(['title' => 'Original']);
+    $accommodation = Accommodation::factory()->for($otherSelection)->create();
+    actingAs($user);
+
+    get(route('userzone.selections.accommodations.show', [$selection, $accommodation]))->assertNotFound();
+    \Pest\Laravel\delete(route('userzone.selections.criteria.destroy', [$selection, $criterion]))->assertNotFound();
+
+    expect($criterion->fresh()->title)->toBe('Original');
+});

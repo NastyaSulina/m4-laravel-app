@@ -22,7 +22,7 @@ test('accommodation page displays its details', function (?string $propertyType,
         'note' => $note,
     ]);
 
-    $response = get(route('userzone.accommodations.show', $accommodation))
+    $response = get(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))
         ->assertOk()
         ->assertSee('<title>Madrid apartment</title>', false)
         ->assertSeeText('Address: Calle Mayor 1')
@@ -53,5 +53,5 @@ test('accommodation page returns 404 for a missing accommodation', function () {
     $user = User::factory()->create();
     actingAs($user);
 
-    get(route('userzone.accommodations.show', 999))->assertNotFound();
+    get(route('userzone.selections.accommodations.show', [\App\Models\Selection::factory()->create(), 999]))->assertNotFound();
 });

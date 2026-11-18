@@ -16,7 +16,7 @@ test('a user can delete a criterion and return to its selection', function () {
     $otherCriterion = Criterion::factory()->for($selection)->create();
     actingAs($user);
 
-    delete(route('userzone.criteria.destroy', $criterion))
+    delete(route('userzone.selections.criteria.destroy', [$criterion->selection_id, $criterion]))
         ->assertRedirect(route('userzone.selections.show', $selection));
 
     assertModelMissing($criterion);
@@ -27,7 +27,7 @@ test('a user can delete a criterion and return to its selection', function () {
 test('a guest cannot delete a criterion', function () {
     $criterion = Criterion::factory()->create();
 
-    delete(route('userzone.criteria.destroy', $criterion))
+    delete(route('userzone.selections.criteria.destroy', [$criterion->selection_id, $criterion]))
         ->assertRedirect(route('login'));
 
     assertModelExists($criterion);
@@ -36,5 +36,5 @@ test('a guest cannot delete a criterion', function () {
 test('deleting a missing criterion returns not found', function () {
     actingAs(User::factory()->create());
 
-    delete(route('userzone.criteria.destroy', 999))->assertNotFound();
+    delete(route('userzone.selections.criteria.destroy', [\App\Models\Selection::factory()->create(), 999]))->assertNotFound();
 });

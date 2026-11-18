@@ -71,7 +71,7 @@ test('selection page lists only its own criteria with their requirement', functi
         ->assertOk()
         ->assertSeeText('Wi-Fi — Required')
         ->assertSeeText('Balcony — Optional')
-        ->assertSee('action="'.route('userzone.criteria.destroy', $criterion).'"', false)
+        ->assertSee('action="'.route('userzone.selections.criteria.destroy', [$criterion->selection_id, $criterion]).'"', false)
         ->assertSee('name="_method" value="delete"', false)
         ->assertSee('name="_token"', false)
         ->assertSee('aria-label="Delete criterion: Wi-Fi"', false)
@@ -109,6 +109,6 @@ test('selection page lists only its own accommodations', function () {
         ->assertSeeText('Address: Calle Mayor 1')
         ->assertSeeText('Status: shortlisted')
         ->assertSeeText('Property type: apartment')
-        ->assertSee(route('userzone.accommodations.show', $accommodation))
+        ->assertSee(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))
         ->assertDontSeeText('Unrelated accommodation');
 });

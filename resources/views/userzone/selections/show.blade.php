@@ -31,7 +31,7 @@
                            {{ $criterion->is_required ? 'border-teal-200 bg-teal-50 text-teal-800' : 'border-slate-200 bg-slate-100 text-slate-600' }}"
                 >
                     {{ $criterion->title }} — {{ $criterion->is_required ? 'Required' : 'Optional' }}
-                    <form action="{{ route('userzone.criteria.destroy', $criterion) }}" method="post">
+                    <form action="{{ route('userzone.selections.criteria.destroy', [$criterion->selection_id, $criterion]) }}" method="post">
                         @method('delete')
                         @csrf
                         <button
@@ -60,7 +60,7 @@
                     <p>Property type: {{ $accommodation->property_type }}</p>
                 @endif
                 <a
-                    href="{{ route('userzone.accommodations.show', $accommodation) }}"
+                    href="{{ route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]) }}"
                     class="mt-auto self-start rounded-sm pt-3 font-medium text-teal-700 underline-offset-4 hover:underline
                            focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
                 >
