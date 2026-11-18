@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Userzone;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Accommodation;
 use App\Models\Selection;
 use Illuminate\View\View;

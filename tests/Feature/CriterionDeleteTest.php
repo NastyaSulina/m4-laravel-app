@@ -36,5 +36,5 @@ test('a guest cannot delete a criterion', function () {
 test('deleting a missing criterion returns not found', function () {
     actingAs(User::factory()->create());
 
-    delete(route('userzone.selections.criteria.destroy', [\App\Models\Selection::factory()->create(), 999]))->assertNotFound();
+    delete(route('userzone.selections.criteria.destroy', [Selection::factory()->create(), 999]))->assertNotFound();
 });

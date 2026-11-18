@@ -2,7 +2,6 @@
 
 use App\Models\Accommodation;
 use App\Models\Selection;
-
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
@@ -53,5 +52,5 @@ test('accommodation page returns 404 for a missing accommodation', function () {
     $user = User::factory()->create();
     actingAs($user);
 
-    get(route('userzone.selections.accommodations.show', [\App\Models\Selection::factory()->create(), 999]))->assertNotFound();
+    get(route('userzone.selections.accommodations.show', [Selection::factory()->create(), 999]))->assertNotFound();
 });

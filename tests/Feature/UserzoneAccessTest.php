@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Accommodation;
+use App\Models\Criterion;
 use App\Models\Selection;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
@@ -53,7 +54,7 @@ test('nested routes reject records from another selection', function () {
     $user = User::factory()->create();
     $selection = Selection::factory()->for($user, 'owner')->create();
     $otherSelection = Selection::factory()->for($user, 'owner')->create();
-    $criterion = \App\Models\Criterion::factory()->for($otherSelection)->create(['title' => 'Original']);
+    $criterion = Criterion::factory()->for($otherSelection)->create(['title' => 'Original']);
     $accommodation = Accommodation::factory()->for($otherSelection)->create();
     actingAs($user);
 

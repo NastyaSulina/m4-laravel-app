@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Userzone\AccommodationController;
 use App\Http\Controllers\Userzone\CriterionController;
-use App\Http\Controllers\Userzone\SelectionController;
 use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\ProfileController;
+use App\Http\Controllers\Userzone\SelectionController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 

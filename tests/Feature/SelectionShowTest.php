@@ -1,9 +1,8 @@
 <?php
 
-use App\Models\Criterion;
 use App\Models\Accommodation;
+use App\Models\Criterion;
 use App\Models\Selection;
-
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;

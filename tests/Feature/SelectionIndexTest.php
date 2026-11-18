@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Selection;
-
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
