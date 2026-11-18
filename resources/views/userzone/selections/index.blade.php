@@ -1,7 +1,13 @@
 <x-base-layout title="Selections">
     <h1 class="mb-6 text-3xl font-semibold tracking-tight text-slate-900">Selections</h1>
 
-    <a href="{{ route('userzone.selections.create') }}">New selection</a>
+    <a
+        href="{{ route('userzone.selections.create') }}"
+        class="mb-6 inline-block rounded-lg bg-teal-700 px-4 py-2 font-medium text-white hover:bg-teal-800
+               focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
+    >
+        New selection
+    </a>
 
     <div class="grid gap-5 sm:grid-cols-2">
     @forelse ($selections as $selection)
