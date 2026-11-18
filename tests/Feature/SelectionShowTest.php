@@ -76,9 +76,9 @@ test('selection page lists only its own criteria with their requirement', functi
         ->assertSee('<span class="sr-only">Required</span>', false)
         ->assertSeeInOrder(['Wi-Fi', $requiredMarker, 'Balcony'], false)
         ->assertSee(route('userzone.selections.criteria.index', $selection))
-        ->assertDontSeeText('Edit')
+        ->assertDontSee(route('userzone.selections.criteria.edit', [$selection, $criterion]))
         ->assertDontSeeText('Add criterion')
-        ->assertDontSee('name="_method"', false)
+        ->assertDontSee('action="'.route('userzone.selections.criteria.destroy', [$selection, $criterion]).'"', false)
         ->assertDontSeeText('Unrelated criterion');
 
     expect(substr_count($response->getContent(), $requiredMarker))->toBe(1);

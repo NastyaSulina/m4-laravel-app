@@ -7,10 +7,22 @@ use App\Http\Controllers\Controller;
 use App\Models\Selection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class SelectionController extends Controller
 {
+    public function destroy(Selection $selection): RedirectResponse
+    {
+        DB::transaction(function () use ($selection) {
+            $selection->criteria()->delete();
+            $selection->accommodations()->delete();
+            $selection->delete();
+        });
+
+        return redirect()->route('userzone.selections.index');
+    }
+
     public function index(Request $request): View
     {
         $selections = $request->user()->selections()->get();

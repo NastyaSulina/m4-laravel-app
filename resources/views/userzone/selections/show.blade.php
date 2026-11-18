@@ -3,6 +3,13 @@
         <p class="text-sm text-slate-500">Added by {{ $selection->owner->name }}</p>
         <h1 class="break-words text-3xl font-semibold tracking-tight text-slate-900">{{ $selection->title }}</h1>
         <a href="{{ route('userzone.selections.edit', $selection) }}">Edit</a>
+        <form
+            action="{{ route('userzone.selections.destroy', $selection) }}" method="post"
+        >
+            @method('DELETE')
+            @csrf
+            <button type="submit" class="cursor-pointer text-sm text-red-600 hover:underline">Delete selection</button>
+        </form>
 
         <p>Search type: {{ $selection->search_type }}</p>
         <p>Status: {{ $selection->status }}</p>
