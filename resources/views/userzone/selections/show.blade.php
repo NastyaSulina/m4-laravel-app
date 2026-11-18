@@ -49,6 +49,15 @@
         </ul>
     @endif
 
+    <form action="{{ route('userzone.selections.criteria.store', $selection) }}" method="post">
+        @csrf
+
+        <x-form.textinput name="title" label="Title" minlength="3" maxlength="255" required />
+        <x-form.checkbox name="is_required" label="Required" />
+
+        <button type="submit">Add criterion</button>
+    </form>
+
     <h2 class="mb-5 mt-10 text-2xl font-semibold text-slate-900">Accommodations</h2>
 
     <div class="grid gap-5 sm:grid-cols-2">
