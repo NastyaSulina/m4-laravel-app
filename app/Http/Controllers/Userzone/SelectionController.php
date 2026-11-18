@@ -30,6 +30,29 @@ class SelectionController extends Controller
         return view('userzone.selections.create');
     }
 
+    public function edit(Selection $selection): View
+    {
+        return view('userzone.selections.edit', compact('selection'));
+    }
+
+    public function update(Request $request, Selection $selection): RedirectResponse
+    {
+        $request->validate([
+            'title' => ['required', 'string', 'min:3', 'max:255'],
+            'search_type' => ['required', 'in:short_stay,long_term'],
+            'start_date' => ['nullable', 'date_format:Y-m-d'],
+            'end_date' => ['nullable', 'date_format:Y-m-d', ...($request->filled('start_date') ? ['after_or_equal:start_date'] : [])],
+        ]);
+
+        $selection->title = $request->title;
+        $selection->search_type = $request->search_type;
+        $selection->start_date = $request->start_date;
+        $selection->end_date = $request->end_date;
+        $selection->save();
+
+        return redirect()->route('userzone.selections.index');
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
