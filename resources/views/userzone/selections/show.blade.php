@@ -31,6 +31,7 @@
                            {{ $criterion->is_required ? 'border-teal-200 bg-teal-50 text-teal-800' : 'border-slate-200 bg-slate-100 text-slate-600' }}"
                 >
                     {{ $criterion->title }} — {{ $criterion->is_required ? 'Required' : 'Optional' }}
+                    <a href="{{ route('userzone.selections.criteria.edit', [$selection, $criterion]) }}">Edit</a>
                     <form action="{{ route('userzone.selections.criteria.destroy', [$criterion->selection_id, $criterion]) }}" method="post">
                         @method('delete')
                         @csrf

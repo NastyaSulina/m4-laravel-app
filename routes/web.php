@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/selections/{selection}', [SelectionController::class, 'show'])->name('userzone.selections.show');
     Route::prefix('/user/selections/{selection}')->name('userzone.selections.')->scopeBindings()->group(function () {
         Route::get('/accommodations/{accommodation}', [AccommodationController::class, 'show'])->name('accommodations.show');
+        Route::get('/criteria/{criterion}/edit', [CriterionController::class, 'edit'])->name('criteria.edit');
+        Route::put('/criteria/{criterion}', [CriterionController::class, 'update'])->name('criteria.update');
         Route::delete('/criteria/{criterion}', [CriterionController::class, 'destroy'])->name('criteria.destroy');
     });
 
