@@ -10,6 +10,26 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 use function Pest\Laravel\put;
 
+test('accommodation update requires a property type without changing existing data', function (array $input) {
+    $accommodation = Accommodation::factory()->create(['title' => 'Original', 'property_type' => 'house']);
+    actingAs($accommodation->selection->owner);
+
+    put(route('userzone.selections.accommodations.update', [$accommodation->selection_id, $accommodation]), [
+        'title' => 'Changed apartment',
+        'source_url' => 'https://example.com/listing',
+        'address' => 'New address',
+        'status' => 'considering',
+        ...$input,
+    ])->assertSessionHasErrors('property_type');
+
+    expect($accommodation->fresh()->title)->toBe('Original');
+    expect($accommodation->fresh()->property_type)->toBe('house');
+})->with([
+    'missing' => [[]],
+    'null' => [['property_type' => null]],
+    'empty' => [['property_type' => '']],
+]);
+
 test('owners can open a prefilled accommodation edit form', function () {
     $accommodation = Accommodation::factory()->create([
         'title' => 'Madrid apartment',
@@ -71,7 +91,7 @@ test('owners can update accommodation while preserving its author and selection'
         'source_url' => 'https://example.com/updated',
         'address' => 'New address',
         'status' => 'selected',
-        'property_type' => null,
+        'property_type' => 'room',
         'note' => null,
         'user_id' => $other->owner_id,
         'selection_id' => $other->id,
@@ -83,7 +103,7 @@ test('owners can update accommodation while preserving its author and selection'
     expect($updated->source_url)->toBe('https://example.com/updated');
     expect($updated->address)->toBe('New address');
     expect($updated->status)->toBe('selected');
-    expect($updated->property_type)->toBeNull();
+    expect($updated->property_type)->toBe('room');
     expect($updated->note)->toBeNull();
     expect($updated->user_id)->toBe($accommodation->user_id);
     expect($updated->selection_id)->toBe($selection->id);
@@ -147,6 +167,7 @@ test('updates keep the image unless a replacement is uploaded', function (bool $
         'source_url' => 'https://example.com/updated',
         'address' => 'New address',
         'status' => 'considering',
+        'property_type' => 'apartment',
     ];
     if ($upload) {
         $input['image'] = UploadedFile::fake()->image('new.jpg');

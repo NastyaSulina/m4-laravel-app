@@ -16,7 +16,7 @@ class AccommodationRequest extends FormRequest
             'source_url' => ['required', 'url:http,https', 'max:2048'],
             'address' => ['required', 'string', 'max:255'],
             'status' => ['required', 'in:considering,shortlisted,selected,rejected,unavailable'],
-            'property_type' => ['nullable', 'in:apartment,house,room,hotel'],
+            'property_type' => ['required', 'in:apartment,house,room,hotel'],
             'note' => ['nullable', 'string', 'max:5000'],
             'image' => ['nullable', 'image'],
         ];

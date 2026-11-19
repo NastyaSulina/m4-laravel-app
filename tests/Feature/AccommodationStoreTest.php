@@ -11,6 +11,20 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
 
+test('accommodation creation requires a property type', function () {
+    $selection = Selection::factory()->create();
+    actingAs($selection->owner);
+
+    post(route('userzone.selections.accommodations.store', $selection), [
+        'title' => 'Madrid apartment',
+        'source_url' => 'https://example.com/listing',
+        'address' => 'Calle Mayor 1',
+        'status' => 'considering',
+    ])->assertSessionHasErrors('property_type');
+
+    assertDatabaseCount('accommodations', 0);
+});
+
 test('owners can open the accommodation creation form', function () {
     $selection = Selection::factory()->create();
     actingAs($selection->owner);
@@ -41,6 +55,7 @@ test('accommodation form preserves notes and shows validation errors', function 
         'title' => 'Hi',
         'source_url' => 'https://example.com/listing/1',
         'address' => 'Calle Mayor 1',
+        'property_type' => 'apartment',
         'status' => 'considering',
         'note' => $note,
     ])->assertSessionHasErrors('title');
@@ -60,6 +75,7 @@ test('owners can add accommodation with server assigned selection and author', f
         'title' => 'Madrid apartment',
         'source_url' => 'https://example.com/listing/1',
         'address' => 'Calle Mayor 1',
+        'property_type' => 'apartment',
         'status' => 'shortlisted',
         'selection_id' => $otherSelection->id,
         'user_id' => $otherSelection->owner_id,
@@ -73,12 +89,12 @@ test('owners can add accommodation with server assigned selection and author', f
     expect($accommodation->source_url)->toBe('https://example.com/listing/1');
     expect($accommodation->address)->toBe('Calle Mayor 1');
     expect($accommodation->status)->toBe('shortlisted');
-    expect($accommodation->property_type)->toBe($optional['property_type'] ?? null);
+    expect($accommodation->property_type)->toBe('apartment');
     expect($accommodation->note)->toBe($optional['note'] ?? null);
     assertDatabaseCount('media', 0);
 })->with([
     'optional fields omitted' => [[]],
-    'optional fields supplied' => [['property_type' => 'apartment', 'note' => 'Near the station']],
+    'optional fields supplied' => [['note' => 'Near the station']],
     'maximum note length' => [['note' => str_repeat('a', 5000)]],
     'no image' => [['image' => null]],
 ]);
@@ -93,6 +109,7 @@ test('owners can attach an image when creating accommodation', function () {
         'title' => 'Madrid apartment',
         'source_url' => 'https://example.com/listing/1',
         'address' => 'Calle Mayor 1',
+        'property_type' => 'apartment',
         'status' => 'considering',
         'image' => UploadedFile::fake()->image('apartment.jpg', 1200, 900)->size(3072),
     ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.show', $selection));
@@ -123,6 +140,7 @@ test('invalid accommodation data is not saved', function (array $invalid, string
         'title' => 'Madrid apartment',
         'source_url' => 'https://example.com/listing/1',
         'address' => 'Calle Mayor 1',
+        'property_type' => 'apartment',
         'status' => 'considering',
     ], $invalid))->assertSessionHasErrors($field);
 
@@ -134,6 +152,8 @@ test('invalid accommodation data is not saved', function (array $invalid, string
     'unsafe URL' => [['source_url' => 'javascript:alert(1)'], 'source_url'],
     'missing address' => [['address' => ''], 'address'],
     'unknown status' => [['status' => 'new'], 'status'],
+    'empty property type' => [['property_type' => ''], 'property_type'],
+    'null property type' => [['property_type' => null], 'property_type'],
     'unknown property type' => [['property_type' => 'unknown'], 'property_type'],
     'invalid note' => [['note' => ['text']], 'note'],
     'note too long' => [['note' => str_repeat('a', 5001)], 'note'],

@@ -16,6 +16,7 @@
         <x-form.select
             name="property_type" :value="$accommodation->property_type" label="Property type"
             :options="['' => 'Choose property type', 'apartment' => 'Apartment', 'house' => 'House', 'room' => 'Room', 'hotel' => 'Hotel']"
+            required
         />
         <x-form.textarea name="note" :value="$accommodation->note" label="Note" rows="5" maxlength="5000" />
         <img

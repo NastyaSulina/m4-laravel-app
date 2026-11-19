@@ -24,12 +24,13 @@ test('accommodation can be saved with only required fields', function () {
     $accommodation->title = 'Apartment in Madrid';
     $accommodation->source_url = 'https://example.com/listing/1';
     $accommodation->address = 'Calle Mayor 1, Madrid';
+    $accommodation->property_type = 'apartment';
 
     $accommodation->save();
     $accommodation->refresh();
 
     expect($accommodation->status)->toBe('considering');
-    expect($accommodation->property_type)->toBeNull();
+    expect($accommodation->property_type)->toBe('apartment');
     expect($accommodation->note)->toBeNull();
 });
 

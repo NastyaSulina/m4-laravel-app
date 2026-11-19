@@ -58,9 +58,7 @@
                 <h3 class="break-words text-xl font-semibold text-slate-900">{{ $accommodation->title }}</h3>
                 <p>Address: {{ $accommodation->address }}</p>
                 <p>Status: {{ $accommodation->status }}</p>
-                @if ($accommodation->property_type)
-                    <p>Property type: {{ $accommodation->property_type }}</p>
-                @endif
+                <p>Property type: {{ $accommodation->property_type }}</p>
                 <x-ui.button
                     :href="route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation])"
                     variant="tertiary" class="mt-auto self-start pt-3"

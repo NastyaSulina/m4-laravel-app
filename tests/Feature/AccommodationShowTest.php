@@ -7,7 +7,7 @@ use App\Models\User;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
-test('accommodation page displays its details', function (?string $propertyType, ?string $note) {
+test('accommodation page displays its details', function (string $propertyType, ?string $note) {
     $user = User::factory()->create();
     actingAs($user);
 
@@ -29,11 +29,7 @@ test('accommodation page displays its details', function (?string $propertyType,
         ->assertSeeText('Source: https://example.com/listing/1')
         ->assertSee(route('userzone.selections.show', $accommodation->selection_id));
 
-    if ($propertyType !== null) {
-        $response->assertSeeText('Property type: '.$propertyType);
-    } else {
-        $response->assertDontSeeText('Property type:');
-    }
+    $response->assertSeeText('Property type: '.$propertyType);
 
     if ($note !== null) {
         $response->assertSeeText('Note: '.$note)
@@ -43,9 +39,9 @@ test('accommodation page displays its details', function (?string $propertyType,
     }
 })->with([
     'all fields' => ['apartment', '<script>alert(1)</script>'],
-    'no optional fields' => [null, null],
+    'house without note' => ['house', null],
     'type only' => ['room', null],
-    'note only' => [null, 'Near the station'],
+    'hotel with note' => ['hotel', 'Near the station'],
 ]);
 
 test('accommodation page returns 404 for a missing accommodation', function () {

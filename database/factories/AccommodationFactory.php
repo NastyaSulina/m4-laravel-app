@@ -26,7 +26,7 @@ class AccommodationFactory extends Factory
             'source_url' => fake()->url(),
             'address' => fake()->address(),
             'status' => fake()->randomElement(['considering', 'shortlisted', 'selected', 'rejected', 'unavailable']),
-            'property_type' => fake()->boolean() ? fake()->randomElement(['apartment', 'house', 'room', 'hotel']) : null,
+            'property_type' => fake()->randomElement(['apartment', 'house', 'room', 'hotel']),
             'note' => fake()->boolean() ? fake()->sentence() : null,
         ];
     }

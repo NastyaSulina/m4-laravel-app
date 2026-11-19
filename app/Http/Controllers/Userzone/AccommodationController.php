@@ -44,7 +44,6 @@ class AccommodationController extends Controller
     public function update(AccommodationRequest $request, Selection $selection, Accommodation $accommodation): RedirectResponse
     {
         $accommodation->update([
-            'property_type' => null,
             'note' => null,
             ...Arr::except($request->validated(), ['image']),
         ]);
