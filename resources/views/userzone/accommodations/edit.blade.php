@@ -1,7 +1,7 @@
 <x-base-layout title="Edit accommodation">
-    <h1>Edit accommodation</h1>
+    <h1 class="mb-6 text-3xl font-semibold tracking-tight text-slate-900">Edit accommodation</h1>
 
-    <form action="{{ route('userzone.selections.accommodations.update', [$selection, $accommodation]) }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('userzone.selections.accommodations.update', [$selection, $accommodation]) }}" method="post" enctype="multipart/form-data" class="flex max-w-lg flex-col gap-5">
         @method('PUT')
         @csrf
 
@@ -20,8 +20,8 @@
         <x-form.textarea name="note" :value="$accommodation->note" label="Note" rows="5" maxlength="5000" />
         <x-form.fileinput name="image" label="Image" accept="image/*" />
 
-        <x-ui.button type="submit">Update accommodation</x-ui.button>
+        <x-ui.button type="submit" class="self-start">Update accommodation</x-ui.button>
     </form>
 
-    <x-ui.button :href="route('userzone.selections.accommodations.show', [$selection, $accommodation])" variant="tertiary">Back to accommodation</x-ui.button>
+    <x-ui.button :href="route('userzone.selections.accommodations.show', [$selection, $accommodation])" variant="tertiary" class="mt-5">Back to accommodation</x-ui.button>
 </x-base-layout>
