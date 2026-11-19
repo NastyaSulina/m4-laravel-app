@@ -105,6 +105,10 @@ test('owners can attach an image when creating accommodation', function () {
     get(route('userzone.selections.accommodations.show', [$selection, $accommodation]))
         ->assertOk()
         ->assertSee('src="'.$media->getUrl().'"', false);
+
+    get(route('userzone.selections.show', $selection))
+        ->assertOk()
+        ->assertSee('src="'.$media->getUrl().'"', false);
 });
 
 test('invalid accommodation data is not saved', function (array $invalid, string $field) {

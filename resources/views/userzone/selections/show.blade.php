@@ -50,6 +50,13 @@
     <div class="grid gap-5 sm:grid-cols-2">
         @forelse ($selection->accommodations as $accommodation)
             <article class="flex min-w-0 flex-col gap-3 rounded-xl border border-slate-200 bg-white p-6">
+                @if ($accommodation->hasMedia('images'))
+                    <img
+                        src="{{ $accommodation->getFirstMediaUrl('images') }}" alt="{{ $accommodation->title }}"
+                        width="128" height="96" loading="lazy"
+                        class="h-24 w-32 rounded-lg border border-slate-200 bg-slate-50 object-cover"
+                    >
+                @endif
                 <h3 class="break-words text-xl font-semibold text-slate-900">{{ $accommodation->title }}</h3>
                 <p>Address: {{ $accommodation->address }}</p>
                 <p>Status: {{ $accommodation->status }}</p>

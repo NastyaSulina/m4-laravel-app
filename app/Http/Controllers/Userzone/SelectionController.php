@@ -32,7 +32,7 @@ class SelectionController extends Controller
 
     public function show(Selection $selection): View
     {
-        $selection->load('accommodations', 'criteria');
+        $selection->load('accommodations.media', 'criteria');
 
         return view('userzone.selections.show', compact('selection'));
     }
