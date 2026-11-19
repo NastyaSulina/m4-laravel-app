@@ -45,7 +45,7 @@
 
     <h2 class="mb-5 mt-10 text-2xl font-semibold text-slate-900">Accommodations</h2>
 
-    <a href="{{ route('userzone.selections.accommodations.create', $selection) }}">New accommodation</a>
+    <x-ui.button :href="route('userzone.selections.accommodations.create', $selection)" class="mb-5">New accommodation</x-ui.button>
 
     <div class="grid gap-5 sm:grid-cols-2">
         @forelse ($selection->accommodations as $accommodation)
