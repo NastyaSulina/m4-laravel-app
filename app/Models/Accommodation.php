@@ -18,6 +18,13 @@ class Accommodation extends Model implements HasMedia
 
     use InteractsWithMedia;
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('images')
+            ->singleFile()
+            ->useFallbackUrl('/img/default-accommodation.png');
+    }
+
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumbnail')

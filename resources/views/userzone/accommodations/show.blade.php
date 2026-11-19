@@ -8,12 +8,10 @@
             variant="secondary" class="self-start"
         >Edit</x-ui.button>
 
-        @if ($accommodation->hasMedia('images'))
-            <img
-                src="{{ $accommodation->getFirstMediaUrl('images') }}" alt="{{ $accommodation->title }}"
-                class="h-auto max-h-96 w-full rounded-lg border border-slate-200 bg-slate-50 object-contain"
-            >
-        @endif
+        <img
+            src="{{ $accommodation->getFirstMediaUrl('images') }}" alt="{{ $accommodation->title }}"
+            class="h-auto max-h-96 w-full rounded-lg border border-slate-200 bg-slate-50 object-contain"
+        >
 
         <p>Address: {{ $accommodation->address }}</p>
         <p>Status: {{ $accommodation->status }}</p>

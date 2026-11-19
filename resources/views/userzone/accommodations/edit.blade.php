@@ -18,6 +18,10 @@
             :options="['' => 'Choose property type', 'apartment' => 'Apartment', 'house' => 'House', 'room' => 'Room', 'hotel' => 'Hotel']"
         />
         <x-form.textarea name="note" :value="$accommodation->note" label="Note" rows="5" maxlength="5000" />
+        <img
+            src="{{ $accommodation->getFirstMediaUrl('images', 'thumbnail') }}" alt="{{ $accommodation->title }}"
+            width="128" height="96" class="h-24 w-32 rounded-lg border border-slate-200 bg-slate-50 object-cover"
+        >
         <x-form.fileinput name="image" label="Image" accept="image/*" />
 
         <x-ui.button type="submit" class="self-start">Update accommodation</x-ui.button>

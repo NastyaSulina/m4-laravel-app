@@ -133,12 +133,15 @@ test('guests cannot edit or update accommodation', function () {
     put(route('userzone.selections.accommodations.update', $parameters), [])->assertRedirect(route('login'));
 });
 
-test('updates preserve existing images and can add a new image', function (bool $upload) {
+test('updates keep the image unless a replacement is uploaded', function (bool $upload) {
     $disk = Storage::fake('public');
     config(['media-library.disk_name' => 'public']);
     $accommodation = Accommodation::factory()->create()->refresh();
     $existing = $accommodation->addMedia(UploadedFile::fake()->image('existing.jpg'))->toMediaCollection('images');
     actingAs($accommodation->selection->owner);
+    get(route('userzone.selections.accommodations.edit', [$accommodation->selection_id, $accommodation]))
+        ->assertOk()->assertSee('src="'.$existing->getUrl('thumbnail').'"', false);
+
     $input = [
         'title' => 'Updated apartment',
         'source_url' => 'https://example.com/updated',
@@ -153,10 +156,27 @@ test('updates preserve existing images and can add a new image', function (bool 
         ->assertSessionHasNoErrors()->assertRedirect();
 
     $media = $accommodation->fresh()->getMedia('images');
-    expect($media)->toHaveCount($upload ? 2 : 1);
-    $disk->assertExists($existing->getPathRelativeToRoot());
+    expect($media)->toHaveCount(1);
     if ($upload) {
+        $disk->assertMissing($existing->getPathRelativeToRoot());
         expect($media->last()->file_name)->toBe('new.jpg');
         $disk->assertExists($media->last()->getPathRelativeToRoot());
+    } else {
+        expect($media->sole()->id)->toBe($existing->id);
+        $disk->assertExists($existing->getPathRelativeToRoot());
     }
 })->with([false, true]);
+
+test('accommodation without an image displays the fallback', function () {
+    $accommodation = Accommodation::factory()->create();
+    $selection = $accommodation->selection;
+    actingAs($selection->owner);
+
+    foreach ([
+        route('userzone.selections.accommodations.edit', [$selection, $accommodation]),
+        route('userzone.selections.accommodations.show', [$selection, $accommodation]),
+        route('userzone.selections.show', $selection),
+    ] as $url) {
+        get($url)->assertOk()->assertSee('src="/img/default-accommodation.png"', false);
+    }
+});
