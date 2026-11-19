@@ -38,3 +38,13 @@ test('deleting a missing criterion returns not found', function () {
 
     delete(route('userzone.selections.criteria.destroy', [Selection::factory()->create(), 999]))->assertNotFound();
 });
+
+test('a user cannot delete another owners criterion', function () {
+    $criterion = Criterion::factory()->create();
+    actingAs(User::factory()->create());
+
+    delete(route('userzone.selections.criteria.destroy', [$criterion->selection_id, $criterion]))
+        ->assertForbidden();
+
+    assertModelExists($criterion);
+});
