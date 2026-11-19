@@ -18,7 +18,7 @@ class AccommodationRequest extends FormRequest
             'status' => ['required', 'in:considering,shortlisted,selected,rejected,unavailable'],
             'property_type' => ['required', 'in:apartment,house,room,hotel'],
             'note' => ['nullable', 'string', 'max:5000'],
-            'image' => ['nullable', 'image'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:'.(config('media-library.max_file_size') / 1024)],
         ];
     }
 }

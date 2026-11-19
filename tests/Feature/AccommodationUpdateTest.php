@@ -201,3 +201,24 @@ test('accommodation without an image displays the fallback', function () {
         get($url)->assertOk()->assertSee('src="/img/default-accommodation.png"', false);
     }
 });
+
+test('oversized replacement images follow the configured limit and preserve existing data', function (int $limit) {
+    $disk = Storage::fake('public');
+    config(['media-library.disk_name' => 'public', 'media-library.max_file_size' => $limit * 1024]);
+    $accommodation = Accommodation::factory()->create()->refresh();
+    $existing = $accommodation->addMedia(UploadedFile::fake()->image('existing.jpg'))->toMediaCollection('images');
+    actingAs($accommodation->selection->owner);
+
+    put(route('userzone.selections.accommodations.update', [$accommodation->selection_id, $accommodation]), [
+        'title' => 'Changed apartment',
+        'source_url' => 'https://example.com/updated',
+        'address' => 'New address',
+        'status' => 'considering',
+        'property_type' => 'apartment',
+        'image' => UploadedFile::fake()->image('room.jpg')->size($limit + 1),
+    ])->assertSessionHasErrors(['image' => __('validation.max.file', ['attribute' => 'image', 'max' => $limit])]);
+
+    expect($accommodation->fresh()->getAttributes())->toBe($accommodation->getAttributes());
+    expect($accommodation->fresh()->getMedia('images')->sole()->id)->toBe($existing->id);
+    $disk->assertExists([$existing->getPathRelativeToRoot(), $existing->getPathRelativeToRoot('thumbnail')]);
+})->with(['ten MiB' => 10240, 'changed configuration' => 1024]);

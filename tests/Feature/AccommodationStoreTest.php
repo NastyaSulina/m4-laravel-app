@@ -99,7 +99,7 @@ test('owners can add accommodation with server assigned selection and author', f
     'no image' => [['image' => null]],
 ]);
 
-test('owners can attach an image when creating accommodation', function () {
+test('owners can attach JPG JPEG and PNG images up to ten MiB', function (string $extension) {
     $disk = Storage::fake('public');
     config(['media-library.disk_name' => 'public']);
     $selection = Selection::factory()->create();
@@ -111,11 +111,11 @@ test('owners can attach an image when creating accommodation', function () {
         'address' => 'Calle Mayor 1',
         'property_type' => 'apartment',
         'status' => 'considering',
-        'image' => UploadedFile::fake()->image('apartment.jpg', 1200, 900)->size(3072),
+        'image' => UploadedFile::fake()->image('apartment.'.$extension, 1200, 900)->size(10240),
     ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.show', $selection));
 
     $media = Accommodation::sole()->getMedia('images')->sole();
-    expect($media->file_name)->toBe('apartment.jpg');
+    expect($media->file_name)->toBe('apartment.'.$extension);
     $disk->assertExists($media->getPathRelativeToRoot());
     $disk->assertExists($media->getPathRelativeToRoot('thumbnail'));
     $thumbnailSize = getimagesize($media->getPath('thumbnail'));
@@ -130,7 +130,7 @@ test('owners can attach an image when creating accommodation', function () {
     get(route('userzone.selections.show', $selection))
         ->assertOk()
         ->assertSee('src="'.$media->getUrl('thumbnail').'"', false);
-});
+})->with(['jpg', 'jpeg', 'png']);
 
 test('invalid accommodation data is not saved', function (array $invalid, string $field) {
     $selection = Selection::factory()->create();
@@ -178,3 +178,35 @@ test('guests cannot create accommodations', function () {
 
     assertDatabaseCount('accommodations', 0);
 });
+
+test('invalid images return field errors and preserve form input without creating accommodation', function (UploadedFile $image, string $message) {
+    $disk = Storage::fake('public');
+    config(['media-library.disk_name' => 'public']);
+    $selection = Selection::factory()->create();
+    actingAs($selection->owner);
+    $formUrl = route('userzone.selections.accommodations.create', $selection);
+    $input = [
+        'title' => 'Madrid apartment',
+        'source_url' => 'https://example.com/listing',
+        'address' => 'Calle Mayor 1',
+        'status' => 'considering',
+        'property_type' => 'apartment',
+        'note' => 'Near the station',
+    ];
+
+    $response = $this->from($formUrl)->post(route('userzone.selections.accommodations.store', $selection), [
+        ...$input,
+        'image' => $image,
+    ])->assertRedirect($formUrl)->assertSessionHasErrors(['image' => $message]);
+
+    foreach ($input as $field => $value) {
+        $response->assertSessionHasInput($field, $value);
+    }
+    assertDatabaseCount('accommodations', 0);
+    assertDatabaseCount('media', 0);
+    $disk->assertDirectoryEmpty('/');
+    get($formUrl)->assertOk()->assertSeeText($message)->assertSeeText('Near the station');
+})->with([
+    'unsupported format' => fn () => [UploadedFile::fake()->image('room.gif'), __('validation.mimes', ['attribute' => 'image', 'values' => 'jpg, jpeg, png'])],
+    'too large' => fn () => [UploadedFile::fake()->image('room.jpg')->size(10241), __('validation.max.file', ['attribute' => 'image', 'max' => 10240])],
+]);
