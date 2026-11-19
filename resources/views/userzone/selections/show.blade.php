@@ -45,6 +45,8 @@
 
     <h2 class="mb-5 mt-10 text-2xl font-semibold text-slate-900">Accommodations</h2>
 
+    <a href="{{ route('userzone.selections.accommodations.create', $selection) }}">New accommodation</a>
+
     <div class="grid gap-5 sm:grid-cols-2">
         @forelse ($selection->accommodations as $accommodation)
             <article class="flex min-w-0 flex-col gap-3 rounded-xl border border-slate-200 bg-white p-6">

@@ -9,6 +9,44 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
 
+test('owners can open the accommodation creation form', function () {
+    $selection = Selection::factory()->create();
+    actingAs($selection->owner);
+
+    get(route('userzone.selections.accommodations.create', $selection))
+        ->assertOk()
+        ->assertSee('action="'.route('userzone.selections.accommodations.store', $selection).'"', false)
+        ->assertSee('name="_token"', false)
+        ->assertSee('name="title"', false)
+        ->assertSee('name="source_url"', false)
+        ->assertSee('name="address"', false)
+        ->assertSee('name="status"', false)
+        ->assertSee('name="property_type"', false)
+        ->assertSee('name="note"', false)
+        ->assertSee('maxlength="5000"', false)
+        ->assertSeeText('Add accommodation');
+});
+
+test('accommodation form preserves notes and shows validation errors', function () {
+    $selection = Selection::factory()->create();
+    actingAs($selection->owner);
+    $url = route('userzone.selections.accommodations.create', $selection);
+    $note = '<script>alert(1)</script>';
+
+    post(route('userzone.selections.accommodations.store', $selection), [
+        'title' => 'Hi',
+        'source_url' => 'https://example.com/listing/1',
+        'address' => 'Calle Mayor 1',
+        'status' => 'considering',
+        'note' => $note,
+    ])->assertSessionHasErrors('title');
+
+    get($url)->assertOk()
+        ->assertSee($note)
+        ->assertDontSee($note, false)
+        ->assertSeeText(__('validation.min.string', ['attribute' => 'title', 'min' => 3]));
+});
+
 test('owners can add accommodation with server assigned selection and author', function (array $optional) {
     $selection = Selection::factory()->create();
     $otherSelection = Selection::factory()->create();
