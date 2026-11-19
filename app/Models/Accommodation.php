@@ -18,6 +18,8 @@ class Accommodation extends Model implements HasMedia
 
     use InteractsWithMedia;
 
+    protected $fillable = ['user_id', 'title', 'source_url', 'address', 'status', 'property_type', 'note'];
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('images')

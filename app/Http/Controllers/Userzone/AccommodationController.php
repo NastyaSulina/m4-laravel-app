@@ -7,6 +7,7 @@ use App\Http\Requests\Userzone\AccommodationRequest;
 use App\Models\Accommodation;
 use App\Models\Selection;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
 class AccommodationController extends Controller
@@ -18,20 +19,14 @@ class AccommodationController extends Controller
 
     public function store(AccommodationRequest $request, Selection $selection): RedirectResponse
     {
-        $accommodation = new Accommodation;
-        $accommodation->user_id = $request->user()->id;
-        $accommodation->title = $request->title;
-        $accommodation->source_url = $request->source_url;
-        $accommodation->address = $request->address;
-        $accommodation->status = $request->status;
-        $accommodation->property_type = $request->property_type;
-        $accommodation->note = $request->note;
+        $accommodation = $selection->accommodations()->create([
+            ...Arr::except($request->validated(), ['image']),
+            'user_id' => $request->user()->id,
+        ]);
 
         if ($request->hasFile('image')) {
             $accommodation->addMediaFromRequest('image')->toMediaCollection('images');
         }
-
-        $selection->accommodations()->save($accommodation);
 
         return redirect()->route('userzone.selections.show', $selection);
     }
@@ -48,13 +43,11 @@ class AccommodationController extends Controller
 
     public function update(AccommodationRequest $request, Selection $selection, Accommodation $accommodation): RedirectResponse
     {
-        $accommodation->title = $request->title;
-        $accommodation->source_url = $request->source_url;
-        $accommodation->address = $request->address;
-        $accommodation->status = $request->status;
-        $accommodation->property_type = $request->property_type;
-        $accommodation->note = $request->note;
-        $accommodation->save();
+        $accommodation->update([
+            'property_type' => null,
+            'note' => null,
+            ...Arr::except($request->validated(), ['image']),
+        ]);
 
         if ($request->hasFile('image')) {
             $accommodation->addMediaFromRequest('image')->toMediaCollection('images');
