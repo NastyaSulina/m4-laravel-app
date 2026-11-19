@@ -20,10 +20,10 @@ class CriterionController extends Controller
 
     public function store(CriterionRequest $request, Selection $selection): RedirectResponse
     {
-        $criterion = new Criterion;
-        $criterion->title = $request->title;
-        $criterion->is_required = $request->boolean('is_required');
-        $selection->criteria()->save($criterion);
+        $selection->criteria()->create([
+            ...$request->validated(),
+            'is_required' => $request->boolean('is_required'),
+        ]);
 
         return redirect()->route('userzone.selections.criteria.index', $selection);
     }
@@ -35,9 +35,10 @@ class CriterionController extends Controller
 
     public function update(CriterionRequest $request, Selection $selection, Criterion $criterion): RedirectResponse
     {
-        $criterion->title = $request->title;
-        $criterion->is_required = $request->boolean('is_required');
-        $criterion->save();
+        $criterion->update([
+            ...$request->validated(),
+            'is_required' => $request->boolean('is_required'),
+        ]);
 
         return redirect()->route('userzone.selections.criteria.index', $selection);
     }

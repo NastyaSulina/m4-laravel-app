@@ -12,6 +12,8 @@ class Criterion extends Model
     /** @use HasFactory<CriterionFactory> */
     use HasFactory;
 
+    protected $fillable = ['title', 'is_required'];
+
     public function selection(): BelongsTo
     {
         return $this->belongsTo(Selection::class);
