@@ -58,7 +58,9 @@ class SelectionController extends Controller
     {
         DB::transaction(function () use ($selection) {
             $selection->criteria()->delete();
-            $selection->accommodations()->delete();
+            foreach ($selection->accommodations()->get() as $accommodation) {
+                $accommodation->delete();
+            }
             $selection->delete();
         });
 

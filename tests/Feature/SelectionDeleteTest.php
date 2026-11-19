@@ -4,6 +4,8 @@ use App\Models\Accommodation;
 use App\Models\Criterion;
 use App\Models\Selection;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertModelExists;
@@ -56,4 +58,28 @@ test('users cannot delete another owners selection or its contents', function ()
     assertModelExists($selection);
     assertModelExists($criterion);
     assertModelExists($accommodation);
+});
+
+test('deleting a selection removes all its photos and preserves other selections photos', function () {
+    $disk = Storage::fake('public');
+    config(['media-library.disk_name' => 'public']);
+    $selection = Selection::factory()->create();
+    $accommodations = Accommodation::factory()->count(2)->for($selection)->create();
+    $photos = $accommodations->map(fn (Accommodation $accommodation) => $accommodation
+        ->addMedia(UploadedFile::fake()->image('room.jpg'))->toMediaCollection('images'));
+    $other = Accommodation::factory()->create();
+    $otherPhoto = $other->addMedia(UploadedFile::fake()->image('other.jpg'))->toMediaCollection('images');
+    foreach ($photos as $photo) {
+        $disk->assertExists([$photo->getPathRelativeToRoot(), $photo->getPathRelativeToRoot('thumbnail')]);
+    }
+    actingAs($selection->owner);
+
+    delete(route('userzone.selections.destroy', $selection))->assertRedirect(route('userzone.selections.index'));
+
+    foreach ($photos as $photo) {
+        assertModelMissing($photo);
+        $disk->assertMissing([$photo->getPathRelativeToRoot(), $photo->getPathRelativeToRoot('thumbnail')]);
+    }
+    assertModelExists($otherPhoto);
+    $disk->assertExists([$otherPhoto->getPathRelativeToRoot(), $otherPhoto->getPathRelativeToRoot('thumbnail')]);
 });
