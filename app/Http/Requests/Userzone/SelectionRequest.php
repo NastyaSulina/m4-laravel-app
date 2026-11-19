@@ -14,6 +14,7 @@ class SelectionRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'min:3', 'max:255'],
             'search_type' => ['required', 'in:short_stay,long_term'],
+            'status' => ['sometimes', 'required', 'in:active,archived'],
             'start_date' => ['nullable', 'date_format:Y-m-d'],
             'end_date' => ['nullable', 'date_format:Y-m-d', ...($this->filled('start_date') ? ['after_or_equal:start_date'] : [])],
         ];
