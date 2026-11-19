@@ -40,4 +40,26 @@ class AccommodationController extends Controller
     {
         return view('userzone.accommodations.show', compact('accommodation'));
     }
+
+    public function edit(Selection $selection, Accommodation $accommodation): View
+    {
+        return view('userzone.accommodations.edit', compact('selection', 'accommodation'));
+    }
+
+    public function update(AccommodationRequest $request, Selection $selection, Accommodation $accommodation): RedirectResponse
+    {
+        $accommodation->title = $request->title;
+        $accommodation->source_url = $request->source_url;
+        $accommodation->address = $request->address;
+        $accommodation->status = $request->status;
+        $accommodation->property_type = $request->property_type;
+        $accommodation->note = $request->note;
+        $accommodation->save();
+
+        if ($request->hasFile('image')) {
+            $accommodation->addMediaFromRequest('image')->toMediaCollection('images');
+        }
+
+        return redirect()->route('userzone.selections.accommodations.show', [$selection, $accommodation]);
+    }
 }

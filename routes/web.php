@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('user')->name('userzone.')->group(function () {
         Route::resource('selections', SelectionController::class)->middlewareFor(['show', 'edit', 'update', 'destroy'], CheckSelectionOwnership::class);
-        Route::resource('selections.accommodations', AccommodationController::class)->only(['create', 'store', 'show'])->scoped()->middleware(CheckSelectionOwnership::class);
+        Route::resource('selections.accommodations', AccommodationController::class)->except(['index', 'destroy'])->scoped()->middleware(CheckSelectionOwnership::class);
         Route::resource('selections.criteria', CriterionController::class)->except(['create', 'show'])->scoped()->middleware(CheckSelectionOwnership::class);
     });
 
