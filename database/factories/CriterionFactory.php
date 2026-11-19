@@ -11,6 +11,21 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CriterionFactory extends Factory
 {
+    public const TITLES = [
+        'Good Wi-Fi',
+        'Balcony',
+        'Parking',
+        'Air conditioning',
+        'Pet friendly',
+        'Parrots welcome',
+        'Walking distance to Zara',
+        'Sea view',
+        'Quiet area',
+        'Near metro',
+        'Dishwasher',
+        'Lift',
+    ];
+
     /**
      * Define the model's default state.
      *
@@ -20,7 +35,7 @@ class CriterionFactory extends Factory
     {
         return [
             'selection_id' => Selection::factory(),
-            'title' => fake()->randomElement(['Wi-Fi', 'Balcony', 'Parking', 'Air conditioning', 'Pet friendly']),
+            'title' => fake()->randomElement(self::TITLES),
             'is_required' => fake()->boolean(),
         ];
     }

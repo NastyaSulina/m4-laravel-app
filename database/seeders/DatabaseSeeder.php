@@ -6,6 +6,7 @@ use App\Models\Accommodation;
 use App\Models\Criterion;
 use App\Models\Selection;
 use App\Models\User;
+use Database\Factories\CriterionFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,7 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::factory(5)->create();
+        $users = User::factory(1)->create();
         $testUser = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -27,11 +28,18 @@ class DatabaseSeeder extends Seeder
         $users->push($testUser);
 
         foreach ($users as $user) {
-            Selection::factory(5)
+            $selections = Selection::factory(3)
                 ->for($user, 'owner')
-                ->has(Accommodation::factory(10)->for($user))
-                ->has(Criterion::factory(5))
+                ->has(Accommodation::factory(3)->for($user))
                 ->create();
+
+            foreach ($selections as $selection) {
+                $titles = collect(CriterionFactory::TITLES)->random(fake()->numberBetween(1, 5));
+
+                foreach ($titles as $title) {
+                    Criterion::factory()->for($selection)->create(['title' => $title]);
+                }
+            }
         }
     }
 }

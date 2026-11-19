@@ -8,6 +8,15 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\seed;
 
+test('factory titles match the supplied search type and include a destination', function (string $searchType, string $pattern) {
+    $selection = Selection::factory()->make(['search_type' => $searchType]);
+
+    expect($selection->title)->toMatch($pattern);
+})->with([
+    'short stay' => ['short_stay', "/^(Birthday weekend in|New Year's trip to|Summer escape to|A long weekend in) .+$/"],
+    'long term' => ['long_term', '/^(My next home in|Moving to|A fresh start in|A place to call home in) .+$/'],
+]);
+
 test('factory creates a selection for an existing owner without adding users', function () {
     $owner = User::factory()->create();
 
@@ -25,7 +34,7 @@ test('selection can be saved with only required fields', function () {
     $selection = new Selection;
     $selection->owner()->associate(User::factory()->create());
     $selection->title = 'Summer in Madrid';
-    $selection->search_type = 'trip';
+    $selection->search_type = 'short_stay';
     $selection->save();
     $selection->refresh();
 
@@ -37,7 +46,7 @@ test('selection can be saved with only required fields', function () {
 test('selection preserves its dates', function (?string $startDate, ?string $endDate) {
     $selection = Selection::factory()->create([
         'title' => 'Summer in Madrid',
-        'search_type' => 'trip',
+        'search_type' => 'short_stay',
         'start_date' => $startDate,
         'end_date' => $endDate,
     ])->refresh();
@@ -51,19 +60,20 @@ test('selection preserves its dates', function (?string $startDate, ?string $end
     'neither date' => [null, null],
 ]);
 
-test('database seeder creates selections with accommodations and criteria for its eleven users', function () {
+test('database seeder creates selections with accommodations and criteria for its two users', function () {
     seed(DatabaseSeeder::class);
 
-    assertDatabaseCount('users', 11);
-    assertDatabaseCount('selections', 55);
-    assertDatabaseCount('accommodations', 550);
-    assertDatabaseCount('criteria', 275);
+    assertDatabaseCount('users', 2);
+    assertDatabaseCount('selections', 6);
+    assertDatabaseCount('accommodations', 18);
     foreach (User::all() as $user) {
-        expect($user->selections()->count())->toBe(5);
+        expect($user->selections()->count())->toBe(3);
     }
     foreach (Selection::all() as $selection) {
-        expect($selection->criteria()->count())->toBe(5);
-        expect($selection->accommodations()->count())->toBe(10);
-        expect($selection->accommodations()->where('user_id', $selection->owner_id)->count())->toBe(10);
+        $titles = $selection->criteria()->pluck('title');
+        expect($titles->count())->toBeBetween(1, 5);
+        expect($titles->unique()->count())->toBe($titles->count());
+        expect($selection->accommodations()->count())->toBe(3);
+        expect($selection->accommodations()->where('user_id', $selection->owner_id)->count())->toBe(3);
     }
 });

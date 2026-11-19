@@ -23,8 +23,21 @@ class SelectionFactory extends Factory
 
         return [
             'owner_id' => User::factory(),
-            'title' => fake()->city().' accommodation',
             'search_type' => fake()->randomElement(['short_stay', 'long_term']),
+            'title' => fn (array $attributes): string => fake()->randomElement(match ($attributes['search_type']) {
+                'short_stay' => [
+                    'Birthday weekend in',
+                    "New Year's trip to",
+                    'Summer escape to',
+                    'A long weekend in',
+                ],
+                'long_term' => [
+                    'My next home in',
+                    'Moving to',
+                    'A fresh start in',
+                    'A place to call home in',
+                ],
+            }).' '.fake()->country(),
             'status' => fake()->randomElement(['active', 'archived']),
             'start_date' => fake()->boolean() ? $startDate->toDateString() : null,
             'end_date' => fake()->boolean() ? $endDate->toDateString() : null,

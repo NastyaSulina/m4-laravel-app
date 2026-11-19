@@ -22,11 +22,13 @@ class AccommodationFactory extends Factory
         return [
             'user_id' => User::factory(),
             'selection_id' => Selection::factory(),
-            'title' => fake()->city().' apartment',
             'source_url' => fake()->url(),
             'address' => fake()->address(),
             'status' => fake()->randomElement(['considering', 'shortlisted', 'selected', 'rejected', 'unavailable']),
             'property_type' => fake()->randomElement(['apartment', 'house', 'room', 'hotel']),
+            'title' => fn (array $attributes): string => fake()->randomElement(['Little', 'Cosy', 'Quiet', 'Lovely', 'Bright', 'Suspiciously cheap'])
+                .' '.$attributes['property_type'].' '
+                .fake()->randomElement(['by the sea', 'near the metro', 'with a view', 'with a quirky host', 'above a noisy bar', 'in the middle of nowhere']),
             'note' => fake()->boolean() ? fake()->sentence() : null,
         ];
     }

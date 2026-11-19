@@ -6,6 +6,12 @@ use App\Models\Selection;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertModelExists;
 
+test('factory titles match the supplied property type', function (string $propertyType) {
+    $accommodation = Accommodation::factory()->make(['property_type' => $propertyType]);
+
+    expect(strtolower($accommodation->title))->toContain($propertyType);
+})->with(['apartment', 'house', 'room', 'hotel']);
+
 test('factory creates an accommodation belonging to a selection', function () {
     $accommodation = Accommodation::factory()->create();
 
