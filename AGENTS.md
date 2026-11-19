@@ -1,3 +1,52 @@
+# Project AI Instructions
+
+## Git and commits
+
+- Create a commit only when the user explicitly requests or approves it. Completing a task is not permission to commit. An explicit request to commit is sufficient; do not ask for the same permission again.
+- Before committing, review the diff and stage only files relevant to the requested change. Preserve unrelated modified and untracked files.
+- Keep each commit focused on one logical change. Do not mix unrelated cleanup into it.
+- Run the checks required for the change and report any failures or checks that could not run. Do not describe unverified changes as tested.
+- Pushing, amending existing commits, or rewriting history requires explicit authorization for that action.
+- Never include secrets, credentials, private keys, or local `.env` values in commits or commit messages.
+
+### Commit message format
+
+Use a single line in this format:
+
+```text
+TYPE: Description
+```
+
+- Use an uppercase type, immediately followed by a colon and one space.
+- Write a short, specific English description starting with a capitalized imperative verb, such as `Add`, `Fix`, or `Remove`.
+- Do not use emoji or emoji shortcodes, a trailing period, a message body, or `Co-authored-by` trailers.
+- Choose the type that best describes the purpose of the change. Use `SECURITY` for a security fix even when it also qualifies as `BUGFIX`.
+
+| Type | Purpose |
+| --- | --- |
+| INIT | Initial project setup |
+| FEATURE | New functionality |
+| BUGFIX | Correction of incorrect behavior |
+| REFACTOR | Code restructuring without changing behavior |
+| DESIGN | Visual styling and layout |
+| CONTENT | Copy, documentation, and AI instructions |
+| TEST | Tests without application behavior changes |
+| CHORE | Tooling, configuration, and dependency maintenance |
+| SECURITY | Vulnerability fixes and security hardening |
+
+Examples:
+
+```text
+FEATURE: Add article search
+BUGFIX: Preserve filters when changing pages
+REFACTOR: Extract repeated query logic
+DESIGN: Improve mobile navigation spacing
+CONTENT: Clarify AI commit instructions
+TEST: Cover invalid form submissions
+CHORE: Update development tooling configuration
+SECURITY: Prevent unauthorized article updates
+```
+
 <laravel-boost-guidelines>
 === foundation rules ===
 
