@@ -14,7 +14,7 @@ test('selection page displays the selected selection', function (?string $startD
 
     $selection = Selection::factory()->for($user, 'owner')->create([
         'title' => '<script>alert(1)</script>',
-        'search_type' => 'trip',
+        'search_type' => 'short_stay',
         'status' => 'active',
         'start_date' => $startDate,
         'end_date' => $endDate,
@@ -26,8 +26,8 @@ test('selection page displays the selected selection', function (?string $startD
         ->assertSee('<title>&lt;script&gt;alert(1)&lt;/script&gt;</title>', false)
         ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false)
         ->assertDontSee('<script>alert(1)</script>', false)
-        ->assertSeeText('Search type: trip')
-        ->assertSeeText('Status: active')
+        ->assertSeeText('Search type: Short stay')
+        ->assertSeeText('Status: Active')
         ->assertDontSeeText('Another selection')
         ->assertSee(route('userzone.selections.index'));
     $response->assertSeeText('No accommodations yet.');

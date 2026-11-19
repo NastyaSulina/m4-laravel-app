@@ -6,6 +6,32 @@ use App\Models\User;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
+test('selection pages display readable search type and status', function (string $page, string $type, string $typeLabel, string $status, string $statusLabel) {
+    $selection = Selection::factory()->create(['search_type' => $type, 'status' => $status]);
+    actingAs($selection->owner);
+
+    get(route('userzone.selections.'.$page, $page === 'show' ? $selection : []))
+        ->assertOk()
+        ->assertSeeText('Search type: '.$typeLabel)
+        ->assertSeeText('Status: '.$statusLabel);
+})->with(['index', 'show'])->with([
+    ['short_stay', 'Short stay', 'active', 'Active'],
+    ['long_term', 'Long-term rental', 'archived', 'Archived'],
+]);
+
+test('selection edit form selects its current status', function (string $status, string $label) {
+    $selection = Selection::factory()->create(['status' => $status]);
+    actingAs($selection->owner);
+
+    get(route('userzone.selections.edit', $selection))
+        ->assertOk()
+        ->assertSee('name="status"', false)
+        ->assertSee('<option value="'.$status.'" selected>'.$label.'</option>', false);
+})->with([
+    ['active', 'Active'],
+    ['archived', 'Archived'],
+]);
+
 test('selections page displays only the current users selections', function () {
     $user = User::factory()->create();
     actingAs($user);
