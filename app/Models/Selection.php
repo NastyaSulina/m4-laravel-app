@@ -13,6 +13,8 @@ class Selection extends Model
     /** @use HasFactory<SelectionFactory> */
     use HasFactory;
 
+    protected $fillable = ['title', 'search_type', 'start_date', 'end_date'];
+
     public function accommodations(): HasMany
     {
         return $this->hasMany(Accommodation::class);

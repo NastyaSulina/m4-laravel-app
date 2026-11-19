@@ -12,17 +12,6 @@ use Illuminate\View\View;
 
 class SelectionController extends Controller
 {
-    public function destroy(Selection $selection): RedirectResponse
-    {
-        DB::transaction(function () use ($selection) {
-            $selection->criteria()->delete();
-            $selection->accommodations()->delete();
-            $selection->delete();
-        });
-
-        return redirect()->route('userzone.selections.index');
-    }
-
     public function index(Request $request): View
     {
         $selections = $request->user()->selections()->get();
@@ -42,6 +31,13 @@ class SelectionController extends Controller
         return view('userzone.selections.create');
     }
 
+    public function store(SelectionRequest $request): RedirectResponse
+    {
+        $request->user()->selections()->create($request->validated());
+
+        return redirect()->route('userzone.selections.index');
+    }
+
     public function edit(Selection $selection): View
     {
         return view('userzone.selections.edit', compact('selection'));
@@ -49,24 +45,22 @@ class SelectionController extends Controller
 
     public function update(SelectionRequest $request, Selection $selection): RedirectResponse
     {
-        $selection->title = $request->title;
-        $selection->search_type = $request->search_type;
-        $selection->start_date = $request->start_date;
-        $selection->end_date = $request->end_date;
-        $selection->save();
+        $selection->update([
+            'start_date' => null,
+            'end_date' => null,
+            ...$request->validated(),
+        ]);
 
         return redirect()->route('userzone.selections.index');
     }
 
-    public function store(SelectionRequest $request): RedirectResponse
+    public function destroy(Selection $selection): RedirectResponse
     {
-        $selection = new Selection;
-        $selection->title = $request->title;
-        $selection->search_type = $request->search_type;
-        $selection->status = 'active';
-        $selection->start_date = $request->start_date;
-        $selection->end_date = $request->end_date;
-        $request->user()->selections()->save($selection);
+        DB::transaction(function () use ($selection) {
+            $selection->criteria()->delete();
+            $selection->accommodations()->delete();
+            $selection->delete();
+        });
 
         return redirect()->route('userzone.selections.index');
     }
