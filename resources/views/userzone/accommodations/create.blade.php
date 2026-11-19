@@ -1,7 +1,7 @@
 <x-base-layout title="Create accommodation">
     <h1 class="mb-6 text-3xl font-semibold tracking-tight text-slate-900">Create accommodation</h1>
 
-    <form action="{{ route('userzone.selections.accommodations.store', $selection) }}" method="post" class="flex max-w-lg flex-col gap-5">
+    <form action="{{ route('userzone.selections.accommodations.store', $selection) }}" method="post" enctype="multipart/form-data" class="flex max-w-lg flex-col gap-5">
         @csrf
 
         <x-form.textinput name="title" label="Title" minlength="3" maxlength="255" required />
@@ -17,6 +17,7 @@
             :options="['' => 'Choose property type', 'apartment' => 'Apartment', 'house' => 'House', 'room' => 'Room', 'hotel' => 'Hotel']"
         />
         <x-form.textarea name="note" label="Note" rows="5" maxlength="5000" />
+        <x-form.fileinput name="image" label="Image" accept="image/*" />
 
         <x-ui.button type="submit" class="self-start">Add accommodation</x-ui.button>
     </form>

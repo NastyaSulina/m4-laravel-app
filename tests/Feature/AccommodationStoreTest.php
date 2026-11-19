@@ -25,6 +25,8 @@ test('owners can open the accommodation creation form', function () {
         ->assertSee('name="status"', false)
         ->assertSee('name="property_type"', false)
         ->assertSee('name="note"', false)
+        ->assertSee('enctype="multipart/form-data"', false)
+        ->assertSee('type="file" name="image"', false)
         ->assertSee('maxlength="5000"', false)
         ->assertSeeText('Add accommodation');
 });
@@ -98,6 +100,11 @@ test('owners can attach an image when creating accommodation', function () {
     $media = Accommodation::sole()->getMedia('images')->sole();
     expect($media->file_name)->toBe('apartment.jpg');
     $disk->assertExists($media->getPathRelativeToRoot());
+
+    $accommodation = Accommodation::sole();
+    get(route('userzone.selections.accommodations.show', [$selection, $accommodation]))
+        ->assertOk()
+        ->assertSee('src="'.$media->getUrl().'"', false);
 });
 
 test('invalid accommodation data is not saved', function (array $invalid, string $field) {

@@ -3,6 +3,10 @@
         <p class="text-sm text-slate-500">Added by {{ $accommodation->user->name }}</p>
         <h1 class="break-words text-3xl font-semibold tracking-tight text-slate-900">{{ $accommodation->title }}</h1>
 
+        @if ($accommodation->hasMedia('images'))
+            <img src="{{ $accommodation->getFirstMediaUrl('images') }}" alt="{{ $accommodation->title }}">
+        @endif
+
         <p>Address: {{ $accommodation->address }}</p>
         <p>Status: {{ $accommodation->status }}</p>
         <p class="break-all">Source: {{ $accommodation->source_url }}</p>
