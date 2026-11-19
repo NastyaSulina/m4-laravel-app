@@ -18,6 +18,7 @@ class AccommodationRequest extends FormRequest
             'status' => ['required', 'in:considering,shortlisted,selected,rejected,unavailable'],
             'property_type' => ['nullable', 'in:apartment,house,room,hotel'],
             'note' => ['nullable', 'string', 'max:5000'],
+            'image' => ['nullable', 'image'],
         ];
     }
 }

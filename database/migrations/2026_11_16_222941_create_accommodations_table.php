@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('source_url');
             $table->string('address');
             $table->string('status')->default('considering');
+            $table->text('image')->nullable();
             $table->string('property_type')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();

@@ -26,6 +26,11 @@ class AccommodationController extends Controller
         $accommodation->status = $request->status;
         $accommodation->property_type = $request->property_type;
         $accommodation->note = $request->note;
+
+        if ($request->hasFile('image')) {
+            $accommodation->addMediaFromRequest('image')->toMediaCollection('images');
+        }
+
         $selection->accommodations()->save($accommodation);
 
         return redirect()->route('userzone.selections.show', $selection);

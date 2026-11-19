@@ -3,6 +3,8 @@
 use App\Models\Accommodation;
 use App\Models\Selection;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
@@ -71,11 +73,32 @@ test('owners can add accommodation with server assigned selection and author', f
     expect($accommodation->status)->toBe('shortlisted');
     expect($accommodation->property_type)->toBe($optional['property_type'] ?? null);
     expect($accommodation->note)->toBe($optional['note'] ?? null);
+    assertDatabaseCount('media', 0);
 })->with([
     'optional fields omitted' => [[]],
     'optional fields supplied' => [['property_type' => 'apartment', 'note' => 'Near the station']],
     'maximum note length' => [['note' => str_repeat('a', 5000)]],
+    'no image' => [['image' => null]],
 ]);
+
+test('owners can attach an image when creating accommodation', function () {
+    $disk = Storage::fake('public');
+    config(['media-library.disk_name' => 'public']);
+    $selection = Selection::factory()->create();
+    actingAs($selection->owner);
+
+    post(route('userzone.selections.accommodations.store', $selection), [
+        'title' => 'Madrid apartment',
+        'source_url' => 'https://example.com/listing/1',
+        'address' => 'Calle Mayor 1',
+        'status' => 'considering',
+        'image' => UploadedFile::fake()->image('apartment.jpg')->size(3072),
+    ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.show', $selection));
+
+    $media = Accommodation::sole()->getMedia('images')->sole();
+    expect($media->file_name)->toBe('apartment.jpg');
+    $disk->assertExists($media->getPathRelativeToRoot());
+});
 
 test('invalid accommodation data is not saved', function (array $invalid, string $field) {
     $selection = Selection::factory()->create();
@@ -89,6 +112,7 @@ test('invalid accommodation data is not saved', function (array $invalid, string
     ], $invalid))->assertSessionHasErrors($field);
 
     assertDatabaseCount('accommodations', 0);
+    assertDatabaseCount('media', 0);
 })->with([
     'short title' => [['title' => 'Hi'], 'title'],
     'invalid URL' => [['source_url' => 'not a URL'], 'source_url'],
@@ -98,6 +122,7 @@ test('invalid accommodation data is not saved', function (array $invalid, string
     'unknown property type' => [['property_type' => 'unknown'], 'property_type'],
     'invalid note' => [['note' => ['text']], 'note'],
     'note too long' => [['note' => str_repeat('a', 5001)], 'note'],
+    'not an image' => fn () => [['image' => UploadedFile::fake()->create('document.pdf', 10, 'application/pdf')], 'image'],
 ]);
 
 test('other users cannot create accommodations in a selection', function () {
