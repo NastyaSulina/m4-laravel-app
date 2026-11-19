@@ -9,26 +9,60 @@ use Database\Seeders\DatabaseSeeder;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
+use function Pest\Laravel\put;
 use function Pest\Laravel\seed;
 
 test('guests are redirected to login from userzone content', function (string $path) {
     get($path)->assertRedirect(route('login'));
 })->with(['/user/selections', '/user/selections/1', '/user/selections/1/accommodations/1']);
 
-test('authenticated users can open a selection by its URL', function () {
+test('users cannot open another owners selection pages', function (string $action) {
     $user = User::factory()->create();
     $selection = Selection::factory()->create();
     actingAs($user);
 
-    get(route('userzone.selections.show', $selection))->assertOk();
-});
+    get(route('userzone.selections.'.$action, $selection))->assertForbidden();
+})->with(['show', 'edit']);
 
-test('authenticated users can open an accommodation by its URL', function () {
+test('accommodation authors cannot open accommodations in another owners selection', function () {
     $user = User::factory()->create();
     $accommodation = Accommodation::factory()->for($user)->create();
     actingAs($user);
 
-    get(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))->assertOk();
+    get(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))->assertForbidden();
+});
+
+test('users cannot update another owners selection', function () {
+    $selection = Selection::factory()->create(['title' => 'Original selection']);
+    actingAs(User::factory()->create());
+
+    put(route('userzone.selections.update', $selection), [
+        'title' => 'Changed selection',
+        'search_type' => 'short_stay',
+    ])->assertForbidden();
+
+    expect($selection->fresh()->title)->toBe('Original selection');
+});
+
+test('owners can create and edit their selections', function () {
+    $user = User::factory()->create();
+    actingAs($user);
+
+    get(route('userzone.selections.create'))->assertOk();
+    post(route('userzone.selections.store'), [
+        'title' => 'New selection',
+        'search_type' => 'short_stay',
+    ])->assertRedirect(route('userzone.selections.index'));
+
+    $selection = $user->selections()->sole();
+    expect($selection->title)->toBe('New selection');
+    get(route('userzone.selections.edit', $selection))->assertOk();
+    put(route('userzone.selections.update', $selection), [
+        'title' => 'Updated selection',
+        'search_type' => 'long_term',
+    ])->assertRedirect(route('userzone.selections.index'));
+
+    expect($selection->fresh()->title)->toBe('Updated selection');
 });
 
 test('seeded test user can log in and browse their selection and accommodation', function () {

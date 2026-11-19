@@ -20,8 +20,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::prefix('user')->name('userzone.')->group(function () {
-        Route::resource('selections', SelectionController::class);
-        Route::resource('selections.accommodations', AccommodationController::class)->only(['show'])->scoped();
+        Route::resource('selections', SelectionController::class)->middlewareFor(['show', 'edit', 'update', 'destroy'], CheckSelectionOwnership::class);
+        Route::resource('selections.accommodations', AccommodationController::class)->only(['show'])->scoped()->middleware(CheckSelectionOwnership::class);
         Route::resource('selections.criteria', CriterionController::class)->except(['create', 'show'])->scoped()->middleware(CheckSelectionOwnership::class);
     });
 

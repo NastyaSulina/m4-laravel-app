@@ -44,3 +44,16 @@ test('deleting a missing selection returns not found', function () {
     actingAs(User::factory()->create());
     delete(route('userzone.selections.destroy', 999))->assertNotFound();
 });
+
+test('users cannot delete another owners selection or its contents', function () {
+    $selection = Selection::factory()->create();
+    $criterion = Criterion::factory()->for($selection)->create();
+    $accommodation = Accommodation::factory()->for($selection)->create();
+    actingAs(User::factory()->create());
+
+    delete(route('userzone.selections.destroy', $selection))->assertForbidden();
+
+    assertModelExists($selection);
+    assertModelExists($criterion);
+    assertModelExists($accommodation);
+});
