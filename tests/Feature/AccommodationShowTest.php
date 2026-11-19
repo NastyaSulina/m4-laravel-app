@@ -25,11 +25,11 @@ test('accommodation page displays its details', function (string $propertyType, 
         ->assertOk()
         ->assertSee('<title>Madrid apartment</title>', false)
         ->assertSeeText('Address: Calle Mayor 1')
-        ->assertSeeText('Status: shortlisted')
+        ->assertSeeText('Status: Shortlisted')
         ->assertSeeText('Source: https://example.com/listing/1')
         ->assertSee(route('userzone.selections.show', $accommodation->selection_id));
 
-    $response->assertSeeText('Property type: '.$propertyType);
+    $response->assertSeeText('Property type: '.ucfirst($propertyType));
 
     if ($note !== null) {
         $response->assertSeeText('Note: '.$note)

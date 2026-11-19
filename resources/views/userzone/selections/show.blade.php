@@ -12,7 +12,7 @@
         </form>
 
         <p>Search type: {{ ['short_stay' => 'Short stay', 'long_term' => 'Long-term rental'][$selection->search_type] }}</p>
-        <p>Status: {{ ['active' => 'Active', 'archived' => 'Archived'][$selection->status] }}</p>
+        <p>Status: {{ ucfirst($selection->status) }}</p>
         @if ($selection->start_date)
             <p>Start date: {{ $selection->start_date }}</p>
         @endif
@@ -57,8 +57,8 @@
                 >
                 <h3 class="break-words text-xl font-semibold text-slate-900">{{ $accommodation->title }}</h3>
                 <p>Address: {{ $accommodation->address }}</p>
-                <p>Status: {{ $accommodation->status }}</p>
-                <p>Property type: {{ $accommodation->property_type }}</p>
+                <p>Status: {{ ucfirst($accommodation->status) }}</p>
+                <p>Property type: {{ ucfirst($accommodation->property_type) }}</p>
                 <x-ui.button
                     :href="route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation])"
                     variant="tertiary" class="mt-auto self-start pt-3"

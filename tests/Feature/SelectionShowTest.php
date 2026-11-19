@@ -112,8 +112,8 @@ test('selection page lists only its own accommodations', function () {
         ->assertOk()
         ->assertSeeText('Madrid apartment')
         ->assertSeeText('Address: Calle Mayor 1')
-        ->assertSeeText('Status: shortlisted')
-        ->assertSeeText('Property type: apartment')
+        ->assertSeeText('Status: Shortlisted')
+        ->assertSeeText('Property type: Apartment')
         ->assertSee(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))
         ->assertDontSeeText('Unrelated accommodation');
 });

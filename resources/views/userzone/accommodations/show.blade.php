@@ -20,9 +20,9 @@
         >
 
         <p>Address: {{ $accommodation->address }}</p>
-        <p>Status: {{ $accommodation->status }}</p>
+        <p>Status: {{ ucfirst($accommodation->status) }}</p>
         <p class="break-all">Source: {{ $accommodation->source_url }}</p>
-        <p>Property type: {{ $accommodation->property_type }}</p>
+        <p>Property type: {{ ucfirst($accommodation->property_type) }}</p>
         @if ($accommodation->note)
             <p class="whitespace-pre-line break-words">Note: {{ $accommodation->note }}</p>
         @endif
