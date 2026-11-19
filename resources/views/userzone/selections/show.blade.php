@@ -52,7 +52,7 @@
             <article class="flex min-w-0 flex-col gap-3 rounded-xl border border-slate-200 bg-white p-6">
                 @if ($accommodation->hasMedia('images'))
                     <img
-                        src="{{ $accommodation->getFirstMediaUrl('images') }}" alt="{{ $accommodation->title }}"
+                        src="{{ $accommodation->getFirstMediaUrl('images', 'thumbnail') }}" alt="{{ $accommodation->title }}"
                         width="128" height="96" loading="lazy"
                         class="h-24 w-32 rounded-lg border border-slate-200 bg-slate-50 object-cover"
                     >

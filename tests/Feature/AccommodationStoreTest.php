@@ -94,12 +94,16 @@ test('owners can attach an image when creating accommodation', function () {
         'source_url' => 'https://example.com/listing/1',
         'address' => 'Calle Mayor 1',
         'status' => 'considering',
-        'image' => UploadedFile::fake()->image('apartment.jpg')->size(3072),
+        'image' => UploadedFile::fake()->image('apartment.jpg', 1200, 900)->size(3072),
     ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.show', $selection));
 
     $media = Accommodation::sole()->getMedia('images')->sole();
     expect($media->file_name)->toBe('apartment.jpg');
     $disk->assertExists($media->getPathRelativeToRoot());
+    $disk->assertExists($media->getPathRelativeToRoot('thumbnail'));
+    $thumbnailSize = getimagesize($media->getPath('thumbnail'));
+    expect($thumbnailSize[0])->toBe(600);
+    expect($thumbnailSize[1])->toBe(450);
 
     $accommodation = Accommodation::sole();
     get(route('userzone.selections.accommodations.show', [$selection, $accommodation]))
@@ -108,7 +112,7 @@ test('owners can attach an image when creating accommodation', function () {
 
     get(route('userzone.selections.show', $selection))
         ->assertOk()
-        ->assertSee('src="'.$media->getUrl().'"', false);
+        ->assertSee('src="'.$media->getUrl('thumbnail').'"', false);
 });
 
 test('invalid accommodation data is not saved', function (array $invalid, string $field) {
