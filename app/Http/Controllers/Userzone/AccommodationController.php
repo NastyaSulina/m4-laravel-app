@@ -54,4 +54,11 @@ class AccommodationController extends Controller
 
         return redirect()->route('userzone.selections.accommodations.show', [$selection, $accommodation]);
     }
+
+    public function destroy(Selection $selection, Accommodation $accommodation): RedirectResponse
+    {
+        $accommodation->delete();
+
+        return redirect()->route('userzone.selections.show', $selection);
+    }
 }

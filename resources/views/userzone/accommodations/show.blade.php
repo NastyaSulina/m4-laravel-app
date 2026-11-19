@@ -8,6 +8,12 @@
             variant="secondary" class="self-start"
         >Edit</x-ui.button>
 
+        <form action="{{ route('userzone.selections.accommodations.destroy', [$accommodation->selection_id, $accommodation]) }}" method="post">
+            @method('DELETE')
+            @csrf
+            <x-ui.button type="submit" variant="tertiary" danger>Delete accommodation</x-ui.button>
+        </form>
+
         <img
             src="{{ $accommodation->getFirstMediaUrl('images') }}" alt="{{ $accommodation->title }}"
             class="h-auto max-h-96 w-full rounded-lg border border-slate-200 bg-slate-50 object-contain"
