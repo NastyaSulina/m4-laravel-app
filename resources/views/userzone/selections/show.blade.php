@@ -11,8 +11,8 @@
             <x-ui.button type="submit" variant="tertiary" danger>Delete selection</x-ui.button>
         </form>
 
-        <p>Search type: {{ $selection->search_type }}</p>
-        <p>Status: {{ $selection->status }}</p>
+        <p>Search type: {{ ['short_stay' => 'Short stay', 'long_term' => 'Long-term rental'][$selection->search_type] }}</p>
+        <p>Status: {{ ['active' => 'Active', 'archived' => 'Archived'][$selection->status] }}</p>
         @if ($selection->start_date)
             <p>Start date: {{ $selection->start_date }}</p>
         @endif

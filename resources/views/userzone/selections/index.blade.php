@@ -7,8 +7,8 @@
     @forelse ($selections as $selection)
         <div class="flex min-w-0 flex-col gap-3 rounded-xl border border-slate-200 bg-white p-6">
             <h2 class="break-words text-xl font-semibold text-slate-900">{{ $selection->title }}</h2>
-            <p>Search type: {{ $selection->search_type }}</p>
-            <p>Status: {{ $selection->status }}</p>
+            <p>Search type: {{ ['short_stay' => 'Short stay', 'long_term' => 'Long-term rental'][$selection->search_type] }}</p>
+            <p>Status: {{ ['active' => 'Active', 'archived' => 'Archived'][$selection->status] }}</p>
             @if ($selection->start_date)
                 <p>Start date: {{ $selection->start_date }}</p>
             @endif
