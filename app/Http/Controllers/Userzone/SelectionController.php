@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Userzone;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Userzone\SelectionRequest;
 use App\Models\Selection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,15 +47,8 @@ class SelectionController extends Controller
         return view('userzone.selections.edit', compact('selection'));
     }
 
-    public function update(Request $request, Selection $selection): RedirectResponse
+    public function update(SelectionRequest $request, Selection $selection): RedirectResponse
     {
-        $request->validate([
-            'title' => ['required', 'string', 'min:3', 'max:255'],
-            'search_type' => ['required', 'in:short_stay,long_term'],
-            'start_date' => ['nullable', 'date_format:Y-m-d'],
-            'end_date' => ['nullable', 'date_format:Y-m-d', ...($request->filled('start_date') ? ['after_or_equal:start_date'] : [])],
-        ]);
-
         $selection->title = $request->title;
         $selection->search_type = $request->search_type;
         $selection->start_date = $request->start_date;
@@ -64,15 +58,8 @@ class SelectionController extends Controller
         return redirect()->route('userzone.selections.index');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(SelectionRequest $request): RedirectResponse
     {
-        $request->validate([
-            'title' => ['required', 'string', 'min:3', 'max:255'],
-            'search_type' => ['required', 'in:short_stay,long_term'],
-            'start_date' => ['nullable', 'date_format:Y-m-d'],
-            'end_date' => ['nullable', 'date_format:Y-m-d', ...($request->filled('start_date') ? ['after_or_equal:start_date'] : [])],
-        ]);
-
         $selection = new Selection;
         $selection->title = $request->title;
         $selection->search_type = $request->search_type;
