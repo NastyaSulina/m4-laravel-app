@@ -4,7 +4,10 @@
         <h1 class="break-words text-3xl font-semibold tracking-tight text-slate-900">{{ $accommodation->title }}</h1>
 
         @if ($accommodation->hasMedia('images'))
-            <img src="{{ $accommodation->getFirstMediaUrl('images') }}" alt="{{ $accommodation->title }}">
+            <img
+                src="{{ $accommodation->getFirstMediaUrl('images') }}" alt="{{ $accommodation->title }}"
+                class="h-auto max-h-96 w-full rounded-lg border border-slate-200 bg-slate-50 object-contain"
+            >
         @endif
 
         <p>Address: {{ $accommodation->address }}</p>
