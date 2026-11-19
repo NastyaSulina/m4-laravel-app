@@ -55,6 +55,34 @@ test('guests cannot open criteria management', function () {
     get(route('userzone.selections.criteria.index', 1))->assertRedirect(route('login'));
 });
 
+test('criterion creation rejects invalid input', function (array $input, string $field) {
+    $selection = Selection::factory()->create();
+    actingAs($selection->owner);
+
+    post(route('userzone.selections.criteria.store', $selection), $input)
+        ->assertSessionHasErrors($field);
+
+    expect($selection->criteria()->count())->toBe(0);
+})->with([
+    'short title' => [['title' => 'Hi'], 'title'],
+    'invalid checkbox' => [['title' => 'Balcony', 'is_required' => 'invalid'], 'is_required'],
+]);
+
+test('criterion update rejects invalid input without changing the criterion', function (array $input, string $field) {
+    $selection = Selection::factory()->create();
+    $criterion = Criterion::factory()->for($selection)->create(['title' => 'Original', 'is_required' => false]);
+    actingAs($selection->owner);
+
+    put(route('userzone.selections.criteria.update', [$selection, $criterion]), $input)
+        ->assertSessionHasErrors($field);
+
+    expect($criterion->fresh()->title)->toBe('Original');
+    expect((bool) $criterion->fresh()->is_required)->toBeFalse();
+})->with([
+    'short title' => [['title' => 'Hi', 'is_required' => 1], 'title'],
+    'invalid checkbox' => [['title' => 'Balcony', 'is_required' => 'invalid'], 'is_required'],
+]);
+
 test('a user cannot view another owners criteria management', function () {
     $selection = Selection::factory()->create();
     actingAs(User::factory()->create());

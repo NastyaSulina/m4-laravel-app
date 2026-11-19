@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Userzone;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Userzone\CriterionRequest;
 use App\Models\Criterion;
 use App\Models\Selection;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CriterionController extends Controller
@@ -18,13 +18,8 @@ class CriterionController extends Controller
         return view('userzone.criteria.index', compact('selection', 'criteria'));
     }
 
-    public function store(Request $request, Selection $selection): RedirectResponse
+    public function store(CriterionRequest $request, Selection $selection): RedirectResponse
     {
-        $request->validate([
-            'title' => ['required', 'string', 'min:3', 'max:255'],
-            'is_required' => ['boolean'],
-        ]);
-
         $criterion = new Criterion;
         $criterion->title = $request->title;
         $criterion->is_required = $request->boolean('is_required');
@@ -38,13 +33,8 @@ class CriterionController extends Controller
         return view('userzone.criteria.edit', compact('selection', 'criterion'));
     }
 
-    public function update(Request $request, Selection $selection, Criterion $criterion): RedirectResponse
+    public function update(CriterionRequest $request, Selection $selection, Criterion $criterion): RedirectResponse
     {
-        $request->validate([
-            'title' => ['required', 'string', 'min:3', 'max:255'],
-            'is_required' => ['boolean'],
-        ]);
-
         $criterion->title = $request->title;
         $criterion->is_required = $request->boolean('is_required');
         $criterion->save();
