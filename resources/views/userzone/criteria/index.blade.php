@@ -1,8 +1,8 @@
 <x-base-layout :title="'Criteria — '.$selection->title" class="bg-[#F8F3E9]!">
     <div class="mx-auto max-w-2xl text-[#43263D]">
-        <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current text-lg! no-underline!"><span>←</span> Back to selection</x-ui.button>
+        <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to selection</x-ui.button>
 
-        <h1 class="mb-2 font-serif text-3xl font-semibold">Criteria</h1>
+        <h1 class="mb-2 font-serif text-3xl font-semibold leading-tight">Criteria</h1>
         <p class="mb-4 break-words text-[#43263D]/75">{{ $selection->title }}</p>
 
         <ul class="my-6 max-w-2xl divide-y divide-[#D8C9EA]">
@@ -22,7 +22,7 @@
             @endforelse
         </ul>
 
-        <h2 class="mb-4 text-lg font-semibold text-[#43263D]">Add criterion</h2>
+        <h2 class="mb-4 text-2xl font-semibold text-[#43263D] font-serif leading-tight">Add criterion</h2>
         <form action="{{ route('userzone.selections.criteria.store', $selection) }}" method="post" class="flex flex-col gap-4">
             @csrf
             <x-form.textinput name="title" label="Title" minlength="3" maxlength="255" required />

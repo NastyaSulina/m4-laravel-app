@@ -1,9 +1,9 @@
 <x-base-layout :title="$selection->title" class="bg-[#F8F3E9]!">
-    <x-ui.button :href="route('userzone.selections.index')" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current text-lg! no-underline!"><span>←</span> Back to selections</x-ui.button>
+    <x-ui.button :href="route('userzone.selections.index')" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to selections</x-ui.button>
 
     <article class="flex flex-col gap-6 border-b border-[#D8C9EA] pb-8 text-[#43263D]">
         <div class="flex items-center justify-between gap-4">
-            <h1 class="flex-1 font-serif text-5xl font-semibold leading-tight">{{ $selection->title }}</h1>
+            <h1 class="flex-1 font-serif text-3xl font-semibold leading-tight">{{ $selection->title }}</h1>
             <div class="flex items-center gap-4">
                 <x-ui.button :href="route('userzone.selections.edit', $selection)" variant="secondary">Edit</x-ui.button>
                 <form action="{{ route('userzone.selections.destroy', $selection) }}" method="post">
@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-x-6 gap-y-3 whitespace-nowrap text-lg">
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3 whitespace-nowrap text-base">
             <p>{{ ['short_stay' => 'Short stay', 'long_term' => 'Long-term rental'][$selection->search_type] }}</p>
             @if ($selection->start_date)
                 <p class="border-l border-[#D8C9EA] pl-6">From: {{ $selection->start_date }}</p>
@@ -28,12 +28,12 @@
     </article>
 
     <section class="mt-8 flex items-center gap-6 border-b border-[#D8C9EA] pb-6 text-[#43263D]">
-        <h2 class="text-xl font-semibold">Criteria</h2>
+        <h2 class="text-2xl font-semibold font-serif leading-tight">Criteria</h2>
 
         @if ($selection->criteria->isNotEmpty())
             <ul class="flex gap-3">
                 @foreach ($selection->criteria as $criterion)
-                    <li class="rounded-full border border-[#D8C9EA] px-5 py-1 text-lg">
+                    <li class="rounded-full border border-[#D8C9EA] px-5 py-1 text-base">
                         {{ $criterion->title }}
                         @if ($criterion->is_required)
                             <span title="Required" aria-hidden="true">*</span>
@@ -48,7 +48,7 @@
     </section>
 
     <div class="mb-6 mt-8 flex items-center justify-between gap-6 text-[#43263D]">
-        <h2 class="font-serif text-4xl font-semibold">Accommodations</h2>
+        <h2 class="font-serif text-2xl font-semibold leading-tight">Accommodations</h2>
         <x-ui.button :href="route('userzone.selections.accommodations.create', $selection)">+ New accommodation</x-ui.button>
     </div>
 
@@ -60,7 +60,7 @@
                     width="600" height="400" loading="lazy"
                     class="aspect-[3/2] w-full rounded-2xl bg-[#D8C9EA]/30 object-cover"
                 >
-                <h3 class="break-words text-xl font-semibold">{{ $accommodation->title }}</h3>
+                <h3 class="break-words text-xl font-semibold font-serif leading-tight">{{ $accommodation->title }}</h3>
                 <p>Address: {{ $accommodation->address }}</p>
                 <p>Status: {{ ucfirst($accommodation->status) }}</p>
                 <p>Property type: {{ ucfirst($accommodation->property_type) }}</p>

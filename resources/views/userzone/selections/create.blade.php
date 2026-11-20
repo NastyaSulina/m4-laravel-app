@@ -1,8 +1,8 @@
 <x-base-layout title="Create selection" class="bg-[#F8F3E9]!">
     <div class="mx-auto max-w-2xl text-[#43263D]">
-        <x-ui.button :href="route('userzone.selections.index')" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current text-lg! no-underline!"><span>←</span> Back to selections</x-ui.button>
+        <x-ui.button :href="route('userzone.selections.index')" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to selections</x-ui.button>
 
-        <h1 class="mb-6 font-serif text-3xl font-semibold">Create selection</h1>
+        <h1 class="mb-6 font-serif text-3xl font-semibold leading-tight">Create selection</h1>
 
         <form action="{{ route('userzone.selections.store') }}" method="post" class="flex flex-col gap-4">
             @csrf

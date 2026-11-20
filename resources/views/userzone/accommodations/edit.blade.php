@@ -1,8 +1,8 @@
 <x-base-layout title="Edit accommodation" class="bg-[#F8F3E9]!">
     <div class="mx-auto max-w-2xl text-[#43263D]">
-        <x-ui.button :href="route('userzone.selections.accommodations.show', [$selection, $accommodation])" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current text-lg! no-underline!"><span>←</span> Back to accommodation</x-ui.button>
+        <x-ui.button :href="route('userzone.selections.accommodations.show', [$selection, $accommodation])" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to accommodation</x-ui.button>
 
-        <h1 class="mb-6 font-serif text-3xl font-semibold">Edit accommodation</h1>
+        <h1 class="mb-6 font-serif text-3xl font-semibold leading-tight">Edit accommodation</h1>
 
         <form action="{{ route('userzone.selections.accommodations.update', [$selection, $accommodation]) }}" method="post" enctype="multipart/form-data" class="flex flex-col gap-4">
             @method('PUT')

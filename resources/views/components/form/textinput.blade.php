@@ -20,7 +20,7 @@
     <input
         type="{{ $type }}" id="{{ $id }}" name="{{ $name }}" value="{{ old($name, $value) }}" @required($required)
         {{ $attributes->class([
-            'w-full rounded-md border bg-white px-3 py-2 text-sm text-[#43263D] placeholder:text-slate-400 focus:outline-2 focus:outline-[#43263D]',
+            'w-full rounded-md border bg-white px-3 py-2 text-base text-[#43263D] placeholder:text-slate-400 focus:outline-2 focus:outline-[#43263D]',
             'border-red-500' => $errors->has($name),
             'border-[#D8C9EA]' => ! $errors->has($name),
         ]) }}

@@ -21,7 +21,7 @@
         <select
             id="{{ $id }}" name="{{ $name }}" @required($required)
             {{ $attributes->class([
-                'w-full appearance-none rounded-md border bg-white bg-none py-2 pl-3 pr-10 text-sm text-[#43263D] focus:outline-2 focus:outline-[#43263D]',
+                'w-full appearance-none rounded-md border bg-white bg-none py-2 pl-3 pr-10 text-base text-[#43263D] focus:outline-2 focus:outline-[#43263D]',
                 'border-red-500' => $errors->has($name),
                 'border-[#D8C9EA]' => ! $errors->has($name),
             ]) }}

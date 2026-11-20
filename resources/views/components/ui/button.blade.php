@@ -7,7 +7,7 @@
 
 @php
     $attributes = $attributes->class([
-        'inline-flex items-center justify-center cursor-pointer rounded-xl text-sm font-medium transition-colors',
+        'inline-flex items-center justify-center cursor-pointer rounded-xl text-base font-medium transition-colors',
         'focus-visible:outline-2 focus-visible:outline-offset-4',
         $danger ? 'focus-visible:outline-red-700' : 'focus-visible:outline-[#43263D]',
         'border border-transparent px-4 py-2 text-white' => $variant === 'primary',

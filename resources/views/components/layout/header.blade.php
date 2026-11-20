@@ -8,7 +8,7 @@
             @foreach ($menu as $label => $link)
                 <a
                     href="{{ $link }}"
-                    class="rounded-sm text-base first:font-semibold hover:underline underline-offset-4 sm:text-xl
+                    class="rounded-sm text-lg hover:underline underline-offset-4
                            focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#43263D]"
                 >
                     {{ $label }}

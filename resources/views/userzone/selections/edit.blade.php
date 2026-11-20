@@ -1,8 +1,8 @@
 <x-base-layout title="Edit selection" class="bg-[#F8F3E9]!">
     <div class="mx-auto max-w-2xl text-[#43263D]">
-        <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current text-lg! no-underline!"><span>←</span> Back to selection</x-ui.button>
+        <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to selection</x-ui.button>
 
-        <h1 class="mb-6 font-serif text-3xl font-semibold">Edit selection</h1>
+        <h1 class="mb-6 font-serif text-3xl font-semibold leading-tight">Edit selection</h1>
 
         <form action="{{ route('userzone.selections.update', $selection) }}" method="post" class="flex flex-col gap-4">
             @method('PUT')

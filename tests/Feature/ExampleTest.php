@@ -21,7 +21,7 @@ it('shows the logo and sign in and sign up links to guests', function () {
         ->assertSee('href="'.route('register').'"', false)
         ->assertSeeText('Sign in')
         ->assertSeeText('Sign up')
-        ->assertDontSeeText('My Selections')
+        ->assertDontSeeText('My selections')
         ->assertDontSee('href="'.route('userzone.selections.index').'"', false)
         ->assertDontSee('href="'.route('dashboard').'"', false)
         ->assertDontSeeText('Home');
@@ -35,7 +35,7 @@ it('shows personal navigation without the user name to signed in users', functio
         ->assertSee('href="'.route('welcome').'"', false)
         ->assertSee('alt="Staylist"', false)
         ->assertSee('href="'.route('userzone.selections.index').'"', false)
-        ->assertSeeText('My Selections')
+        ->assertSeeText('My selections')
         ->assertDontSeeText($user->name)
         ->assertSee('href="'.route('dashboard').'"', false)
         ->assertSeeText('Dashboard')
