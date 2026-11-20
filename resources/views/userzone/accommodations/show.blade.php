@@ -1,10 +1,10 @@
 <x-base-layout :title="$accommodation->title" class="bg-[#F8F3E9]!">
-    <article class="flex flex-col gap-8 text-[#43263D]">
-        <x-ui.button
-            :href="route('userzone.selections.show', $accommodation->selection_id)"
-            variant="tertiary" class="self-start"
-        >Back to selection</x-ui.button>
+    <x-ui.button
+        :href="route('userzone.selections.show', $accommodation->selection_id)"
+        variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current text-lg! no-underline!"
+    ><span>←</span> Back to selection</x-ui.button>
 
+    <article class="flex flex-col gap-8 text-[#43263D]">
         <div class="flex items-center justify-between gap-4">
             <h1 class="break-words font-serif text-4xl font-semibold leading-tight">{{ $accommodation->title }}</h1>
             <x-ui.button

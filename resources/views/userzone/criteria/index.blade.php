@@ -1,8 +1,9 @@
 <x-base-layout :title="'Criteria — '.$selection->title" class="bg-[#F8F3E9]!">
     <div class="mx-auto max-w-2xl text-[#43263D]">
+        <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current text-lg! no-underline!"><span>←</span> Back to selection</x-ui.button>
+
         <h1 class="mb-2 font-serif text-3xl font-semibold">Criteria</h1>
         <p class="mb-4 break-words text-[#43263D]/75">{{ $selection->title }}</p>
-        <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary">Back to selection</x-ui.button>
 
         <ul class="my-6 max-w-2xl divide-y divide-[#D8C9EA]">
             @forelse ($criteria as $criterion)
