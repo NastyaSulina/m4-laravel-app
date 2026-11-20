@@ -71,15 +71,15 @@ test('selections page only displays dates that are present', function (?string $
     $response = get(route('userzone.selections.index'))->assertOk();
 
     if ($startDate !== null) {
-        $response->assertSeeText('Start date: '.$startDate);
+        $response->assertSeeText('From: '.$startDate);
     } else {
-        $response->assertDontSeeText('Start date:');
+        $response->assertDontSeeText('From:');
     }
 
     if ($endDate !== null) {
-        $response->assertSeeText('End date: '.$endDate);
+        $response->assertSeeText('To: '.$endDate);
     } else {
-        $response->assertDontSeeText('End date:');
+        $response->assertDontSeeText('To:');
     }
 })->with([
     'both dates' => ['2027-06-01', '2027-06-15'],

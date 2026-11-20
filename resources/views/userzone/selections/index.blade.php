@@ -1,24 +1,29 @@
-<x-base-layout title="Selections">
-    <h1 class="mb-6 text-3xl font-semibold tracking-tight text-slate-900">Selections</h1>
+<x-base-layout title="Selections" class="bg-[#F8F3E9]!">
+    <div class="mb-8 flex items-center justify-between gap-6 text-[#43263D]">
+        <h1 class="font-serif text-5xl font-semibold leading-tight">My selections</h1>
+        <x-ui.button :href="route('userzone.selections.create')">+ New selection</x-ui.button>
+    </div>
 
-    <x-ui.button :href="route('userzone.selections.create')" class="mb-6">New selection</x-ui.button>
-
-    <div class="grid gap-5 sm:grid-cols-2">
-    @forelse ($selections as $selection)
-        <div class="flex min-w-0 flex-col gap-3 rounded-xl border border-slate-200 bg-white p-6">
-            <h2 class="break-words text-xl font-semibold text-slate-900">{{ $selection->title }}</h2>
-            <p>Search type: {{ ['short_stay' => 'Short stay', 'long_term' => 'Long-term rental'][$selection->search_type] }}</p>
-            <p>Status: {{ ucfirst($selection->status) }}</p>
-            @if ($selection->start_date)
-                <p>Start date: {{ $selection->start_date }}</p>
-            @endif
-            @if ($selection->end_date)
-                <p>End date: {{ $selection->end_date }}</p>
-            @endif
-            <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="mt-auto self-start pt-3">View selection</x-ui.button>
-        </div>
-    @empty
-        <p class="rounded-xl border border-dashed border-slate-300 p-8 text-center text-slate-500 sm:col-span-2">No selections yet.</p>
-    @endforelse
+    <div class="flex flex-col gap-5 text-[#43263D]">
+        @forelse ($selections as $selection)
+            <article class="flex items-center justify-between gap-6 rounded-2xl border border-[#D8C9EA] bg-white/30 p-6">
+                <div class="min-w-0 flex-1">
+                    <h2 class="mb-3 break-words font-serif text-2xl font-semibold">{{ $selection->title }}</h2>
+                    <div class="flex flex-wrap items-center gap-x-5 gap-y-2 whitespace-nowrap text-lg">
+                        <p>{{ ['short_stay' => 'Short stay', 'long_term' => 'Long-term rental'][$selection->search_type] }}</p>
+                        @if ($selection->start_date)
+                            <p class="border-l border-[#D8C9EA] pl-5">From: {{ $selection->start_date }}</p>
+                        @endif
+                        @if ($selection->end_date)
+                            <p class="border-l border-[#D8C9EA] pl-5">To: {{ $selection->end_date }}</p>
+                        @endif
+                        <p class="border-l border-[#D8C9EA] pl-5">Status: {{ ucfirst($selection->status) }}</p>
+                    </div>
+                </div>
+                <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="shrink-0 text-lg! no-underline! hover:underline!">View selection →</x-ui.button>
+            </article>
+        @empty
+            <p class="rounded-2xl border border-dashed border-[#D8C9EA] p-8 text-center">No selections yet.</p>
+        @endforelse
     </div>
 </x-base-layout>
