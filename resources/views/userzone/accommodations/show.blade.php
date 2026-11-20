@@ -26,7 +26,10 @@
             >
             <div class="col-span-2 flex min-w-0 flex-col gap-6 text-lg">
                 <p class="break-words"><span class="block font-serif text-2xl font-semibold">Address: </span>{{ $accommodation->address }}</p>
-                <p class="break-all"><span class="block font-serif text-2xl font-semibold">Source: </span>{{ $accommodation->source_url }}</p>
+                <p class="break-all">
+                    <span class="block font-serif text-2xl font-semibold">Source</span>
+                    <a href="{{ $accommodation->source_url }}" class="underline underline-offset-4">{{ parse_url($accommodation->source_url, PHP_URL_HOST) }} ↗</a>
+                </p>
                 @if ($accommodation->note)
                     <p><span class="mb-2 block font-serif text-2xl font-semibold">Note: </span><span class="block whitespace-pre-line break-words rounded-xl bg-[#D8C9EA]/50 px-4 py-3">{{ $accommodation->note }}</span></p>
                 @endif
