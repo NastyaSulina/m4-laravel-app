@@ -5,23 +5,23 @@
     'required' => false,
 ])
 
-<div class="flex flex-col gap-2">
-    <label for="{{ $id }}" class="text-sm font-medium text-slate-700">
+<div class="flex flex-col gap-1">
+    <label for="{{ $id }}" class="text-sm font-medium text-[#43263D]">
         {{ $label }}
         @if ($required)
             <span class="text-red-600" title="Required" aria-hidden="true">*</span>
         @else
-            <span class="font-normal text-slate-500">(optional)</span>
+            <span class="font-normal text-[#43263D]/60">(optional)</span>
         @endif
     </label>
 
     <input
         type="file" name="{{ $name }}" id="{{ $id }}" @required($required)
         {{ $attributes->class([
-            'w-full min-w-0 cursor-pointer rounded-md border bg-white px-3 py-2 text-sm text-slate-900 focus:outline-2 focus:outline-teal-700',
-            'file:mr-3 file:cursor-pointer file:rounded-lg file:border file:border-teal-700 file:bg-white file:px-4 file:py-2 file:text-sm file:font-medium file:text-teal-700 hover:file:bg-teal-50',
+            'w-full min-w-0 cursor-pointer rounded-md border bg-white px-3 py-2 text-sm text-[#43263D] focus:outline-2 focus:outline-[#43263D]',
+            'file:mr-3 file:cursor-pointer file:rounded-lg file:border file:border-[#D8C9EA] file:bg-white file:px-4 file:py-1 file:text-sm file:font-medium file:text-[#43263D] hover:file:bg-[#D8C9EA]/30',
             'border-red-500' => $errors->has($name),
-            'border-slate-300' => ! $errors->has($name),
+            'border-[#D8C9EA]' => ! $errors->has($name),
         ]) }}
     >
 
