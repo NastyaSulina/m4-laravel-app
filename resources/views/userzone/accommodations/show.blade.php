@@ -1,39 +1,39 @@
-<x-base-layout :title="$accommodation->title">
-    <article class="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 sm:p-8">
+<x-base-layout :title="$accommodation->title" class="bg-[#F8F3E9]!">
+    <article class="flex flex-col gap-8 text-[#43263D]">
         <x-ui.button
             :href="route('userzone.selections.show', $accommodation->selection_id)"
             variant="tertiary" class="self-start"
         >Back to selection</x-ui.button>
 
         <div class="flex items-center justify-between gap-4">
-            <h1 class="break-words text-3xl font-semibold tracking-tight text-slate-900">{{ $accommodation->title }}</h1>
+            <h1 class="break-words font-serif text-4xl font-semibold leading-tight">{{ $accommodation->title }}</h1>
             <x-ui.button
                 :href="route('userzone.selections.accommodations.edit', [$accommodation->selection_id, $accommodation])"
-                variant="secondary" class="self-start"
+                variant="secondary" class="shrink-0"
             >Edit</x-ui.button>
         </div>
 
-        <div class="flex items-center gap-4">
-            <p>Property type: {{ ucfirst($accommodation->property_type) }}</p>
-            <p>Status: {{ ucfirst($accommodation->status) }}</p>
-            <p class="text-sm text-slate-500">Added by {{ $accommodation->user->name }}</p>
+        <div class="flex items-center gap-6 border-b border-[#D8C9EA] pb-6 text-lg">
+            <p class="font-semibold">Property type: {{ ucfirst($accommodation->property_type) }}</p>
+            <p class="border-l border-[#D8C9EA] pl-6">Status: {{ ucfirst($accommodation->status) }}</p>
+            <p class="border-l border-[#D8C9EA] pl-6">Added by <strong>{{ $accommodation->user->name }}</strong></p>
         </div>
 
-        <div class="grid grid-cols-3 gap-6">
+        <div class="grid grid-cols-3 items-start gap-8">
             <img
                 src="{{ $accommodation->getFirstMediaUrl('images') }}" alt="{{ $accommodation->title }}"
-                class="h-auto max-h-96 w-full rounded-lg border border-slate-200 bg-slate-50 object-contain"
+                class="aspect-square w-full rounded-xl object-cover"
             >
-            <div class="col-span-2 flex flex-col gap-4">
-                <p>Address: {{ $accommodation->address }}</p>
-                <p class="break-all">Source: {{ $accommodation->source_url }}</p>
+            <div class="col-span-2 flex min-w-0 flex-col gap-6 text-lg">
+                <p class="break-words"><span class="block font-serif text-2xl font-semibold">Address: </span>{{ $accommodation->address }}</p>
+                <p class="break-all"><span class="block font-serif text-2xl font-semibold">Source: </span>{{ $accommodation->source_url }}</p>
                 @if ($accommodation->note)
-                    <p class="whitespace-pre-line break-words">Note: {{ $accommodation->note }}</p>
+                    <p><span class="mb-2 block font-serif text-2xl font-semibold">Note: </span><span class="block whitespace-pre-line break-words rounded-xl bg-[#D8C9EA]/50 px-4 py-3">{{ $accommodation->note }}</span></p>
                 @endif
             </div>
         </div>
 
-        <form action="{{ route('userzone.selections.accommodations.destroy', [$accommodation->selection_id, $accommodation]) }}" method="post">
+        <form action="{{ route('userzone.selections.accommodations.destroy', [$accommodation->selection_id, $accommodation]) }}" method="post" class="border-t border-[#D8C9EA] pt-6">
             @method('DELETE')
             @csrf
             <x-ui.button type="submit" variant="tertiary" danger>Delete accommodation</x-ui.button>
