@@ -26,22 +26,22 @@ test('selection page displays the selected selection', function (?string $startD
         ->assertSee('<title>&lt;script&gt;alert(1)&lt;/script&gt; | Staylist</title>', false)
         ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false)
         ->assertDontSee('<script>alert(1)</script>', false)
-        ->assertSeeText('Search type: Short stay')
+        ->assertSeeText('Short stay')
         ->assertSeeText('Status: Active')
         ->assertDontSeeText('Another selection')
         ->assertSee(route('userzone.selections.index'));
     $response->assertSeeText('No accommodations yet.');
 
     if ($startDate !== null) {
-        $response->assertSeeText('Start date: '.$startDate);
+        $response->assertSeeText('From: '.$startDate);
     } else {
-        $response->assertDontSeeText('Start date:');
+        $response->assertDontSeeText('From: ');
     }
 
     if ($endDate !== null) {
-        $response->assertSeeText('End date: '.$endDate);
+        $response->assertSeeText('To: '.$endDate);
     } else {
-        $response->assertDontSeeText('End date:');
+        $response->assertDontSeeText('To: ');
     }
 })->with([
     'both dates' => ['2027-06-01', '2027-06-15'],
@@ -102,6 +102,7 @@ test('selection page lists only its own accommodations', function () {
     $selection = Selection::factory()->for($user, 'owner')->create();
     $accommodation = Accommodation::factory()->for($selection)->create([
         'title' => 'Madrid apartment',
+        'note' => '<script>alert(2)</script>',
         'address' => 'Calle Mayor 1',
         'status' => 'shortlisted',
         'property_type' => 'apartment',
@@ -112,6 +113,8 @@ test('selection page lists only its own accommodations', function () {
         ->assertOk()
         ->assertSeeText('Madrid apartment')
         ->assertSeeText('Address: Calle Mayor 1')
+        ->assertDontSee($accommodation->note)
+        ->assertDontSee($accommodation->note, false)
         ->assertSeeText('Status: Shortlisted')
         ->assertSeeText('Property type: Apartment')
         ->assertSee(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))

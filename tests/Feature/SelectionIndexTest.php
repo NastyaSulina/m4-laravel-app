@@ -12,7 +12,7 @@ test('selection pages display readable search type and status', function (string
 
     get(route('userzone.selections.'.$page, $page === 'show' ? $selection : []))
         ->assertOk()
-        ->assertSeeText('Search type: '.$typeLabel)
+        ->assertSeeText($typeLabel)
         ->assertSeeText('Status: '.$statusLabel);
 })->with(['index', 'show'])->with([
     ['short_stay', 'Short stay', 'active', 'Active'],

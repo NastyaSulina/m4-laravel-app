@@ -6,7 +6,7 @@
     <title>{{ $title ? "{$title} | Staylist" : "Staylist" }}</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="flex min-h-screen flex-col bg-slate-50 font-sans text-slate-700 antialiased">
+<body {{ $attributes->merge(['class' => 'flex min-h-screen flex-col bg-slate-50 font-sans text-slate-700 antialiased']) }}>
     <x-layout.header />
     <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6">
         {{ $slot }}
