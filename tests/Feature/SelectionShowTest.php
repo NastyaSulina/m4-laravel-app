@@ -23,7 +23,7 @@ test('selection page displays the selected selection', function (?string $startD
 
     $response = get(route('userzone.selections.show', $selection))
         ->assertOk()
-        ->assertSee('<title>&lt;script&gt;alert(1)&lt;/script&gt;</title>', false)
+        ->assertSee('<title>&lt;script&gt;alert(1)&lt;/script&gt; | Staylist</title>', false)
         ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false)
         ->assertDontSee('<script>alert(1)</script>', false)
         ->assertSeeText('Search type: Short stay')

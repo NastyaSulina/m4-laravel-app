@@ -7,7 +7,7 @@ use Illuminate\View\View;
 
 class BaseLayout extends Component
 {
-    public function __construct(public string $title = 'Default title') {}
+    public function __construct(public ?string $title = null) {}
 
     /**
      * Get the view / contents that represent the component.

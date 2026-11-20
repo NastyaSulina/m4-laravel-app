@@ -23,7 +23,7 @@ test('accommodation page displays its details', function (string $propertyType, 
 
     $response = get(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))
         ->assertOk()
-        ->assertSee('<title>Madrid apartment</title>', false)
+        ->assertSee('<title>Madrid apartment | Staylist</title>', false)
         ->assertSeeText('Address: Calle Mayor 1')
         ->assertSeeText('Status: Shortlisted')
         ->assertSeeText('Source: https://example.com/listing/1')

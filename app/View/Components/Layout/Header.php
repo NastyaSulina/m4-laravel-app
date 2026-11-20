@@ -3,6 +3,7 @@
 namespace App\View\Components\Layout;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class Header extends Component
@@ -15,10 +16,12 @@ class Header extends Component
      */
     public function __construct()
     {
-        $this->menu = [
-            'Home' => route('welcome'),
-            'Selections' => route('userzone.selections.index'),
-        ];
+        $this->menu = Auth::check()
+            ? [
+                'My Selections' => route('userzone.selections.index'),
+                'Dashboard' => route('dashboard'),
+            ]
+            : ['Sign in' => route('login'), 'Sign up' => route('register')];
     }
 
     /**
