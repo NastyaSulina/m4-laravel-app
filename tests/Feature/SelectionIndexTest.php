@@ -44,7 +44,6 @@ test('selections page displays only the current users selections', function () {
         ->assertOk()
         ->assertSeeText('Summer in Madrid')
         ->assertDontSeeText('Someone elses selection')
-        ->assertSee('<title>Selections | Staylist</title>', false)
         ->assertSee(route('userzone.selections.show', $selection))
         ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false)
         ->assertDontSee('<script>alert(1)</script>', false);

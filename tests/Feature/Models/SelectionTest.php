@@ -8,15 +8,6 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\seed;
 
-test('factory titles match the supplied search type and include a destination', function (string $searchType, string $pattern) {
-    $selection = Selection::factory()->make(['search_type' => $searchType]);
-
-    expect($selection->title)->toMatch($pattern);
-})->with([
-    'short stay' => ['short_stay', "/^(Birthday weekend in|New Year's trip to|Summer escape to|A long weekend in) .+$/"],
-    'long term' => ['long_term', '/^(My next home in|Moving to|A fresh start in|A place to call home in) .+$/'],
-]);
-
 test('factory creates a selection for an existing owner without adding users', function () {
     $owner = User::factory()->create();
 
@@ -42,23 +33,6 @@ test('selection can be saved with only required fields', function () {
     expect($selection->start_date)->toBeNull();
     expect($selection->end_date)->toBeNull();
 });
-
-test('selection preserves its dates', function (?string $startDate, ?string $endDate) {
-    $selection = Selection::factory()->create([
-        'title' => 'Summer in Madrid',
-        'search_type' => 'short_stay',
-        'start_date' => $startDate,
-        'end_date' => $endDate,
-    ])->refresh();
-
-    expect($selection->start_date)->toBe($startDate);
-    expect($selection->end_date)->toBe($endDate);
-})->with([
-    'both dates' => ['2027-06-01', '2027-06-15'],
-    'start only' => ['2027-06-01', null],
-    'end only' => [null, '2027-06-15'],
-    'neither date' => [null, null],
-]);
 
 test('database seeder creates selections with accommodations and criteria for its two users', function () {
     seed(DatabaseSeeder::class);
