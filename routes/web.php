@@ -6,7 +6,7 @@ use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\ProfileController;
 use App\Http\Controllers\Userzone\SelectionController;
 use App\Http\Controllers\WelcomeController;
-use App\Http\Middleware\CheckSelectionOwnership;
+use App\Http\Middleware\CheckSelectionAccess;
 use Illuminate\Support\Facades\Route;
 
 // Public ----------------------------------------------------------------------
@@ -20,9 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::prefix('user')->name('userzone.')->group(function () {
-        Route::resource('selections', SelectionController::class)->middlewareFor(['show', 'edit', 'update', 'destroy'], CheckSelectionOwnership::class);
-        Route::resource('selections.accommodations', AccommodationController::class)->except(['index'])->scoped()->middleware(CheckSelectionOwnership::class);
-        Route::resource('selections.criteria', CriterionController::class)->except(['create', 'show'])->scoped()->middleware(CheckSelectionOwnership::class);
+        Route::resource('selections', SelectionController::class)->middlewareFor(['show', 'edit', 'update', 'destroy'], CheckSelectionAccess::class);
+        Route::resource('selections.accommodations', AccommodationController::class)->except(['index'])->scoped()->middleware(CheckSelectionAccess::class);
+        Route::resource('selections.criteria', CriterionController::class)->except(['create', 'show'])->scoped()->middleware(CheckSelectionAccess::class);
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

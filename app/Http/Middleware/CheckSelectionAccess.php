@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckSelectionOwnership
+class CheckSelectionAccess
 {
     /**
      * Handle an incoming request.
@@ -16,8 +16,10 @@ class CheckSelectionOwnership
     public function handle(Request $request, Closure $next): Response
     {
         $selection = $request->route('selection');
+        $user = $request->user();
+        $isOwner = $selection->owner_id == $user->id;
 
-        if ($selection->owner_id != $request->user()->id) {
+        if (! $isOwner && ! $selection->users()->whereKey($user->id)->exists()) {
             abort(403);
         }
 

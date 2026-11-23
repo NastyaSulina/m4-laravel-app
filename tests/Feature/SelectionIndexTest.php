@@ -168,11 +168,14 @@ test('guests cannot access selection filters', function () {
         ->assertRedirectToRoute('login');
 });
 
-test('shared membership does not yet grant access to selection details', function () {
+test('shared members can view selection details', function () {
     $user = User::factory()->create();
     $selection = Selection::factory()->create();
     $selection->users()->attach($user);
     actingAs($user);
 
-    get(route('userzone.selections.show', $selection))->assertForbidden();
+    get(route('userzone.selections.show', $selection))
+        ->assertOk()
+        ->assertSeeText($selection->title)
+        ->assertSeeText($selection->owner->name);
 });

@@ -1,5 +1,7 @@
 <x-base-layout :title="$selection->title" class="bg-[#F8F3E9]!">
-    <x-ui.button :href="route('userzone.selections.index')" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to selections</x-ui.button>
+    @php($isOwner = $selection->owner_id === auth()->id())
+
+    <x-ui.button :href="route('userzone.selections.index',  ['filter' => $isOwner ? 'my' : 'shared'])" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to selections</x-ui.button>
 
     <article class="flex flex-col gap-6 border-b border-[#D8C9EA] pb-8 text-[#43263D]">
         <div class="flex items-center justify-between gap-4">
@@ -23,7 +25,9 @@
                 <p class="border-l border-[#D8C9EA] pl-6">To: {{ $selection->end_date }}</p>
             @endif
             <p class="border-l border-[#D8C9EA] pl-6">Status: {{ ucfirst($selection->status) }}</p>
-            <p class="border-l border-[#D8C9EA] pl-6">Added by <strong>{{ $selection->owner->name }}</strong></p>
+            @if (! $isOwner)
+                <p class="border-l border-[#D8C9EA] pl-6">Added by <strong>{{ $selection->owner->name }}</strong></p>
+            @endif
         </div>
     </article>
 
