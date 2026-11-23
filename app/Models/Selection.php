@@ -16,6 +16,17 @@ class Selection extends Model
 
     protected $fillable = ['title', 'search_type', 'status', 'start_date', 'end_date'];
 
+    protected static function booted(): void
+    {
+        static::saved(function (Selection $selection): void {
+            cache()->forget("welcome:user:{$selection->owner_id}");
+        });
+
+        static::deleted(function (Selection $selection): void {
+            cache()->forget("welcome:user:{$selection->owner_id}");
+        });
+    }
+
     public function accommodations(): HasMany
     {
         return $this->hasMany(Accommodation::class);
