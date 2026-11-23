@@ -41,5 +41,18 @@ class DatabaseSeeder extends Seeder
                 }
             }
         }
+
+        foreach ($users as $user) {
+            $otherUsers = $users->except($user->id);
+
+            if ($otherUsers->isEmpty()) {
+                continue;
+            }
+
+            $owner = $otherUsers->random();
+            $selectionId = $owner->selections()->inRandomOrder()->value('id');
+
+            $user->sharedSelections()->attach($selectionId);
+        }
     }
 }
