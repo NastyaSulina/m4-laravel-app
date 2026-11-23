@@ -49,14 +49,19 @@ test('selections page displays only the current users selections', function () {
         ->assertDontSee('<script>alert(1)</script>', false);
 });
 
-test('selections page displays an empty message when there are no selections', function () {
+test('selections page displays an empty message for the selected filter', function (string $filter) {
     $user = User::factory()->create();
     actingAs($user);
 
-    get(route('userzone.selections.index'))
+    get(route('userzone.selections.index', ['filter' => $filter]))
         ->assertOk()
-        ->assertSeeText('No selections yet.');
-});
+        ->assertSeeText('No selections yet.')
+        ->assertSeeText('My selections')
+        ->assertSeeText('Shared with me');
+})->with([
+    'my',
+    'shared',
+]);
 
 test('selections page only displays dates that are present', function (?string $startDate, ?string $endDate) {
     $user = User::factory()->create();
@@ -86,3 +91,88 @@ test('selections page only displays dates that are present', function (?string $
     'end only' => [null, '2027-06-15'],
     'neither date' => [null, null],
 ]);
+
+test('selection filters show only the appropriate accessible selections without duplicates', function (?string $filter, array $expectedTitles) {
+    $user = User::factory()->create();
+    $owned = Selection::factory()->for($user, 'owner')->create(['title' => 'Owned selection', 'created_at' => '2026-01-01']);
+    $shared = Selection::factory()->create(['title' => 'Shared selection', 'created_at' => '2026-01-02']);
+    $owned->users()->attach($user);
+    $shared->users()->attach($user);
+    Selection::factory()->create(['title' => 'Unrelated selection']);
+    actingAs($user);
+
+    $response = get(route('userzone.selections.index', $filter === null ? [] : ['filter' => $filter]));
+
+    $response->assertOk();
+    expect($response['selections']->pluck('title')->all())->toBe($expectedTitles);
+    $response->assertViewHas('filter', $filter ?? 'my');
+})->with([
+    'default' => [null, ['Owned selection']],
+    'my' => ['my', ['Owned selection']],
+    'shared' => ['shared', ['Shared selection']],
+]);
+
+test('invalid selection filters fall back to owned selections', function (mixed $filter) {
+    $user = User::factory()->create();
+    $owned = Selection::factory()->for($user, 'owner')->create();
+    $shared = Selection::factory()->create();
+    $shared->users()->attach($user);
+    actingAs($user);
+
+    $response = get(route('userzone.selections.index', ['filter' => $filter]));
+
+    $response->assertOk()->assertViewHas('filter', 'my');
+    expect($response['selections']->modelKeys())->toBe([$owned->id]);
+})->with([
+    'unknown' => ['invalid'],
+    'removed all filter' => ['all'],
+    'empty' => [''],
+    'array' => [['all']],
+]);
+
+test('shared cards identify the owner safely', function () {
+    $user = User::factory()->create();
+    $owner = User::factory()->create(['name' => '<script>alert(1)</script>']);
+    $shared = Selection::factory()->for($owner, 'owner')->create();
+    $shared->users()->attach($user);
+    actingAs($user);
+
+    get(route('userzone.selections.index', ['filter' => 'shared']))
+        ->assertOk()
+        ->assertSee('Owner: &lt;script&gt;alert(1)&lt;/script&gt;', false)
+        ->assertDontSee('<script>alert(1)</script>', false)
+        ->assertSee(route('userzone.selections.show', $shared));
+});
+
+test('selection lists include owned selections regardless of creation date', function () {
+    $user = User::factory()->create();
+    $newest = Selection::factory()->for($user, 'owner')->create(['created_at' => '2026-02-01']);
+    $older = Selection::factory()->for($user, 'owner')->create(['created_at' => '2026-01-01']);
+    $tie = Selection::factory()->for($user, 'owner')->create(['created_at' => '2026-01-01']);
+    actingAs($user);
+
+    $response = get(route('userzone.selections.index'));
+
+    $response->assertOk();
+    expect($response['selections']->modelKeys())->toEqualCanonicalizing([$newest->id, $tie->id, $older->id]);
+});
+
+test('the old shared selections route is no longer available', function () {
+    actingAs(User::factory()->create());
+
+    get('/user/shared-selections')->assertNotFound();
+});
+
+test('guests cannot access selection filters', function () {
+    get(route('userzone.selections.index', ['filter' => 'shared']))
+        ->assertRedirectToRoute('login');
+});
+
+test('shared membership does not yet grant access to selection details', function () {
+    $user = User::factory()->create();
+    $selection = Selection::factory()->create();
+    $selection->users()->attach($user);
+    actingAs($user);
+
+    get(route('userzone.selections.show', $selection))->assertForbidden();
+});

@@ -14,9 +14,16 @@ class SelectionController extends Controller
 {
     public function index(Request $request): View
     {
-        $selections = $request->user()->selections()->get();
+        $filter = $request->query('filter') === 'shared' ? 'shared' : 'my';
+        $user = $request->user();
 
-        return view('userzone.selections.index', compact('selections'));
+        $query = $filter === 'shared'
+            ? $user->sharedSelections()->where('owner_id', '!=', $user->id)->with('owner')
+            : $user->selections();
+
+        $selections = $query->get();
+
+        return view('userzone.selections.index', compact('selections', 'filter'));
     }
 
     public function show(Selection $selection): View

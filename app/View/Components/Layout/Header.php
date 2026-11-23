@@ -18,7 +18,7 @@ class Header extends Component
     {
         $this->menu = Auth::check()
             ? [
-                'My selections' => route('userzone.selections.index'),
+                'Selections' => route('userzone.selections.index'),
                 'Dashboard' => route('dashboard'),
             ]
             : ['Sign in' => route('login'), 'Sign up' => route('register')];
