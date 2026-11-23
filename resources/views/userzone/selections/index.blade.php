@@ -24,6 +24,7 @@
                 <div class="min-w-0 flex-1">
                     <div class="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2">
                         <h2 class="break-words font-serif text-xl font-semibold leading-tight">{{ $selection->title }}</h2>
+                        <x-ui.status-badge :status="$selection->status" />
                         @if (! $isOwner)
                             <p class="rounded-full bg-[#D8C9EA] px-3 py-1 text-sm font-medium text-[#43263D]">Owner: {{ $selection->owner->name }}</p>
                         @endif
@@ -36,7 +37,6 @@
                         @if ($selection->end_date)
                             <p class="border-l border-[#D8C9EA] pl-5">To: {{ $selection->end_date }}</p>
                         @endif
-                        <p class="border-l border-[#D8C9EA] pl-5">Status: {{ ucfirst($selection->status) }}</p>
                     </div>
                 </div>
                 <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="shrink-0 no-underline! hover:underline!">View selection →</x-ui.button>

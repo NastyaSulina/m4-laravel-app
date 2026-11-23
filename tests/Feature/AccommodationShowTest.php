@@ -24,7 +24,7 @@ test('accommodation page displays its details', function (string $propertyType, 
     $response = get(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))
         ->assertOk()
         ->assertSeeText('Address: Calle Mayor 1')
-        ->assertSeeText('Status: Considering')
+        ->assertSeeText('Considering')
         ->assertSeeText('example.com')
         ->assertSee('href="https://example.com/listing/1"', false)
         ->assertSee(route('userzone.selections.show', $accommodation->selection_id));

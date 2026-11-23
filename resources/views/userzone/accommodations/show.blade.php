@@ -6,7 +6,10 @@
 
     <article class="flex flex-col gap-8 text-[#43263D]">
         <div class="flex items-center justify-between gap-4">
-            <h1 class="break-words font-serif text-3xl font-semibold leading-tight">{{ $accommodation->title }}</h1>
+            <div class="flex min-w-0 flex-1 flex-wrap items-center gap-3">
+                <h1 class="break-words font-serif text-3xl font-semibold leading-tight">{{ $accommodation->title }}</h1>
+                <x-ui.status-badge :status="$accommodation->status" />
+            </div>
             <x-ui.button
                 :href="route('userzone.selections.accommodations.edit', [$accommodation->selection_id, $accommodation])"
                 variant="secondary" class="shrink-0"
@@ -15,7 +18,6 @@
 
         <div class="flex items-center gap-6 border-b border-[#D8C9EA] pb-6 text-base">
             <p class="font-semibold">Property type: {{ ucfirst($accommodation->property_type) }}</p>
-            <p class="border-l border-[#D8C9EA] pl-6">Status: {{ ucfirst($accommodation->status) }}</p>
             <p class="border-l border-[#D8C9EA] pl-6">Added by <strong>{{ $accommodation->user->name }}</strong></p>
         </div>
 

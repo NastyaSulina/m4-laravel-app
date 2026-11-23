@@ -5,7 +5,10 @@
 
     <article class="flex flex-col gap-6 border-b border-[#D8C9EA] pb-8 text-[#43263D]">
         <div class="flex items-center justify-between gap-4">
-            <h1 class="flex-1 font-serif text-3xl font-semibold leading-tight">{{ $selection->title }}</h1>
+            <div class="flex min-w-0 flex-1 flex-wrap items-center gap-3">
+                <h1 class="break-words font-serif text-3xl font-semibold leading-tight">{{ $selection->title }}</h1>
+                <x-ui.status-badge :status="$selection->status" />
+            </div>
             <div class="flex items-center gap-4">
                 <x-ui.button :href="route('userzone.selections.edit', $selection)" variant="secondary">Edit</x-ui.button>
                 <form action="{{ route('userzone.selections.destroy', $selection) }}" method="post">
@@ -24,7 +27,6 @@
             @if ($selection->end_date)
                 <p class="border-l border-[#D8C9EA] pl-6">To: {{ $selection->end_date }}</p>
             @endif
-            <p class="border-l border-[#D8C9EA] pl-6">Status: {{ ucfirst($selection->status) }}</p>
             @if (! $isOwner)
                 <p class="border-l border-[#D8C9EA] pl-6">Added by <strong>{{ $selection->owner->name }}</strong></p>
             @endif
@@ -59,14 +61,16 @@
     <div class="grid grid-cols-3 gap-6 text-[#43263D]">
         @forelse ($selection->accommodations as $accommodation)
             <article class="flex min-w-0 flex-col gap-3">
-                <img
-                    src="{{ $accommodation->getFirstMediaUrl('images', 'thumbnail') }}" alt="{{ $accommodation->title }}"
-                    width="600" height="400" loading="lazy"
-                    class="aspect-[3/2] w-full rounded-2xl bg-[#D8C9EA]/30 object-cover"
-                >
+                <div class="relative">
+                    <img
+                        src="{{ $accommodation->getFirstMediaUrl('images', 'thumbnail') }}" alt="{{ $accommodation->title }}"
+                        width="600" height="400" loading="lazy"
+                        class="aspect-[3/2] w-full rounded-2xl bg-[#D8C9EA]/30 object-cover"
+                    >
+                    <x-ui.status-badge :status="$accommodation->status" class="absolute left-3 top-3" />
+                </div>
                 <h3 class="break-words text-xl font-semibold font-serif leading-tight">{{ $accommodation->title }}</h3>
                 <p>Address: {{ $accommodation->address }}</p>
-                <p>Status: {{ ucfirst($accommodation->status) }}</p>
                 <p>Property type: {{ ucfirst($accommodation->property_type) }}</p>
                 <x-ui.button
                     :href="route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation])"

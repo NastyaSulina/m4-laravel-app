@@ -26,7 +26,7 @@ test('selection page displays the selected selection', function (?string $startD
         ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false)
         ->assertDontSee('<script>alert(1)</script>', false)
         ->assertSeeText('Short stay')
-        ->assertSeeText('Status: Active')
+        ->assertSeeText('Active')
         ->assertDontSeeText('Another selection')
         ->assertSee(route('userzone.selections.index'));
     $response->assertSeeText('No accommodations yet.');
@@ -103,7 +103,7 @@ test('selection page lists only its own accommodations', function () {
         ->assertOk()
         ->assertSeeText('Madrid apartment')
         ->assertSeeText('Address: Calle Mayor 1')
-        ->assertSeeText('Status: Considering')
+        ->assertSeeText('Considering')
         ->assertSeeText('Property type: Apartment')
         ->assertSee(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))
         ->assertDontSeeText('Unrelated accommodation');
