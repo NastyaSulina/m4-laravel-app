@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
 class WelcomeController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke()
+    public function __invoke(Request $request): View
     {
-        return view('welcome');
+        $latestSelection = $request->user()?->selections()->where('status', 'active')->latest()->orderByDesc('id')->first();
+
+        return view('welcome', compact('latestSelection'));
     }
 }
