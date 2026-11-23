@@ -35,7 +35,7 @@ test('owners can open a prefilled accommodation edit form', function () {
         'title' => 'Madrid apartment',
         'source_url' => 'https://example.com/apartment',
         'address' => 'Calle Mayor 1',
-        'status' => 'shortlisted',
+        'status' => 'considering',
         'property_type' => 'house',
         'note' => '<script>alert(1)</script>',
     ]);
@@ -50,7 +50,7 @@ test('owners can open a prefilled accommodation edit form', function () {
         ->assertSee('value="Madrid apartment"', false)
         ->assertSee('value="https://example.com/apartment"', false)
         ->assertSee('value="Calle Mayor 1"', false)
-        ->assertSee('value="shortlisted" selected', false)
+        ->assertSee('value="considering" selected', false)
         ->assertSee('value="house" selected', false)
         ->assertSee($accommodation->note)
         ->assertDontSee($accommodation->note, false)

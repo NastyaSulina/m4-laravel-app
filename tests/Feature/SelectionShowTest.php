@@ -94,7 +94,7 @@ test('selection page lists only its own accommodations', function () {
     $accommodation = Accommodation::factory()->for($selection)->create([
         'title' => 'Madrid apartment',
         'address' => 'Calle Mayor 1',
-        'status' => 'shortlisted',
+        'status' => 'considering',
         'property_type' => 'apartment',
     ]);
     Accommodation::factory()->create(['title' => 'Unrelated accommodation']);
@@ -103,7 +103,7 @@ test('selection page lists only its own accommodations', function () {
         ->assertOk()
         ->assertSeeText('Madrid apartment')
         ->assertSeeText('Address: Calle Mayor 1')
-        ->assertSeeText('Status: Shortlisted')
+        ->assertSeeText('Status: Considering')
         ->assertSeeText('Property type: Apartment')
         ->assertSee(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))
         ->assertDontSeeText('Unrelated accommodation');

@@ -15,7 +15,7 @@ class AccommodationRequest extends FormRequest
             'title' => ['required', 'string', 'min:3', 'max:255'],
             'source_url' => ['required', 'url:http,https', 'max:2048'],
             'address' => ['required', 'string', 'max:255'],
-            'status' => ['required', 'in:considering,shortlisted,selected,rejected,unavailable'],
+            'status' => ['required', 'in:considering,selected,rejected'],
             'property_type' => ['required', 'in:apartment,house,room,hotel'],
             'note' => ['nullable', 'string', 'max:5000'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:'.(config('media-library.max_file_size') / 1024)],

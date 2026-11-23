@@ -15,7 +15,7 @@ test('accommodation page displays its details', function (string $propertyType, 
     $accommodation = Accommodation::factory()->for($selection)->for($user)->create([
         'title' => 'Madrid apartment',
         'address' => 'Calle Mayor 1',
-        'status' => 'shortlisted',
+        'status' => 'considering',
         'source_url' => 'https://example.com/listing/1',
         'property_type' => $propertyType,
         'note' => $note,
@@ -24,7 +24,7 @@ test('accommodation page displays its details', function (string $propertyType, 
     $response = get(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))
         ->assertOk()
         ->assertSeeText('Address: Calle Mayor 1')
-        ->assertSeeText('Status: Shortlisted')
+        ->assertSeeText('Status: Considering')
         ->assertSeeText('example.com')
         ->assertSee('href="https://example.com/listing/1"', false)
         ->assertSee(route('userzone.selections.show', $accommodation->selection_id));

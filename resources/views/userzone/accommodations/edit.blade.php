@@ -14,7 +14,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <x-form.select
                     name="status" label="Status" :value="$accommodation->status"
-                    :options="['considering' => 'Considering', 'shortlisted' => 'Shortlisted', 'selected' => 'Selected', 'rejected' => 'Rejected', 'unavailable' => 'Unavailable']"
+                    :options="['considering' => 'Considering', 'selected' => 'Selected', 'rejected' => 'Rejected']"
                     required
                 />
                 <x-form.select

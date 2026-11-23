@@ -24,7 +24,7 @@ class AccommodationFactory extends Factory
             'selection_id' => Selection::factory(),
             'source_url' => fake()->url(),
             'address' => fake()->address(),
-            'status' => fake()->randomElement(['considering', 'shortlisted', 'selected', 'rejected', 'unavailable']),
+            'status' => fake()->randomElement(['considering', 'selected', 'rejected']),
             'property_type' => fake()->randomElement(['apartment', 'house', 'room', 'hotel']),
             'title' => fn (array $attributes): string => fake()->randomElement(['Little', 'Cosy', 'Quiet', 'Lovely', 'Bright', 'Suspiciously cheap'])
                 .' '.$attributes['property_type'].' '

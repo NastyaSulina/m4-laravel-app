@@ -76,7 +76,7 @@ test('owners can add accommodation with server assigned selection and author', f
         'source_url' => 'https://example.com/listing/1',
         'address' => 'Calle Mayor 1',
         'property_type' => 'apartment',
-        'status' => 'shortlisted',
+        'status' => 'considering',
         'selection_id' => $otherSelection->id,
         'user_id' => $otherSelection->owner_id,
         ...$optional,
@@ -88,7 +88,7 @@ test('owners can add accommodation with server assigned selection and author', f
     expect($accommodation->title)->toBe('Madrid apartment');
     expect($accommodation->source_url)->toBe('https://example.com/listing/1');
     expect($accommodation->address)->toBe('Calle Mayor 1');
-    expect($accommodation->status)->toBe('shortlisted');
+    expect($accommodation->status)->toBe('considering');
     expect($accommodation->property_type)->toBe('apartment');
     expect($accommodation->note)->toBe($optional['note'] ?? null);
     assertDatabaseCount('media', 0);
