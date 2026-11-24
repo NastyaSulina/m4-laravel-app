@@ -40,5 +40,10 @@ class SelectionUserController extends Controller
         return redirect()->route('userzone.selections.users.index', $selection);
     }
 
-    public function destroy(Request $request) {}
+    public function destroy(Selection $selection, User $user): RedirectResponse
+    {
+        $selection->users()->detach($user->id);
+
+        return redirect()->route('userzone.selections.users.index', $selection);
+    }
 }

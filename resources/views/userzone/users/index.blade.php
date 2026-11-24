@@ -7,7 +7,14 @@
 
         <ul class="my-6 divide-y divide-[#D8C9EA]">
             @forelse ($users as $user)
-                <li class="break-words py-3">{{ $user->name }} — {{ $user->email }}</li>
+                <li class="flex flex-wrap items-center gap-4 py-3">
+                    <span class="min-w-0 flex-1 break-words">{{ $user->name }} — {{ $user->email }}</span>
+                    <form action="{{ route('userzone.selections.users.destroy', [$selection, $user]) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <x-ui.button type="submit" variant="tertiary" danger>Remove access</x-ui.button>
+                    </form>
+                </li>
             @empty
                 <li class="py-3">Only you have access to this selection.</li>
             @endforelse
