@@ -49,7 +49,7 @@ test('selection update accepts status but ignores protected fields and clears om
         'owner_id' => $otherUser->id,
         'id' => 999,
         'status' => $status,
-    ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.index'));
+    ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.show', $selection));
 
     assertDatabaseHas('selections', [
         'id' => $selection->id,
@@ -140,7 +140,7 @@ test('selection update preserves archived status when status is omitted', functi
     put(route('userzone.selections.update', $selection), [
         'title' => 'Updated trip',
         'search_type' => 'long_term',
-    ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.index'));
+    ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.show', $selection));
 
     assertDatabaseHas('selections', [
         'id' => $selection->id,
@@ -162,7 +162,7 @@ test('selection forms accept optional dates', function (?string $start, ?string 
     expect($selection->end_date)->toBe($end);
 
     put(route('userzone.selections.update', $selection), [...$input, 'title' => 'Updated trip'])
-        ->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.index'));
+        ->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.show', $selection));
     expect($selection->fresh()->title)->toBe('Updated trip');
     expect($selection->fresh()->start_date)->toBe($start);
     expect($selection->fresh()->end_date)->toBe($end);

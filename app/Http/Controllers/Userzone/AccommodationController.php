@@ -33,7 +33,7 @@ class AccommodationController extends Controller
 
     public function show(Selection $selection, Accommodation $accommodation): View
     {
-        return view('userzone.accommodations.show', compact('accommodation'));
+        return view('userzone.accommodations.show', compact('selection', 'accommodation'));
     }
 
     public function edit(Selection $selection, Accommodation $accommodation): View

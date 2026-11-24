@@ -60,7 +60,7 @@ test('owners can create and edit their selections', function () {
     put(route('userzone.selections.update', $selection), [
         'title' => 'Updated selection',
         'search_type' => 'long_term',
-    ])->assertRedirect(route('userzone.selections.index'));
+    ])->assertRedirect(route('userzone.selections.show', $selection));
 
     expect($selection->fresh()->title)->toBe('Updated selection');
 });

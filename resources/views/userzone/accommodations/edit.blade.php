@@ -1,8 +1,9 @@
 <x-base-layout title="Edit accommodation" class="bg-[#F8F3E9]!">
-    <div class="mx-auto max-w-2xl text-[#43263D]">
+    <div class="max-w-2xl text-[#43263D]">
         <x-ui.button :href="route('userzone.selections.accommodations.show', [$selection, $accommodation])" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to accommodation</x-ui.button>
 
-        <h1 class="mb-6 font-serif text-3xl font-semibold leading-tight">Edit accommodation</h1>
+        <h1 class="mb-2 font-serif text-3xl font-semibold leading-tight">Edit accommodation</h1>
+        <p class="mb-6 break-words text-sm leading-relaxed text-[#43263D]/75">In {{ $selection->title }}</p>
 
         <form action="{{ route('userzone.selections.accommodations.update', [$selection, $accommodation]) }}" method="post" enctype="multipart/form-data" class="flex flex-col gap-4">
             @method('PUT')
@@ -11,7 +12,7 @@
             <x-form.textinput name="title" :value="$accommodation->title" label="Title" minlength="3" maxlength="255" required />
             <x-form.textinput name="source_url" :value="$accommodation->source_url" label="Source URL" type="url" maxlength="2048" required />
             <x-form.textinput name="address" :value="$accommodation->address" label="Address" maxlength="255" required />
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <x-form.select
                     name="status" label="Status" :value="$accommodation->status"
                     :options="['considering' => 'Considering', 'selected' => 'Selected', 'rejected' => 'Rejected']"
@@ -23,7 +24,7 @@
                     required
                 />
             </div>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <x-form.textarea name="note" :value="$accommodation->note" label="Note" rows="3" maxlength="5000" />
                 <div class="flex min-w-0 flex-col gap-2">
                     <img
@@ -34,7 +35,10 @@
                 </div>
             </div>
 
-            <x-ui.button type="submit" class="self-start">Update accommodation</x-ui.button>
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+                <x-ui.button type="submit" class="self-start">Update accommodation</x-ui.button>
+                <x-ui.button :href="route('userzone.selections.accommodations.show', [$selection, $accommodation])" variant="tertiary">Cancel</x-ui.button>
+            </div>
         </form>
     </div>
 </x-base-layout>

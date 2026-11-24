@@ -1,5 +1,5 @@
 <x-base-layout title="Selections" class="bg-[#F8F3E9]!">
-    <div class="mb-8 flex items-center justify-between gap-6 text-[#43263D]">
+    <div class="mb-8 flex flex-wrap items-center justify-between gap-6 text-[#43263D]">
         <h1 class="font-serif text-3xl font-semibold leading-tight">Selections</h1>
         <x-ui.button :href="route('userzone.selections.create')">+ New selection</x-ui.button>
     </div>
@@ -20,27 +20,30 @@
     <div class="flex flex-col gap-5 text-[#43263D]">
         @forelse ($selections as $selection)
             @php($isOwner = $selection->owner_id === auth()->id())
-            <article class="flex items-center justify-between gap-6 rounded-2xl border border-[#D8C9EA] bg-white/30 p-6">
+            <a href="{{ route('userzone.selections.show', $selection) }}" @class([
+                'group flex flex-wrap items-center justify-between gap-6 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#43263D] border border-[#D8C9EA] p-6',
+                'bg-white/30' => $isOwner,
+                'bg-[#D8C9EA]/20' => ! $isOwner,
+            ])>
                 <div class="min-w-0 flex-1">
                     <div class="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2">
-                        <h2 class="break-words font-serif text-xl font-semibold leading-tight">{{ $selection->title }}</h2>
+                        <h2 class="break-words font-serif text-xl font-semibold leading-tight group-hover:underline underline-offset-4">{{ $selection->title }}</h2>
                         <x-ui.status-badge :status="$selection->status" />
                         @if (! $isOwner)
-                            <p class="rounded-full bg-[#D8C9EA] px-3 py-1 text-sm font-medium text-[#43263D]">Owner: {{ $selection->owner->name }}</p>
+                            <p class="rounded-full bg-[#D8C9EA] px-3 py-1 text-sm font-medium text-[#43263D]">Shared by {{ $selection->owner->name }}</p>
                         @endif
                     </div>
                     <div class="flex flex-wrap items-center gap-x-5 gap-y-2 whitespace-nowrap text-base">
                         <p>{{ ['short_stay' => 'Short stay', 'long_term' => 'Long-term rental'][$selection->search_type] }}</p>
                         @if ($selection->start_date)
-                            <p class="border-l border-[#D8C9EA] pl-5">From: {{ $selection->start_date }}</p>
+                            <p class="border-l border-[#D8C9EA] pl-5">Check-in: {{ \Illuminate\Support\Carbon::parse($selection->start_date)->format('d.m.Y') }}</p>
                         @endif
                         @if ($selection->end_date)
-                            <p class="border-l border-[#D8C9EA] pl-5">To: {{ $selection->end_date }}</p>
+                            <p class="border-l border-[#D8C9EA] pl-5">Check-out: {{ \Illuminate\Support\Carbon::parse($selection->end_date)->format('d.m.Y') }}</p>
                         @endif
                     </div>
                 </div>
-                <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="shrink-0 no-underline! hover:underline!">View selection →</x-ui.button>
-            </article>
+            </a>
         @empty
             <p class="rounded-2xl border border-dashed border-[#D8C9EA] p-8 text-center">No selections yet.</p>
         @endforelse

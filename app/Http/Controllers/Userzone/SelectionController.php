@@ -58,7 +58,7 @@ class SelectionController extends Controller
             ...$request->validated(),
         ]);
 
-        return redirect()->route('userzone.selections.index');
+        return redirect()->route('userzone.selections.show', $selection);
     }
 
     public function destroy(Selection $selection): RedirectResponse

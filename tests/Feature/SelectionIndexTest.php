@@ -75,15 +75,15 @@ test('selections page only displays dates that are present', function (?string $
     $response = get(route('userzone.selections.index'))->assertOk();
 
     if ($startDate !== null) {
-        $response->assertSeeText('From: '.$startDate);
+        $response->assertSeeText('Check-in: 01.06.2027');
     } else {
-        $response->assertDontSeeText('From:');
+        $response->assertDontSeeText('Check-in:');
     }
 
     if ($endDate !== null) {
-        $response->assertSeeText('To: '.$endDate);
+        $response->assertSeeText('Check-out: 15.06.2027');
     } else {
-        $response->assertDontSeeText('To:');
+        $response->assertDontSeeText('Check-out:');
     }
 })->with([
     'both dates' => ['2027-06-01', '2027-06-15'],
@@ -139,7 +139,7 @@ test('shared cards identify the owner safely', function () {
 
     get(route('userzone.selections.index', ['filter' => 'shared']))
         ->assertOk()
-        ->assertSee('Owner: &lt;script&gt;alert(1)&lt;/script&gt;', false)
+        ->assertSee('Shared by &lt;script&gt;alert(1)&lt;/script&gt;', false)
         ->assertDontSee('<script>alert(1)</script>', false)
         ->assertSee(route('userzone.selections.show', $shared));
 });

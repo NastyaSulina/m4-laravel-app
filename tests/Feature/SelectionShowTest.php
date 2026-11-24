@@ -32,15 +32,15 @@ test('selection page displays the selected selection', function (?string $startD
     $response->assertSeeText('No accommodations yet.');
 
     if ($startDate !== null) {
-        $response->assertSeeText('From: '.$startDate);
+        $response->assertSeeText('Check-in: 01.06.2027');
     } else {
-        $response->assertDontSeeText('From: ');
+        $response->assertDontSeeText('Check-in: ');
     }
 
     if ($endDate !== null) {
-        $response->assertSeeText('To: '.$endDate);
+        $response->assertSeeText('Check-out: 15.06.2027');
     } else {
-        $response->assertDontSeeText('To: ');
+        $response->assertDontSeeText('Check-out: ');
     }
 })->with([
     'both dates' => ['2027-06-01', '2027-06-15'],
@@ -94,6 +94,7 @@ test('selection page lists only its own accommodations', function () {
     $accommodation = Accommodation::factory()->for($selection)->create([
         'title' => 'Madrid apartment',
         'address' => 'Calle Mayor 1',
+        'note' => 'Ask about the balcony',
         'status' => 'considering',
         'property_type' => 'apartment',
     ]);
@@ -102,9 +103,8 @@ test('selection page lists only its own accommodations', function () {
     get(route('userzone.selections.show', $selection))
         ->assertOk()
         ->assertSeeText('Madrid apartment')
-        ->assertSeeText('Address: Calle Mayor 1')
+        ->assertSeeText('Ask about the balcony')
         ->assertSeeText('Considering')
-        ->assertSeeText('Property type: Apartment')
         ->assertSee(route('userzone.selections.accommodations.show', [$accommodation->selection_id, $accommodation]))
         ->assertDontSeeText('Unrelated accommodation');
 });
