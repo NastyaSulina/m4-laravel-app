@@ -5,8 +5,10 @@ use App\Http\Controllers\Userzone\CriterionController;
 use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\ProfileController;
 use App\Http\Controllers\Userzone\SelectionController;
+use App\Http\Controllers\Userzone\SelectionUserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\CheckSelectionAccess;
+use App\Http\Middleware\CheckSelectionOwner;
 use Illuminate\Support\Facades\Route;
 
 // Public ----------------------------------------------------------------------
@@ -23,6 +25,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('selections', SelectionController::class)->middlewareFor(['show', 'edit', 'update', 'destroy'], CheckSelectionAccess::class);
         Route::resource('selections.accommodations', AccommodationController::class)->except(['index'])->scoped()->middleware(CheckSelectionAccess::class);
         Route::resource('selections.criteria', CriterionController::class)->except(['create', 'show'])->scoped()->middleware(CheckSelectionAccess::class);
+        Route::resource('selections.users', SelectionUserController::class)->only(['index', 'store', 'destroy'])->scoped()->middleware(CheckSelectionOwner::class);
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

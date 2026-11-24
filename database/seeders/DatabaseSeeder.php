@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::factory(1)->create();
+        $users = User::factory(5)->create();
         $testUser = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -28,9 +28,9 @@ class DatabaseSeeder extends Seeder
         $users->push($testUser);
 
         foreach ($users as $user) {
-            $selections = Selection::factory(3)
+            $selections = Selection::factory(5)
                 ->for($user, 'owner')
-                ->has(Accommodation::factory(3)->for($user))
+                ->has(Accommodation::factory(5)->for($user))
                 ->create();
 
             foreach ($selections as $selection) {

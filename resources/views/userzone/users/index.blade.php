@@ -1,0 +1,22 @@
+<x-base-layout :title="'Shared with — '.$selection->title" class="bg-[#F8F3E9]!">
+    <div class="mx-auto max-w-2xl text-[#43263D]">
+        <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="mb-6">← Back to selection</x-ui.button>
+
+        <h1 class="mb-2 font-serif text-3xl font-semibold">Shared with</h1>
+        <p class="mb-4 break-words">{{ $selection->title }}</p>
+
+        <ul class="my-6 divide-y divide-[#D8C9EA]">
+            @forelse ($users as $user)
+                <li class="break-words py-3">{{ $user->name }} — {{ $user->email }}</li>
+            @empty
+                <li class="py-3">Only you have access to this selection.</li>
+            @endforelse
+        </ul>
+
+        <form action="{{ route('userzone.selections.users.store', $selection) }}" method="post" class="flex flex-col gap-4">
+            @csrf
+            <x-form.textinput name="email" type="email" label="Email" maxlength="255" required />
+            <x-ui.button type="submit" class="self-start">Add user</x-ui.button>
+        </form>
+    </div>
+</x-base-layout>

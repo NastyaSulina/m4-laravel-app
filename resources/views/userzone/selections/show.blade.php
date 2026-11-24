@@ -10,6 +10,9 @@
                 <x-ui.status-badge :status="$selection->status" />
             </div>
             <div class="flex items-center gap-4">
+                @if ($isOwner)
+                    <x-ui.button :href="route('userzone.selections.users.index', $selection)" variant="secondary">Share selection</x-ui.button>
+                @endif
                 <x-ui.button :href="route('userzone.selections.edit', $selection)" variant="secondary">Edit</x-ui.button>
                 <form action="{{ route('userzone.selections.destroy', $selection) }}" method="post">
                     @method('DELETE')
