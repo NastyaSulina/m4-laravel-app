@@ -17,9 +17,11 @@ class CheckSelectionAccess
     {
         $selection = $request->route('selection');
         $user = $request->user();
-        $isOwner = $selection->owner_id == $user->id;
 
-        if (! $isOwner && ! $selection->users()->whereKey($user->id)->exists()) {
+        $isOwner = $selection->owner_id == $user->id;
+        $hasSharedAccess = ! $isOwner && $selection->users()->whereKey($user->id)->exists();
+
+        if (! $isOwner && ! $hasSharedAccess) {
             abort(403);
         }
 
