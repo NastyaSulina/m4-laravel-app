@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Userzone;
 use App\Http\Controllers\Controller;
 use App\Models\Selection;
 use App\Models\User;
+use App\Notifications\NewSharedSelectionNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -35,7 +36,11 @@ class SelectionUserController extends Controller
             ]);
         }
 
-        $selection->users()->syncWithoutDetaching([$user->id]);
+        $changes = $selection->users()->syncWithoutDetaching([$user->id]);
+
+        if ($changes['attached']) {
+            $user->notify(new NewSharedSelectionNotification($selection));
+        }
 
         return redirect()->route('userzone.selections.users.index', $selection);
     }
