@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Userzone\AccommodationController;
 use App\Http\Controllers\Userzone\CriterionController;
-use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\ProfileController;
 use App\Http\Controllers\Userzone\SelectionController;
 use App\Http\Controllers\Userzone\SelectionUserController;
@@ -19,8 +18,6 @@ require __DIR__.'/auth.php';
 
 // Userzone --------------------------------------------------------------------
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
-
     Route::prefix('user')->name('userzone.')->group(function () {
         Route::resource('selections', SelectionController::class)->middlewareFor(['show', 'edit', 'update', 'destroy'], CheckSelectionAccess::class);
         Route::resource('selections.accommodations', AccommodationController::class)->except(['index'])->scoped()->middleware(CheckSelectionAccess::class);
