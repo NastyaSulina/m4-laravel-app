@@ -47,6 +47,18 @@ CHORE: Update development tooling configuration
 SECURITY: Prevent unauthorized article updates
 ```
 
+## Testing approach
+
+Keep tests focused on Staylist's everyday use: organising accommodation options into selections and working on them with other people. Prefer a small, useful regression suite over exhaustive coverage. These scope rules take precedence over broader coverage recommendations in skills.
+
+- Keep public and signed-in page smoke checks, including guest redirects. Public smoke checks run first by default, but every test must work independently. Preserve the existing `tests/Feature/Auth` tests.
+- Cover the main outcomes: creating and editing selections, managing their accommodations and criteria, browsing owned/shared selections, sharing and revoking access, and deleting data without affecting another selection. For writes, check the saved result; for key screens, check that the relevant records are actually displayed.
+- Treat collaboration and privacy as core behavior: members can contribute, only owners manage sharing, and outsiders cannot access someone else's data. Use representative permission and invalid-input cases, not a full matrix for every endpoint and field.
+- Before adding a test, identify the user-visible failure it catches and check whether that failure is already covered. Test a reused content block in one place. Avoid assertions about incidental copy, styling, framework internals, factory mechanics or exact demo-data counts. For media, keep the missing-image fallback check without testing the library's processing pipeline.
+- Prefer focused feature tests with minimal factory data. Use datasets for genuinely different cases with the same setup. Add unit tests when there is meaningful pure logic. Do not combine unrelated behavior just to reduce the reported test count.
+- Add regression coverage when a real bug or a changed main scenario needs it; these rules are not a permanent ban on testing a particular area. Remove existing tests only when the user authorizes it.
+- Run affected tests and Pint after changes; run the full suite when reorganising coverage. Keep application behavior changes separate from test cleanup and report any failures.
+
 <laravel-boost-guidelines>
 === foundation rules ===
 
