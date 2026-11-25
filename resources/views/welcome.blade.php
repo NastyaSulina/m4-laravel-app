@@ -12,9 +12,9 @@
             <div class="mt-8 rounded-2xl border border-[#D8C9EA] bg-white/30 p-6">
                 @if ($latestSelection)
                     <p class="mb-2 text-sm font-medium text-[#43263D]/70">Continue planning</p>
-                    <h2 class="break-words font-serif text-2xl font-semibold">{{ $latestSelection->title }}</h2>
+                    <h2 class="break-words font-serif text-2xl font-semibold">{{ $latestSelection['title'] }}</h2>
                     <div class="mt-5 flex flex-wrap items-center gap-5">
-                        <x-ui.button :href="route('userzone.selections.show', $latestSelection)">Open selection →</x-ui.button>
+                        <x-ui.button :href="route('userzone.selections.show', $latestSelection['id'])">Open selection →</x-ui.button>
                         <x-ui.button :href="route('userzone.selections.create')" variant="secondary">+ New selection</x-ui.button>
                     </div>
                 @else

@@ -19,11 +19,11 @@ class Selection extends Model
     protected static function booted(): void
     {
         static::saved(function (Selection $selection): void {
-            cache()->forget("welcome:user:{$selection->owner_id}");
+            cache()->forget("welcome:latest-selection:{$selection->owner_id}");
         });
 
         static::deleted(function (Selection $selection): void {
-            cache()->forget("welcome:user:{$selection->owner_id}");
+            cache()->forget("welcome:latest-selection:{$selection->owner_id}");
         });
     }
 

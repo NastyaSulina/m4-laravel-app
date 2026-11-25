@@ -3,25 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class WelcomeController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request): string
+    public function __invoke(Request $request): View
     {
         $user = $request->user();
-        $key = $user ? "welcome:user:{$user->id}" : 'welcome:guest';
 
-        return cache()->flexible($key, [30, 60], function () use ($user): string {
-            $latestSelection = $user?->selections()
-                ->where('status', 'active')
-                ->latest()
-                ->orderByDesc('id')
-                ->first();
+        $data = $user
+            ? cache()->flexible("welcome:latest-selection:{$user->id}", [30, 60], function () use ($user): array {
+                return [
+                    'latestSelection' => $user->selections()
+                        ->where('status', 'active')
+                        ->latest()
+                        ->orderByDesc('id')
+                        ->first(['id', 'title'])?->toArray(),
+                ];
+            })
+            : ['latestSelection' => null];
 
-            return view('welcome', compact('latestSelection'))->render();
-        });
+        return view('welcome', $data);
     }
 }
