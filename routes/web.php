@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\Userzone\AccommodationController;
 use App\Http\Controllers\Userzone\CriterionController;
 use App\Http\Controllers\Userzone\ProfileController;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 // Public ----------------------------------------------------------------------
 Route::get('/', WelcomeController::class)->name('welcome');
+Route::get('/privacy-policy', PrivacyPolicyController::class)->name('privacy-policy');
 
 // Authentication --------------------------------------------------------------
 require __DIR__.'/auth.php';

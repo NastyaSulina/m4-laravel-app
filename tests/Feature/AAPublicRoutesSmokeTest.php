@@ -6,6 +6,7 @@ test('public pages are reachable', function (string $name, array $parameters) {
     get(route($name, $parameters))->assertOk();
 })->with([
     'welcome' => ['welcome', []],
+    'privacy policy' => ['privacy-policy', []],
     'login' => ['login', []],
     'registration' => ['register', []],
     'forgot password' => ['password.request', []],
