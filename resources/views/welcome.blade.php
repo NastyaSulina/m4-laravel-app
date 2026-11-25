@@ -1,4 +1,4 @@
-<x-base-layout class="min-h-dvh! bg-[#F8F3E9]! [&>main]:flex [&>main]:flex-col [&>main]:justify-center [&>main]:py-[clamp(1rem,4vh,3rem)]">
+<x-base-layout class="min-h-dvh! [&>main]:flex [&>main]:flex-col [&>main]:justify-center [&>main]:py-[clamp(1rem,4vh,3rem)]">
     <section class="text-[#43263D]">
         <h1 class="max-w-3xl font-serif text-4xl font-semibold leading-tight sm:text-5xl">All your possible stays,<br class="hidden sm:block"> in one place.</h1>
         <p class="mt-5 max-w-2xl text-lg leading-relaxed text-[#43263D]/75">Keep accommodation links together, organise them into selections, and choose with the people you trust.</p>

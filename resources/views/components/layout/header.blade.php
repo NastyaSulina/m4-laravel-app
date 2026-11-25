@@ -14,6 +14,15 @@
                     {{ $label }}
                 </a>
             @endforeach
+
+            @auth
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="cursor-pointer rounded-sm text-lg hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#43263D]">
+                        Log out
+                    </button>
+                </form>
+            @endauth
         </div>
     </nav>
 </header>
