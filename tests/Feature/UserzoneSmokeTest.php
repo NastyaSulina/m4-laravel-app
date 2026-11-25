@@ -8,7 +8,6 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 dataset('userzone pages', [
-    'dashboard' => ['dashboard', []],
     'profile' => ['profile.edit', []],
     'selections' => ['userzone.selections.index', []],
     'new selection' => ['userzone.selections.create', []],

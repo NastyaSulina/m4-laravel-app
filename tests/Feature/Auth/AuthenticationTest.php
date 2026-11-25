@@ -17,7 +17,7 @@ test('users can authenticate using the login screen', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect(route('userzone.selections.index', absolute: false));
 });
 
 test('users can not authenticate with invalid password', function () {
@@ -38,4 +38,11 @@ test('users can logout', function () {
 
     $this->assertGuest();
     $response->assertRedirect('/');
+});
+
+test('signed in users opening login go to selections', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->get(route('login'))
+        ->assertRedirect(route('userzone.selections.index'));
 });

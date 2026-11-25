@@ -17,7 +17,7 @@ test('password can be confirmed', function () {
         'password' => 'password',
     ]);
 
-    $response->assertRedirect();
+    $response->assertRedirect(route('userzone.selections.index', absolute: false));
     $response->assertSessionHasNoErrors();
 });
 
