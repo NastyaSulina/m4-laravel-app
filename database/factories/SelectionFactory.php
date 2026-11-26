@@ -11,6 +11,22 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class SelectionFactory extends Factory
 {
+    /** @var list<string> */
+    private const DESTINATIONS = [
+        'Barcelona',
+        'Madrid',
+        'Lisbon',
+        'Paris',
+        'London',
+        'Amsterdam',
+        'Berlin',
+        'Rome',
+        'Copenhagen',
+        'New York',
+        'Tokyo',
+        'Melbourne',
+    ];
+
     /**
      * Define the model's default state.
      *
@@ -37,7 +53,7 @@ class SelectionFactory extends Factory
                     'A fresh start in',
                     'A place to call home in',
                 ],
-            }).' '.fake()->country(),
+            }).' '.fake()->randomElement(self::DESTINATIONS),
             'status' => fake()->randomElement(['active', 'archived']),
             'start_date' => fake()->boolean() ? $startDate->toDateString() : null,
             'end_date' => fake()->boolean() ? $endDate->toDateString() : null,

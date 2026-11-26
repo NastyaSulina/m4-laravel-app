@@ -20,39 +20,47 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $users = User::factory(5)->create();
+
         $testUser = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
 
-        $users->push($testUser);
+        $selections = Selection::factory(5)->for($testUser, 'owner')->create();
 
-        foreach ($users as $user) {
-            $selections = Selection::factory(5)
-                ->for($user, 'owner')
-                ->has(Accommodation::factory(5)->for($user))
-                ->create();
-
-            foreach ($selections as $selection) {
-                $titles = collect(CriterionFactory::TITLES)->random(fake()->numberBetween(1, 5));
-
-                foreach ($titles as $title) {
-                    Criterion::factory()->for($selection)->create(['title' => $title]);
-                }
-            }
+        foreach ($selections->take(3) as $selection) {
+            $selection->users()->attach($users->random(2));
         }
 
         foreach ($users as $user) {
-            $otherUsers = $users->except($user->id);
+            $selection = Selection::factory()->for($user, 'owner')->create();
+            $selection->users()->attach($testUser);
+            $selections->push($selection);
+        }
 
-            if ($otherUsers->isEmpty()) {
-                continue;
+        foreach ($selections as $selection) {
+            $titles = collect(CriterionFactory::TITLES)->random(fake()->numberBetween(3, 5));
+
+            foreach ($titles as $title) {
+                Criterion::factory()->for($selection)->create(['title' => $title]);
             }
 
-            $owner = $otherUsers->random();
-            $selectionId = $owner->selections()->inRandomOrder()->value('id');
+            $criteria = $selection->criteria;
+            $contributors = $selection->users()->get();
+            $contributors->push($selection->owner);
 
-            $user->sharedSelections()->attach($selectionId);
+            for ($i = 0; $i < 5; $i++) {
+                $accommodation = Accommodation::factory()
+                    ->for($selection)
+                    ->for($contributors->random(), 'user')
+                    ->create();
+
+                foreach ($criteria as $criterion) {
+                    $accommodation->criteria()->attach($criterion, [
+                        'is_met' => fake()->randomElement([true, false, null]),
+                    ]);
+                }
+            }
         }
     }
 }

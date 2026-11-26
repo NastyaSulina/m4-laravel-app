@@ -6,6 +6,7 @@ use Database\Factories\AccommodationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -47,5 +48,10 @@ class Accommodation extends Model implements HasMedia
     public function selection(): BelongsTo
     {
         return $this->belongsTo(Selection::class);
+    }
+
+    public function criteria(): BelongsToMany
+    {
+        return $this->belongsToMany(Criterion::class)->withPivot('is_met');
     }
 }
