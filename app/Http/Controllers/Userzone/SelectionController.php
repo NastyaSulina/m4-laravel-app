@@ -7,7 +7,6 @@ use App\Http\Requests\Userzone\SelectionRequest;
 use App\Models\Selection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class SelectionController extends Controller
@@ -63,13 +62,7 @@ class SelectionController extends Controller
 
     public function destroy(Selection $selection): RedirectResponse
     {
-        DB::transaction(function () use ($selection) {
-            $selection->criteria()->delete();
-            foreach ($selection->accommodations()->get() as $accommodation) {
-                $accommodation->delete();
-            }
-            $selection->delete();
-        });
+        $selection->delete();
 
         return redirect()->route('userzone.selections.index');
     }

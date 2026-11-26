@@ -8,7 +8,7 @@ use App\Models\User;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertModelExists;
-use function Pest\Laravel\assertModelMissing;
+use function Pest\Laravel\assertSoftDeleted;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
@@ -68,7 +68,7 @@ test('selection update accepts status but ignores protected fields and clears om
     ]);
 });
 
-test('deleting a selection deletes its contents and preserves other selections', function () {
+test('soft deleting a selection preserves its contents and hides their pages', function () {
     $selection = Selection::factory()->create();
     $criterion = Criterion::factory()->for($selection)->create();
     $accommodation = Accommodation::factory()->for($selection)->create();
@@ -82,9 +82,14 @@ test('deleting a selection deletes its contents and preserves other selections',
 
     delete(route('userzone.selections.destroy', $selection))->assertRedirect(route('userzone.selections.index'));
 
-    assertModelMissing($selection);
-    assertModelMissing($criterion);
-    assertModelMissing($accommodation);
+    assertSoftDeleted($selection);
+    assertModelExists($criterion);
+    assertModelExists($accommodation);
+    expect($accommodation->fresh()->trashed())->toBeFalse();
+
+    get(route('userzone.selections.show', $selection))->assertNotFound();
+    get(route('userzone.selections.accommodations.show', [$selection, $accommodation]))->assertNotFound();
+    get(route('userzone.selections.criteria.index', $selection))->assertNotFound();
     assertModelExists($selection->owner);
     assertModelExists($other);
     assertModelExists($otherCriterion);

@@ -6,7 +6,7 @@ use App\Models\User;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertModelExists;
-use function Pest\Laravel\assertModelMissing;
+use function Pest\Laravel\assertSoftDeleted;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
@@ -85,7 +85,7 @@ test('owner can delete accommodation without deleting its selection or other acc
     delete(route('userzone.selections.accommodations.destroy', $parameters))
         ->assertRedirect(route('userzone.selections.show', $selection));
 
-    assertModelMissing($accommodation);
+    assertSoftDeleted($accommodation);
     assertModelExists($selection);
     assertModelExists($other);
 });
@@ -122,7 +122,7 @@ test('shared members can delete only accommodations they added', function (bool 
     if ($isAuthor) {
         $page->assertSee('action="'.$deleteUrl.'"', false);
         delete($deleteUrl)->assertRedirect(route('userzone.selections.show', $selection));
-        assertModelMissing($accommodation);
+        assertSoftDeleted($accommodation);
     } else {
         $page->assertDontSee('action="'.$deleteUrl.'"', false);
         delete($deleteUrl)->assertForbidden();

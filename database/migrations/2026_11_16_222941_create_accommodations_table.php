@@ -13,14 +13,18 @@ return new class extends Migration
     {
         Schema::create('accommodations', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('user_id');
             $table->foreignId('selection_id');
+
             $table->string('title');
             $table->text('source_url');
             $table->string('address');
             $table->string('status')->default('considering');
             $table->string('property_type');
             $table->text('note')->nullable();
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

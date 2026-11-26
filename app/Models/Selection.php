@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Selection extends Model
 {
     /** @use HasFactory<SelectionFactory> */
     use HasFactory;
+
+    use SoftDeletes;
 
     protected $fillable = ['title', 'search_type', 'status', 'start_date', 'end_date'];
 
