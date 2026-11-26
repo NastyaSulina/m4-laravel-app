@@ -5,7 +5,6 @@ use App\Models\Selection;
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\assertModelMissing;
 use function Pest\Laravel\delete;
@@ -33,16 +32,14 @@ test('owners can create a criterion', function () {
 
     post(route('userzone.selections.criteria.store', $selection), [
         'title' => 'Balcony',
-        'is_required' => true,
     ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.criteria.index', $selection));
 
     $criterion = $selection->criteria()->sole();
     expect($criterion->title)->toBe('Balcony');
-    assertDatabaseHas('criteria', ['id' => $criterion->id, 'is_required' => true]);
 });
 
 test('owners can update a criterion', function () {
-    $criterion = Criterion::factory()->create(['is_required' => true]);
+    $criterion = Criterion::factory()->create();
     actingAs($criterion->selection->owner);
 
     put(route('userzone.selections.criteria.update', [$criterion->selection, $criterion]), [
@@ -50,5 +47,4 @@ test('owners can update a criterion', function () {
     ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.criteria.index', $criterion->selection));
 
     expect($criterion->fresh()->title)->toBe('Parking');
-    assertDatabaseHas('criteria', ['id' => $criterion->id, 'is_required' => false]);
 });

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('selection_id');
             $table->string('title');
-            $table->boolean('is_required')->default(false);
             $table->timestamps();
         });
     }

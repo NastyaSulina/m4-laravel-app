@@ -55,10 +55,6 @@
                 @foreach ($selection->criteria as $criterion)
                     <li class="max-w-full break-words rounded-2xl border border-[#D8C9EA] px-4 py-1 text-base">
                         {{ $criterion->title }}
-                        @if ($criterion->is_required)
-                            <span title="Required" aria-hidden="true">*</span>
-                            <span class="sr-only">Required</span>
-                        @endif
                     </li>
                 @endforeach
             </ul>

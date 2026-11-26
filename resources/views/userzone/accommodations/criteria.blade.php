@@ -21,9 +21,6 @@
                     <div class="grid items-center gap-2 border-b border-[#D8C9EA] pb-4 sm:grid-cols-2 sm:gap-6">
                         <label for="criterion-{{ $criterion->id }}" class="min-w-0 break-words font-medium">
                             {{ $criterion->title }}
-                            @if ($criterion->is_required)
-                                <span class="block text-sm font-normal text-[#43263D]/65">Required</span>
-                            @endif
                         </label>
 
                         <input type="hidden" name="criteria[{{ $index }}][id]" value="{{ $criterion->id }}">

@@ -12,7 +12,6 @@
             @csrf
 
             <x-form.textinput name="title" label="Title" :value="$criterion->title" minlength="3" maxlength="255" required />
-            <x-form.checkbox name="is_required" label="Required" :checked="$criterion->is_required" />
 
             <x-ui.button type="submit" class="self-start">Update criterion</x-ui.button>
         </form>

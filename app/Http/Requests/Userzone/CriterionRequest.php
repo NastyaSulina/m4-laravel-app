@@ -13,7 +13,6 @@ class CriterionRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'min:3', 'max:255'],
-            'is_required' => ['boolean'],
         ];
     }
 }

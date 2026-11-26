@@ -12,7 +12,6 @@
                 @forelse ($criteria as $criterion)
                     <li class="flex flex-wrap items-center gap-4 py-4">
                         <span class="min-w-0 flex-1 break-words font-medium text-[#43263D]">{{ $criterion->title }}</span>
-                        <span class="text-sm text-[#43263D]/60">{{ $criterion->is_required ? 'Required' : 'Optional' }}</span>
                         <x-ui.button :href="route('userzone.selections.criteria.edit', [$selection, $criterion])" variant="tertiary">Edit</x-ui.button>
                         <form action="{{ route('userzone.selections.criteria.destroy', [$selection, $criterion]) }}" method="post">
                             @method('delete')
@@ -31,7 +30,6 @@
             <form action="{{ route('userzone.selections.criteria.store', $selection) }}" method="post" class="flex flex-col gap-4">
                 @csrf
                 <x-form.textinput name="title" label="What are you looking for?" placeholder="e.g. European breakfast, Wi-Fi, kitchen" minlength="3" maxlength="255" required />
-                <x-form.checkbox name="is_required" label="Required for this stay" />
                 <div class="flex flex-wrap items-center gap-4 pt-2">
                     <x-ui.button type="submit">Add criterion</x-ui.button>
                     <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary">

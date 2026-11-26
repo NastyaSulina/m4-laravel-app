@@ -36,7 +36,6 @@ class CriterionFactory extends Factory
         return [
             'selection_id' => Selection::factory(),
             'title' => fake()->randomElement(self::TITLES),
-            'is_required' => fake()->boolean(),
         ];
     }
 }

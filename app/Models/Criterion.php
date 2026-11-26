@@ -13,7 +13,7 @@ class Criterion extends Model
     /** @use HasFactory<CriterionFactory> */
     use HasFactory;
 
-    protected $fillable = ['title', 'is_required'];
+    protected $fillable = ['title'];
 
     public function selection(): BelongsTo
     {
