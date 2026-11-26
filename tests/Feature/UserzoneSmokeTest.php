@@ -16,6 +16,7 @@ dataset('userzone pages', [
     'new accommodation' => ['userzone.selections.accommodations.create', ['selection']],
     'accommodation' => ['userzone.selections.accommodations.show', ['selection', 'accommodation']],
     'edit accommodation' => ['userzone.selections.accommodations.edit', ['selection', 'accommodation']],
+    'edit accommodation criteria' => ['userzone.selections.accommodations.criteria.edit', ['selection', 'accommodation']],
     'criteria' => ['userzone.selections.criteria.index', ['selection']],
     'edit criterion' => ['userzone.selections.criteria.edit', ['selection', 'criterion']],
     'sharing' => ['userzone.selections.users.index', ['selection']],

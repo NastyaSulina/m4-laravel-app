@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\Userzone\AccommodationController;
+use App\Http\Controllers\Userzone\AccommodationCriterionController;
 use App\Http\Controllers\Userzone\CriterionController;
 use App\Http\Controllers\Userzone\ProfileController;
 use App\Http\Controllers\Userzone\SelectionController;
@@ -28,6 +29,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('selections.accommodations', AccommodationController::class)->except(['index'])->scoped()->middleware(CheckSelectionAccess::class);
         Route::resource('selections.criteria', CriterionController::class)->except(['create', 'show'])->scoped()->middleware(CheckSelectionAccess::class);
         Route::resource('selections.users', SelectionUserController::class)->only(['index', 'store', 'destroy'])->scoped()->middleware(CheckSelectionOwner::class);
+
+        Route::get('selections/{selection}/accommodations/{accommodation}/criteria/edit', [AccommodationCriterionController::class, 'edit'])
+            ->name('selections.accommodations.criteria.edit')->scopeBindings()->middleware(CheckSelectionAccess::class);
+        Route::put('selections/{selection}/accommodations/{accommodation}/criteria', [AccommodationCriterionController::class, 'update'])
+            ->name('selections.accommodations.criteria.update')->scopeBindings()->middleware(CheckSelectionAccess::class);
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -89,6 +89,27 @@
                 @if ($accommodation->note)
                     <p class="line-clamp-2 break-words text-sm leading-relaxed text-[#43263D]/75">{{ $accommodation->note }}</p>
                 @endif
+                @if ($selection->criteria->isNotEmpty())
+                    <ul class="flex flex-col gap-2 text-sm mt-2">
+                        @foreach ($selection->criteria as $criterion)
+                            @php($isMet = $accommodation->criteria->firstWhere('id', $criterion->id)?->pivot->is_met)
+                            <li class="flex items-start justify-between gap-3">
+                                <span class="min-w-0 break-words">{{ $criterion->title }}</span>
+                                <span class="shrink-0">
+                                    @if ($isMet === null)
+                                        <span class="text-[#43263D]/75">Not checked</span>
+                                    @elseif ($isMet)
+                                        <span aria-hidden="true" class="font-semibold text-green-700">✓</span>
+                                        <span class="sr-only">Met</span>
+                                    @else
+                                        <span aria-hidden="true" class="font-semibold text-red-700">✕</span>
+                                        <span class="sr-only">Not met</span>
+                                    @endif
+                                </span>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </a>
         @empty
             <p class="col-span-full rounded-xl border border-dashed border-[#D8C9EA] p-8 text-center">

@@ -18,6 +18,7 @@
                 <x-ui.status-badge :status="$accommodation->status" />
             </div>
             <x-ui.action-menu
+                :criteria-edit-url="route('userzone.selections.accommodations.criteria.edit', [$selection, $accommodation])"
                 :edit-url="route('userzone.selections.accommodations.edit', [$selection, $accommodation])"
                 :delete-url="($selection->owner_id === auth()->id() || $accommodation->user_id === auth()->id()) ? route('userzone.selections.accommodations.destroy', [$selection, $accommodation]) : null"
                 label="accommodation"
@@ -40,6 +41,33 @@
                     <span class="block font-serif text-xl font-semibold">Source</span>
                     <a href="{{ $accommodation->source_url }}" class="underline underline-offset-4">{{ parse_url($accommodation->source_url, PHP_URL_HOST) }} ↗</a>
                 </p>
+                <section aria-labelledby="criteria-heading">
+                    <h2 id="criteria-heading" class="mb-2 font-serif text-xl font-semibold">Criteria</h2>
+                    <p class="mb-3 text-sm text-[#43263D]/75">How this place matches your selection criteria.</p>
+                    @if ($selection->criteria->isEmpty())
+                        <p class="text-sm text-[#43263D]/75">No criteria added yet.</p>
+                    @else
+                        <ul class="flex flex-col gap-2 text-sm">
+                            @foreach ($selection->criteria as $criterion)
+                                @php($isMet = $accommodation->criteria->firstWhere('id', $criterion->id)?->pivot->is_met)
+                                <li class="flex items-start justify-between gap-3">
+                                    <span class="min-w-0 break-words">{{ $criterion->title }}</span>
+                                    <span class="shrink-0">
+                                        @if ($isMet === null)
+                                            <span class="text-[#43263D]/75">Not checked</span>
+                                        @elseif ($isMet)
+                                            <span aria-hidden="true" class="font-semibold text-green-700">✓</span>
+                                            <span class="sr-only">Met</span>
+                                        @else
+                                            <span aria-hidden="true" class="font-semibold text-red-700">✕</span>
+                                            <span class="sr-only">Not met</span>
+                                        @endif
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </section>
                 @if ($accommodation->note)
                     <p><span class="mb-2 block font-serif text-xl font-semibold">Note: </span><span class="block whitespace-pre-line break-words rounded-xl bg-[#D8C9EA]/50 px-4 py-3">{{ $accommodation->note }}</span></p>
                 @endif

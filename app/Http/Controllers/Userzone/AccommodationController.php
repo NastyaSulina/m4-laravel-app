@@ -34,6 +34,9 @@ class AccommodationController extends Controller
 
     public function show(Selection $selection, Accommodation $accommodation): View
     {
+        $selection->load('criteria');
+        $accommodation->load('criteria');
+
         return view('userzone.accommodations.show', compact('selection', 'accommodation'));
     }
 
