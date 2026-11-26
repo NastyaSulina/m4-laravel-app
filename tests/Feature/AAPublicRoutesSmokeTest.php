@@ -7,6 +7,7 @@ test('public pages are reachable', function (string $name, array $parameters) {
 })->with([
     'welcome' => ['welcome', []],
     'privacy policy' => ['privacy-policy', []],
+    'contacts' => ['contacts', []],
     'login' => ['login', []],
     'registration' => ['register', []],
     'forgot password' => ['password.request', []],
