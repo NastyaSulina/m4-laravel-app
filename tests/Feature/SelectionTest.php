@@ -19,15 +19,16 @@ test('selection creation accepts status but ignores supplied ownership and id', 
     $otherUser = User::factory()->create();
     actingAs($user);
 
-    post(route('userzone.selections.store'), [
+    $response = post(route('userzone.selections.store'), [
         'title' => 'Madrid trip',
         'search_type' => 'short_stay',
         'owner_id' => $otherUser->id,
         'id' => 999,
         'status' => 'active',
-    ])->assertSessionHasNoErrors()->assertRedirect(route('userzone.selections.index'));
+    ])->assertSessionHasNoErrors();
 
     $selection = $user->selections()->sole();
+    $response->assertRedirect(route('userzone.selections.criteria.index', $selection));
     expect($selection->id)->not->toBe(999);
     assertDatabaseHas('selections', [
         'id' => $selection->id,
@@ -38,6 +39,9 @@ test('selection creation accepts status but ignores supplied ownership and id', 
         'start_date' => null,
         'end_date' => null,
     ]);
+
+    get(route('userzone.selections.criteria.index', $selection))->assertOk()
+        ->assertSee(route('userzone.selections.show', $selection));
 });
 
 test('selection update accepts status but ignores protected fields and clears omitted dates', function () {

@@ -39,9 +39,9 @@ class SelectionController extends Controller
 
     public function store(SelectionRequest $request): RedirectResponse
     {
-        $request->user()->selections()->create($request->validated());
+        $selection = $request->user()->selections()->create($request->validated());
 
-        return redirect()->route('userzone.selections.index');
+        return redirect()->route('userzone.selections.criteria.index', $selection);
     }
 
     public function edit(Selection $selection): View
