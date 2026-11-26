@@ -1,88 +1,65 @@
-<h1 align="center">Educational Starter Pack<br><sub>for</sub></h1>
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Staylist
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Staylist is a Laravel application for organising accommodation options into selections when planning a trip. You can save places with links, photos and notes, set their status, and add criteria to each selection. Share selections with other registered users to view and edit them together, while the owner manages access.
 
+## Requirements
 
----
+- PHP 8.5 with the standard Laravel extensions, SQLite support (`pdo_sqlite`), GD and EXIF.
+- Composer 2, Git, and Node.js 20.19+ (20.x) or 22.12+ with npm.
+- Laravel Herd for local hosting; the instructions below use its default `~/Herd` directory.
 
-## About this Starter Pack
+The project uses Laravel 13, SQLite, Blade, Tailwind CSS 4, Alpine.js 3 and Vite 8. Composer and npm install the project dependencies.
 
-This is a starter pack for **Laravel tailored for educational purposes**.
+## Install on local development
 
-It is aimed at helping students and beginners to quickly set up a Laravel development environment that allows for 
-learning the basics without the need to configure everything from scratch.
+1. Clone the project into Herd's directory:
 
-### Changes from the original Laravel repository
-It provides a pre-configured environment with some opinionated settings and packages for the educational context. 
-Initial customisation was done based on Laravel version 12.x. (12.37.0 on November 9th, 2025).
-Updated to Laravel 13.x (13.42 on November 11th, 2026), running on PHP 8.5, including now also Laravel Boost.
+   ```bash
+   cd ~/Herd
+   git clone https://github.com/NastyaSulina/m4-laravel-app.git
+   cd m4-laravel-app
+   ```
 
-- Added **barryvdh/laravel-debugbar** for debug info in the browser
-- Altered **.env.example** for local development (SQLite database, debug mode on, cache and session set to file)
-- Added **roave/security-advisories** to prevent installation of packages with known security issues
-- Added **laravel/boost** for AI assisted code generation, including skills for Claude Code and Codex
-- Used **laravel/breeze** for authentication scaffolding with Blade templates (but moved all of the component views to a `components.breeze` subfolder for better organization; the Breeze package itself is no longer required)
-- Front-end assets are built with **Vite 8** and **Tailwind CSS 4**, with a fallback to **CDN includes of Tailwind CSS and Alpine JS** when no build is present
-- Replaced PHPUnit by **Pest PHP** for testing, kept basic example tests
-- Some other small tweaks in configuration files, routes, controller, and view organisation to better reflect the educational purpose (rigid structure)
+   Select PHP 8.5 for this site in Herd, and make sure `php -v` also reports PHP 8.5 in your terminal.
 
-No front-end build is needed to get started. When there is no Vite build in `public/build`, the application falls back to CDN-hosted Tailwind CSS and Alpine JS. Running `npm run build` (or `npm run dev`) switches it to the compiled assets.
+2. Install PHP dependencies and create the local configuration:
 
-Everything that follows below (and the shields in the header) are part of the original Laravel README.md file.
+   ```bash
+   composer install
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
----
-## About Laravel
+   Set these values in `.env`. Keep `DB_CONNECTION=sqlite`; no separate database server is needed.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+   ```dotenv
+   APP_NAME=Staylist
+   APP_URL=http://m4-laravel-app.test
+   ```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+3. Create the database, load demo data, and make uploaded images accessible:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+   ```bash
+   touch database/database.sqlite
+   php artisan migrate --seed
+   php artisan storage:link
+   ```
 
-## Learning Laravel
+4. Install and build the frontend assets:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+   ```bash
+   npm ci
+   npm run build
+   ```
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+5. Open [m4-laravel-app.test](http://m4-laravel-app.test). Herd serves the site automatically. Register an account or sign in with the seeded demo account: **test@example.com** / **password**.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+6. To process sharing notifications, keep a queue worker running in a separate terminal from the project directory:
 
-## Agentic Development
+   ```bash
+   php artisan queue:work
+   ```
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+   The default `MAIL_MAILER=log` writes emails to `storage/logs/laravel.log` instead of sending them.
 
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
-```
-
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+During frontend development, run `npm run dev` instead of rebuilding after each change. To run the tests, use `php artisan test --compact`.
