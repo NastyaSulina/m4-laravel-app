@@ -18,7 +18,6 @@ class Header extends Component
     {
         $this->menu = Auth::check()
             ? [
-                'Selections' => route('userzone.selections.index'),
                 'Profile' => route('profile.edit'),
             ]
             : ['Sign in' => route('login'), 'Sign up' => route('register')];
