@@ -19,7 +19,7 @@
             </div>
             <x-ui.action-menu
                 :edit-url="route('userzone.selections.accommodations.edit', [$selection, $accommodation])"
-                :delete-url="route('userzone.selections.accommodations.destroy', [$selection, $accommodation])"
+                :delete-url="($selection->owner_id === auth()->id() || $accommodation->user_id === auth()->id()) ? route('userzone.selections.accommodations.destroy', [$selection, $accommodation]) : null"
                 label="accommodation"
             />
         </div>

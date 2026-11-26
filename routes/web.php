@@ -23,7 +23,8 @@ require __DIR__.'/auth.php';
 // Userzone --------------------------------------------------------------------
 Route::middleware('auth')->group(function () {
     Route::prefix('user')->name('userzone.')->group(function () {
-        Route::resource('selections', SelectionController::class)->middlewareFor(['show', 'edit', 'update', 'destroy'], CheckSelectionAccess::class);
+        Route::resource('selections', SelectionController::class)->middlewareFor(['show', 'edit', 'update'], CheckSelectionAccess::class)
+            ->middlewareFor('destroy', CheckSelectionOwner::class);
         Route::resource('selections.accommodations', AccommodationController::class)->except(['index'])->scoped()->middleware(CheckSelectionAccess::class);
         Route::resource('selections.criteria', CriterionController::class)->except(['create', 'show'])->scoped()->middleware(CheckSelectionAccess::class);
         Route::resource('selections.users', SelectionUserController::class)->only(['index', 'store', 'destroy'])->scoped()->middleware(CheckSelectionOwner::class);

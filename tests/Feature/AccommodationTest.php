@@ -8,6 +8,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\assertModelMissing;
 use function Pest\Laravel\delete;
+use function Pest\Laravel\get;
 use function Pest\Laravel\post;
 use function Pest\Laravel\put;
 
@@ -78,6 +79,9 @@ test('owner can delete accommodation without deleting its selection or other acc
     actingAs($selection->owner);
     $parameters = [$selection, $accommodation];
 
+    get(route('userzone.selections.accommodations.show', $parameters))->assertOk()
+        ->assertSee('action="'.route('userzone.selections.accommodations.destroy', $parameters).'"', false);
+
     delete(route('userzone.selections.accommodations.destroy', $parameters))
         ->assertRedirect(route('userzone.selections.show', $selection));
 
@@ -100,3 +104,30 @@ test('invalid updates leave accommodation unchanged', function () {
 
     expect($accommodation->fresh()->getAttributes())->toBe($accommodation->getAttributes());
 });
+
+test('shared members can delete only accommodations they added', function (bool $isAuthor) {
+    $selection = Selection::factory()->create();
+    $member = User::factory()->create();
+    $selection->users()->attach($member);
+    $accommodation = Accommodation::factory()->for($selection)->create([
+        'user_id' => $isAuthor ? $member->id : $selection->owner_id,
+    ]);
+    actingAs($member);
+    $parameters = [$selection, $accommodation];
+    $deleteUrl = route('userzone.selections.accommodations.destroy', $parameters);
+
+    $page = get(route('userzone.selections.accommodations.show', $parameters))->assertOk()
+        ->assertSee(route('userzone.selections.accommodations.edit', $parameters));
+
+    if ($isAuthor) {
+        $page->assertSee('action="'.$deleteUrl.'"', false);
+        delete($deleteUrl)->assertRedirect(route('userzone.selections.show', $selection));
+        assertModelMissing($accommodation);
+    } else {
+        $page->assertDontSee('action="'.$deleteUrl.'"', false);
+        delete($deleteUrl)->assertForbidden();
+        assertModelExists($accommodation);
+    }
+
+    assertModelExists($selection);
+})->with(['author' => true, 'another member' => false]);

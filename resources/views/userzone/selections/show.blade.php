@@ -30,7 +30,7 @@
                 @endif
                 <x-ui.action-menu
                     :edit-url="route('userzone.selections.edit', $selection)"
-                    :delete-url="route('userzone.selections.destroy', $selection)"
+                    :delete-url="$isOwner ? route('userzone.selections.destroy', $selection) : null"
                     label="selection"
                 />
             </div>

@@ -77,6 +77,9 @@ test('deleting a selection deletes its contents and preserves other selections',
     $otherAccommodation = Accommodation::factory()->for($other)->create();
     actingAs($selection->owner);
 
+    get(route('userzone.selections.show', $selection))->assertOk()
+        ->assertSee('action="'.route('userzone.selections.destroy', $selection).'"', false);
+
     delete(route('userzone.selections.destroy', $selection))->assertRedirect(route('userzone.selections.index'));
 
     assertModelMissing($selection);
@@ -139,4 +142,20 @@ test('a selection displays its accommodations and criteria without mixing in ano
         ->assertSee(route('userzone.selections.accommodations.show', [$selection, $accommodation]))
         ->assertDontSeeText('Barcelona studio')
         ->assertDontSeeText('Sea view');
+});
+
+test('shared members cannot delete a selection', function () {
+    $selection = Selection::factory()->create();
+    $member = User::factory()->create();
+    $selection->users()->attach($member);
+    $accommodation = Accommodation::factory()->for($selection)->create();
+    actingAs($member);
+
+    get(route('userzone.selections.show', $selection))->assertOk()
+        ->assertSee(route('userzone.selections.edit', $selection))
+        ->assertDontSee('action="'.route('userzone.selections.destroy', $selection).'"', false);
+    delete(route('userzone.selections.destroy', $selection))->assertForbidden();
+
+    assertModelExists($selection);
+    assertModelExists($accommodation);
 });
