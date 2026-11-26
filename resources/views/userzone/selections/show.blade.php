@@ -47,70 +47,89 @@
         </div>
     </article>
 
-    <section class="mt-8 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b border-[#D8C9EA] pb-6 text-[#43263D]">
-        <h2 class="sr-only">Criteria</h2>
+    <div x-data="{
+        selectedCriteria: [],
+        results: {{ Js::from($criteriaResults) }},
+        matches(criteria) {
+            return this.selectedCriteria.every(id => criteria.includes(Number(id)));
+        }
+    }">
+        <section class="mt-8 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b border-[#D8C9EA] pb-6 text-[#43263D]">
+            <h2 class="sr-only">Criteria</h2>
 
-        @if ($selection->criteria->isNotEmpty())
-            <ul class="flex min-w-0 flex-wrap gap-3">
-                @foreach ($selection->criteria as $criterion)
-                    <li class="max-w-full break-words rounded-2xl border border-[#D8C9EA] px-4 py-1 text-base">
-                        {{ $criterion->title }}
-                    </li>
-                @endforeach
-            </ul>
-        @else
-            <p class="text-sm text-[#43263D]/70">Add what matters to you in a place.</p>
-        @endif
-
-        <x-ui.button :href="route('userzone.selections.criteria.index', $selection)" variant="tertiary" class="shrink-0 text-sm!">Manage criteria</x-ui.button>
-    </section>
-
-    <div class="mb-6 mt-8 flex flex-wrap items-center justify-between gap-6 text-[#43263D]">
-        <h2 class="font-serif text-2xl font-semibold leading-tight">Accommodations</h2>
-        <x-ui.button :href="route('userzone.selections.accommodations.create', $selection)">+ New accommodation</x-ui.button>
-    </div>
-
-    <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 text-[#43263D]">
-        @forelse ($selection->accommodations as $accommodation)
-            <a href="{{ route('userzone.selections.accommodations.show', [$selection, $accommodation]) }}" class="group flex min-w-0 flex-col gap-2 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#43263D]">
-                <div class="relative">
-                    <img
-                        src="{{ $accommodation->getFirstMediaUrl('images', 'thumbnail') }}" alt="{{ $accommodation->title }}"
-                        width="600" height="400" loading="lazy"
-                        class="aspect-[3/2] w-full rounded-2xl bg-[#D8C9EA]/30 object-cover"
-                    >
-                    <x-ui.status-badge :status="$accommodation->status" class="absolute left-3 top-3" />
+            @if ($selection->criteria->isNotEmpty())
+                <div class="min-w-0">
+                    <fieldset>
+                        <div class="flex flex-wrap gap-3">
+                            @foreach ($selection->criteria as $criterion)
+                                <label class="flex max-w-full cursor-pointer items-center gap-2 rounded-2xl border border-[#D8C9EA] px-4 py-1 text-base">
+                                    <input type="checkbox" name="criteria[]" value="{{ $criterion->id }}" x-model="selectedCriteria" class="size-4 shrink-0 accent-[#43263D]">
+                                    <span class="min-w-0 break-words">{{ $criterion->title }}
+                                    </span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </fieldset>
                 </div>
-                <h3 class="truncate font-serif text-xl font-semibold leading-6 group-hover:underline" title="{{ $accommodation->title }}">{{ $accommodation->title }}</h3>
-                @if ($accommodation->note)
-                    <p class="line-clamp-2 break-words text-sm leading-relaxed text-[#43263D]/75">{{ $accommodation->note }}</p>
-                @endif
-                @if ($selection->criteria->isNotEmpty())
-                    <ul class="flex flex-col gap-2 text-sm mt-2">
-                        @foreach ($selection->criteria as $criterion)
-                            @php($isMet = $accommodation->criteria->firstWhere('id', $criterion->id)?->pivot->is_met)
-                            <li class="flex items-start justify-between gap-3">
-                                <span class="min-w-0 break-words">{{ $criterion->title }}</span>
-                                <span class="shrink-0">
-                                    @if ($isMet === null)
-                                        <span class="text-[#43263D]/75">Not checked</span>
-                                    @elseif ($isMet)
-                                        <span aria-hidden="true" class="font-semibold text-green-700">✓</span>
-                                        <span class="sr-only">Met</span>
-                                    @else
-                                        <span aria-hidden="true" class="font-semibold text-red-700">✕</span>
-                                        <span class="sr-only">Not met</span>
-                                    @endif
-                                </span>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-            </a>
-        @empty
-            <p class="col-span-full rounded-xl border border-dashed border-[#D8C9EA] p-8 text-center">
-                No accommodations yet.
-            </p>
-        @endforelse
+            @else
+                <p class="text-sm text-[#43263D]/70">Add what matters to you in a place.</p>
+            @endif
+
+            <x-ui.button :href="route('userzone.selections.criteria.index', $selection)" variant="tertiary" class="shrink-0 text-sm!">Manage criteria</x-ui.button>
+        </section>
+
+        <div class="mb-6 mt-8 flex flex-wrap items-center justify-between gap-6 text-[#43263D]">
+            <h2 class="font-serif text-2xl font-semibold leading-tight">Accommodations</h2>
+            <x-ui.button :href="route('userzone.selections.accommodations.create', $selection)">+ New accommodation</x-ui.button>
+        </div>
+
+        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 text-[#43263D]">
+            @forelse ($selection->accommodations as $accommodation)
+                <a x-show="matches(results[{{ $accommodation->id }}])" href="{{ route('userzone.selections.accommodations.show', [$selection, $accommodation]) }}" class="group flex min-w-0 flex-col gap-2 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#43263D]">
+                    <div class="relative">
+                        <img
+                            src="{{ $accommodation->getFirstMediaUrl('images', 'thumbnail') }}" alt="{{ $accommodation->title }}"
+                            width="600" height="400" loading="lazy"
+                            class="aspect-[3/2] w-full rounded-2xl bg-[#D8C9EA]/30 object-cover"
+                        >
+                        <x-ui.status-badge :status="$accommodation->status" class="absolute left-3 top-3" />
+                    </div>
+                    <h3 class="truncate font-serif text-xl font-semibold leading-6 group-hover:underline" title="{{ $accommodation->title }}">{{ $accommodation->title }}</h3>
+                    @if ($accommodation->note)
+                        <p class="line-clamp-2 break-words text-sm leading-relaxed text-[#43263D]/75">{{ $accommodation->note }}</p>
+                    @endif
+                    @if ($selection->criteria->isNotEmpty())
+                        <ul class="flex flex-col gap-2 text-sm mt-2">
+                            @foreach ($selection->criteria as $criterion)
+                                @php($isMet = $accommodation->criteria->firstWhere('id', $criterion->id)?->pivot->is_met)
+                                <li class="flex items-start justify-between gap-3">
+                                    <span class="min-w-0 break-words">{{ $criterion->title }}</span>
+                                    <span class="shrink-0">
+                                        @if ($isMet === null)
+                                            <span class="text-[#43263D]/75">Not checked</span>
+                                        @elseif ($isMet)
+                                            <span aria-hidden="true" class="font-semibold text-green-700">✓</span>
+                                            <span class="sr-only">Met</span>
+                                        @else
+                                            <span aria-hidden="true" class="font-semibold text-red-700">✕</span>
+                                            <span class="sr-only">Not met</span>
+                                        @endif
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </a>
+            @empty
+                <p class="col-span-full rounded-xl border border-dashed border-[#D8C9EA] p-8 text-center">
+                    No accommodations yet.
+                </p>
+            @endforelse
+            @if ($selection->accommodations->isNotEmpty())
+                <p x-show="!Object.values(results).some(criteria => matches(criteria))" style="display: none" role="status" class="col-span-full rounded-xl border border-dashed border-[#D8C9EA] p-8 text-center">
+                    No accommodations match the selected criteria.
+                </p>
+            @endif
+        </div>
     </div>
 </x-base-layout>

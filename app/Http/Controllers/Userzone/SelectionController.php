@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Userzone;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Userzone\SelectionRequest;
+use App\Models\Accommodation;
 use App\Models\Selection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,8 +29,11 @@ class SelectionController extends Controller
     public function show(Selection $selection): View
     {
         $selection->load('accommodations.media', 'accommodations.criteria', 'criteria');
+        $criteriaResults = $selection->accommodations->mapWithKeys(fn (Accommodation $accommodation): array => [
+            $accommodation->id => $accommodation->criteria->where('pivot.is_met', true)->values()->modelKeys(),
+        ]);
 
-        return view('userzone.selections.show', compact('selection'));
+        return view('userzone.selections.show', compact('selection', 'criteriaResults'));
     }
 
     public function create(): View

@@ -11,6 +11,38 @@ use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\get;
 use function Pest\Laravel\put;
 
+test('selection provides only met criterion IDs for client filtering', function () {
+    $selection = Selection::factory()->create();
+    $criteria = Criterion::factory(2)->for($selection)->create();
+    $matching = Accommodation::factory()->for($selection)->create(['title' => 'Matching place']);
+    $matching->criteria()->attach($criteria->modelKeys(), ['is_met' => true]);
+    $rejected = Accommodation::factory()->for($selection)->create(['title' => 'Rejected place']);
+    $rejected->criteria()->attach([
+        $criteria[0]->id => ['is_met' => false],
+        $criteria[1]->id => ['is_met' => true],
+    ]);
+    $unchecked = Accommodation::factory()->for($selection)->create(['title' => 'Unchecked place']);
+    $unchecked->criteria()->attach([
+        $criteria[0]->id => ['is_met' => true],
+        $criteria[1]->id => ['is_met' => null],
+    ]);
+    $missing = Accommodation::factory()->for($selection)->create(['title' => 'New criterion pending']);
+    actingAs($selection->owner);
+
+    $response = get(route('userzone.selections.show', $selection))->assertOk()
+        ->assertSeeText($matching->title)
+        ->assertSeeText($rejected->title)
+        ->assertSeeText($unchecked->title)
+        ->assertSeeText($missing->title);
+
+    expect($response->viewData('criteriaResults')->all())->toBe([
+        $matching->id => $criteria->modelKeys(),
+        $rejected->id => [$criteria[1]->id],
+        $unchecked->id => [$criteria[0]->id],
+        $missing->id => [],
+    ]);
+});
+
 test('criteria form shows saved answers and new criteria as unchecked', function () {
     $accommodation = Accommodation::factory()->create();
     $selection = $accommodation->selection;
