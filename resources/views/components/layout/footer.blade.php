@@ -1,7 +1,7 @@
 <footer class="border-t border-[#D8C9EA] bg-[#F8F3E9] text-sm text-[#43263D]">
     <div class="mx-auto grid max-w-5xl gap-6 px-4 py-6 sm:grid-cols-[2fr_1.5fr_1.5fr] sm:px-6">
         <div>
-            <p class="font-bold">Staylist</p>
+            <p class="font-bold">{{ config('app.name') }}</p>
             <p class="mt-2 max-w-xs leading-relaxed text-[#43263D]/75">
                 Find your favourites. Compare your options.
                 Choose your next stay together.
@@ -24,7 +24,7 @@
         </nav>
 
         <p class="text-xs leading-relaxed text-[#43263D]/75 sm:self-center sm:text-right">
-            &copy; {{ date('Y') }} Staylist. All rights reserved.
+            &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
         </p>
     </div>
 </footer>
