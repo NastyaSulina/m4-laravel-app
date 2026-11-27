@@ -17,7 +17,7 @@ class AccommodationCriteriaRequest extends FormRequest
             'criteria.*' => ['array:id,is_met'],
             'criteria.*.id' => [
                 'required', 'integer', 'distinct',
-                Rule::exists('criteria', 'id')->where('selection_id', $this->route('selection')->id),
+                Rule::in($this->route('selection')->criteria()->pluck('id')),
             ],
             'criteria.*.is_met' => ['present', 'nullable', 'boolean'],
         ];

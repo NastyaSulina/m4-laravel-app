@@ -52,8 +52,9 @@
                     @else
                         <p class="mb-5 mt-2 text-sm leading-relaxed text-muted">How this place matches your selection criteria.</p>
                         <ul class="flex flex-col gap-3 text-sm">
+                            @php($answers = $accommodation->criteria->pluck('pivot.is_met', 'id'))
                             @foreach ($selection->criteria as $criterion)
-                                @php($isMet = $accommodation->criteria->firstWhere('id', $criterion->id)?->pivot->is_met)
+                                @php($isMet = $answers->get($criterion->id))
                                 <li class="flex items-center justify-between gap-3">
                                     <span class="min-w-0 break-words">{{ $criterion->title }}</span>
                                     <span class="shrink-0">

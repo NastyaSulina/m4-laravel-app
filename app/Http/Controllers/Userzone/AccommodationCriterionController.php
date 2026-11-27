@@ -7,6 +7,7 @@ use App\Http\Requests\Userzone\AccommodationCriteriaRequest;
 use App\Models\Accommodation;
 use App\Models\Selection;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AccommodationCriterionController extends Controller
@@ -24,10 +25,18 @@ class AccommodationCriterionController extends Controller
         $results = [];
 
         foreach ($request->validated('criteria') as $criterion) {
-            $results[$criterion['id']] = ['is_met' => $criterion['is_met']];
+            $results[] = [
+                'accommodation_id' => $accommodation->id,
+                'criterion_id' => $criterion['id'],
+                'is_met' => $criterion['is_met'],
+            ];
         }
 
-        $accommodation->criteria()->syncWithoutDetachingOrFail($results);
+        DB::table('accommodation_criterion')->upsert(
+            $results,
+            ['accommodation_id', 'criterion_id'],
+            ['is_met'],
+        );
 
         return redirect()->route('userzone.selections.accommodations.show', [$selection, $accommodation]);
     }

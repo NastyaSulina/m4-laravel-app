@@ -101,8 +101,9 @@
                     @endif
                     @if ($selection->criteria->isNotEmpty())
                         <ul class="flex flex-col gap-2 rounded-xl bg-canvas/70 p-3 text-sm mt-1">
+                            @php($answers = $accommodation->criteria->pluck('pivot.is_met', 'id'))
                             @foreach ($selection->criteria as $criterion)
-                                @php($isMet = $accommodation->criteria->firstWhere('id', $criterion->id)?->pivot->is_met)
+                                @php($isMet = $answers->get($criterion->id))
                                 <li class="flex items-start justify-between gap-3">
                                     <span class="min-w-0 break-words">{{ $criterion->title }}</span>
                                     <span class="shrink-0">

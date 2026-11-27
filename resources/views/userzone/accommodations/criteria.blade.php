@@ -19,8 +19,9 @@
             <form action="{{ route('userzone.selections.accommodations.criteria.update', [$selection, $accommodation]) }}" method="post" class="flex flex-col gap-6 rounded-2xl bg-surface p-5 sm:p-6">
                 @csrf
                 @method('PUT')
+                @php($answers = $accommodation->criteria->pluck('pivot.is_met', 'id'))
                 @foreach ($selection->criteria as $index => $criterion)
-                    @php($answer = old('criteria.'.$index.'.is_met', $accommodation->criteria->firstWhere('id', $criterion->id)?->pivot->is_met) ?? '')
+                    @php($answer = old('criteria.'.$index.'.is_met', $answers->get($criterion->id)) ?? '')
                     <div class="grid items-center gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] sm:gap-6">
                         <label for="criterion-{{ $criterion->id }}" class="min-w-0 break-words text-sm font-medium">
                             {{ $criterion->title }}

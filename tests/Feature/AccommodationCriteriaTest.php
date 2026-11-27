@@ -4,6 +4,7 @@ use App\Models\Accommodation;
 use App\Models\Criterion;
 use App\Models\Selection;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
@@ -115,6 +116,37 @@ test('owners and members can save all three criterion results without changing o
     assertDatabaseHas('accommodation_criterion', ['accommodation_id' => $accommodation->id, 'criterion_id' => $criteria[2]->id, 'is_met' => null]);
     assertDatabaseHas('accommodation_criterion', ['accommodation_id' => $otherAccommodation->id, 'criterion_id' => $criteria[0]->id, 'is_met' => false]);
 })->with(['owner' => false, 'shared member' => true]);
+
+test('saving one or twelve answers uses the same number of queries', function (bool $existingAnswers) {
+    $queryCount = 0;
+    DB::listen(function () use (&$queryCount): void {
+        $queryCount++;
+    });
+    $queryCounts = [];
+
+    foreach ([1, 12] as $count) {
+        $accommodation = Accommodation::factory()->create();
+        $selection = $accommodation->selection;
+        $criteria = Criterion::factory($count)->for($selection)->create();
+        if ($existingAnswers) {
+            $accommodation->criteria()->attach($criteria->modelKeys(), ['is_met' => false]);
+        }
+        actingAs($selection->owner);
+        $url = route('userzone.selections.accommodations.criteria.update', [$selection, $accommodation]);
+        $data = $criteria->map(fn (Criterion $criterion): array => [
+            'id' => $criterion->id,
+            'is_met' => '1',
+        ])->all();
+
+        $queryCount = 0;
+        put($url, ['criteria' => $data])->assertSessionHasNoErrors()->assertRedirect();
+        $queryCounts[] = $queryCount;
+
+        expect($accommodation->criteria()->wherePivot('is_met', true)->count())->toBe($count);
+    }
+
+    expect($queryCounts[1])->toBe($queryCounts[0]);
+})->with(['new answers' => false, 'existing answers' => true]);
 
 test('criteria from another selection are rejected without saving any changes', function () {
     $accommodation = Accommodation::factory()->create();
