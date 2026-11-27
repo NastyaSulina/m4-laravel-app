@@ -86,3 +86,19 @@ it('does not revoke a membership belonging to another selection', function () {
     delete(route('userzone.selections.users.destroy', [$selection, $member]))->assertNotFound();
     expect($otherSelection->users()->whereKey($member->id)->exists())->toBeTrue();
 });
+
+it('keeps shared selections accessible after one owner deletes their account', function () {
+    $member = User::factory()->create();
+    $selection = Selection::factory()->create(['title' => 'Former owner selection']);
+    $otherSelection = Selection::factory()->create(['title' => 'Remaining shared selection']);
+    $selection->users()->attach($member);
+    $otherSelection->users()->attach($member);
+
+    actingAs($selection->owner);
+    delete(route('profile.destroy'), ['password' => 'password'])->assertSessionHasNoErrors()->assertRedirect('/');
+
+    actingAs($member);
+    get(route('userzone.selections.index', ['filter' => 'shared']))
+        ->assertOk()->assertDontSeeText($selection->title)->assertSeeText($otherSelection->title);
+    get(route('userzone.selections.show', $selection))->assertNotFound();
+});

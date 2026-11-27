@@ -131,3 +131,18 @@ test('shared members can delete only accommodations they added', function (bool 
 
     assertModelExists($selection);
 })->with(['author' => true, 'another member' => false]);
+
+test('an owner can open a contributed accommodation after its author deletes their account', function () {
+    $selection = Selection::factory()->create();
+    $member = User::factory()->create();
+    $selection->users()->attach($member);
+    $accommodation = Accommodation::factory()->for($selection)->create(['user_id' => $member->id]);
+
+    actingAs($member);
+    delete(route('profile.destroy'), ['password' => 'password'])->assertSessionHasNoErrors('userDeletion')->assertRedirect('/');
+
+    expect(User::find($member->id))->toBeNull();
+    actingAs($selection->owner);
+    get(route('userzone.selections.accommodations.show', [$selection, $accommodation]))
+        ->assertOk()->assertSeeText($accommodation->title)->assertSeeText('Deleted user');
+});

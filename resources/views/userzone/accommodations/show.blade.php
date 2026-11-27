@@ -20,7 +20,7 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-muted">
                     <p>Property type: {{ ucfirst($accommodation->property_type) }}</p>
-                    <p>Added by <strong class="font-medium text-ink">{{ $accommodation->user->name }}</strong></p>
+                    <p>Added by <strong class="font-medium text-ink">{{ $accommodation->user?->name ?? 'Deleted user' }}</strong></p>
                 </div>
             </div>
             <x-ui.action-menu

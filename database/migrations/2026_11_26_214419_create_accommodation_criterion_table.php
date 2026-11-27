@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('accommodation_criterion', function (Blueprint $table) {
             $table->foreignId('accommodation_id');
-            $table->foreignId('criterion_id');
+            $table->foreignId('criterion_id')->constrained('criteria')->cascadeOnDelete();
 
             $table->boolean('is_met')->nullable();
 

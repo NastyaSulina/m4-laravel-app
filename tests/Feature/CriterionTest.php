@@ -1,27 +1,35 @@
 <?php
 
+use App\Models\Accommodation;
 use App\Models\Criterion;
 use App\Models\Selection;
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\assertModelMissing;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\post;
 use function Pest\Laravel\put;
 
-test('a user can delete a criterion and return to its criteria list', function () {
+test('a member can delete a criterion and only its answers are removed', function () {
     $user = User::factory()->create();
-    $selection = Selection::factory()->for($user, 'owner')->create();
+    $selection = Selection::factory()->create();
+    $selection->users()->attach($user);
     $criterion = Criterion::factory()->for($selection)->create();
     $otherCriterion = Criterion::factory()->for($selection)->create();
+    $accommodation = Accommodation::factory()->for($selection)->create();
+    $accommodation->criteria()->attach([$criterion->id, $otherCriterion->id], ['is_met' => true]);
     actingAs($user);
 
     delete(route('userzone.selections.criteria.destroy', [$criterion->selection_id, $criterion]))
         ->assertRedirect(route('userzone.selections.criteria.index', $selection));
 
     assertModelMissing($criterion);
+    assertDatabaseMissing('accommodation_criterion', ['criterion_id' => $criterion->id]);
+    assertDatabaseHas('accommodation_criterion', ['criterion_id' => $otherCriterion->id, 'is_met' => true]);
     assertModelExists($otherCriterion);
     assertModelExists($selection);
 });
