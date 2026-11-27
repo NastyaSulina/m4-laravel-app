@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Userzone;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Userzone\SelectionRequest;
-use App\Models\Accommodation;
 use App\Models\Selection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -26,14 +26,23 @@ class SelectionController extends Controller
         return view('userzone.selections.index', compact('selections', 'filter'));
     }
 
-    public function show(Selection $selection): View
+    public function show(Request $request, Selection $selection): View
     {
-        $selection->load('accommodations.media', 'accommodations.criteria', 'criteria');
-        $criteriaResults = $selection->accommodations->mapWithKeys(fn (Accommodation $accommodation): array => [
-            $accommodation->id => $accommodation->criteria->where('pivot.is_met', true)->values()->modelKeys(),
-        ]);
+        $selection->load('criteria');
+        $selectedCriteria = $selection->criteria
+            ->whereIn('id', (array) $request->query('criteria', []))
+            ->modelKeys();
+        $query = $selection->accommodations()->with('media', 'criteria');
 
-        return view('userzone.selections.show', compact('selection', 'criteriaResults'));
+        foreach ($selectedCriteria as $criterionId) {
+            $query->whereHas('criteria', function (Builder $query) use ($criterionId): void {
+                $query->where('criteria.id', $criterionId)->where('accommodation_criterion.is_met', true);
+            });
+        }
+
+        $accommodations = $query->get();
+
+        return view('userzone.selections.show', compact('selection', 'accommodations', 'selectedCriteria'));
     }
 
     public function create(): View

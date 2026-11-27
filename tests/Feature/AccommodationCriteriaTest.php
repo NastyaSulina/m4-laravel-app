@@ -22,7 +22,7 @@ test('an accommodation without criteria offers criteria setup instead of an empt
         ->assertDontSee('action="'.route('userzone.selections.accommodations.criteria.update', [$selection, $accommodation]).'"', false);
 });
 
-test('selection provides only met criterion IDs for client filtering', function () {
+test('selection filters accommodations by all selected criteria', function () {
     $selection = Selection::factory()->create();
     $criteria = Criterion::factory(2)->for($selection)->create();
     $matching = Accommodation::factory()->for($selection)->create(['title' => 'Matching place']);
@@ -40,18 +40,17 @@ test('selection provides only met criterion IDs for client filtering', function 
     $missing = Accommodation::factory()->for($selection)->create(['title' => 'New criterion pending']);
     actingAs($selection->owner);
 
-    $response = get(route('userzone.selections.show', $selection))->assertOk()
+    get(route('userzone.selections.show', $selection))->assertOk()
         ->assertSeeText($matching->title)
         ->assertSeeText($rejected->title)
         ->assertSeeText($unchecked->title)
         ->assertSeeText($missing->title);
 
-    expect($response->viewData('criteriaResults')->all())->toBe([
-        $matching->id => $criteria->modelKeys(),
-        $rejected->id => [$criteria[1]->id],
-        $unchecked->id => [$criteria[0]->id],
-        $missing->id => [],
-    ]);
+    get(route('userzone.selections.show', [$selection, 'criteria' => $criteria->modelKeys()]))->assertOk()
+        ->assertSeeText($matching->title)
+        ->assertDontSeeText($rejected->title)
+        ->assertDontSeeText($unchecked->title)
+        ->assertDontSeeText($missing->title);
 });
 
 test('criteria form shows saved answers and new criteria as unchecked', function () {

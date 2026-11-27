@@ -47,13 +47,7 @@
         </div>
     </article>
 
-    <div x-data="{
-        selectedCriteria: [],
-        results: {{ Js::from($criteriaResults) }},
-        matches(criteria) {
-            return this.selectedCriteria.every(id => criteria.includes(Number(id)));
-        }
-    }">
+    <div>
         <section class="mt-6 flex flex-col gap-2.5 rounded-2xl bg-soft/70 p-3 sm:px-4 text-ink">
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <h2 class="text-sm font-semibold">Filter by criteria</h2>
@@ -61,18 +55,18 @@
             </div>
 
             @if ($selection->criteria->isNotEmpty())
-                <div class="min-w-0">
-                    <fieldset>
+                <form method="get" action="{{ route('userzone.selections.show', $selection) }}" class="flex min-w-0 flex-col gap-3">
+                    <fieldset class="min-w-0">
                         <div class="flex flex-wrap gap-2">
                             @foreach ($selection->criteria as $criterion)
                                 <label class="flex max-w-full cursor-pointer items-center gap-2.5 rounded-xl bg-surface px-3 py-2 text-base font-medium transition-colors hover:bg-line/50 has-checked:bg-ink has-checked:text-white has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ink">
-                                    <input type="checkbox" name="criteria[]" value="{{ $criterion->id }}" x-model="selectedCriteria" class="order-last size-4.5 shrink-0 cursor-pointer rounded-sm border-muted/50 bg-transparent text-ink focus:ring-0 focus:ring-offset-0 checked:border-white/70 checked:bg-ink">
+                                    <input type="checkbox" name="criteria[]" value="{{ $criterion->id }}" @checked(in_array($criterion->id, $selectedCriteria, true)) onchange="this.form.requestSubmit()" class="order-last size-4.5 shrink-0 cursor-pointer rounded-sm border-muted/50 bg-transparent text-ink focus:ring-0 focus:ring-offset-0 checked:border-white/70 checked:bg-ink">
                                     <span class="min-w-0 break-words">{{ $criterion->title }}</span>
                                 </label>
                             @endforeach
                         </div>
                     </fieldset>
-                </div>
+                </form>
             @else
                 <p class="text-sm text-muted">Add what matters to you in a place.</p>
             @endif
@@ -85,8 +79,8 @@
         </div>
 
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 text-ink">
-            @forelse ($selection->accommodations as $accommodation)
-                <a x-show="matches(results[{{ $accommodation->id }}])" href="{{ route('userzone.selections.accommodations.show', [$selection, $accommodation]) }}" class="group flex min-w-0 flex-col gap-3 rounded-2xl bg-surface p-3 transition-colors hover:bg-soft/50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">
+            @forelse ($accommodations as $accommodation)
+                <a href="{{ route('userzone.selections.accommodations.show', [$selection, $accommodation]) }}" class="group flex min-w-0 flex-col gap-3 rounded-2xl bg-surface p-3 transition-colors hover:bg-soft/50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">
                     <div class="relative">
                         <img
                             src="{{ $accommodation->getFirstMediaUrl('images', 'thumbnail') }}" alt="{{ $accommodation->title }}"
@@ -123,18 +117,19 @@
                     @endif
                 </a>
             @empty
-                <div class="col-span-full rounded-2xl bg-surface p-5 sm:p-6">
-                    <h3 class="text-xl font-semibold">No accommodations yet</h3>
-                    <p class="mt-2 max-w-lg text-sm leading-relaxed text-muted">Found a place you like? Add its link to keep the details here and compare it with your next find.</p>
-                    <x-ui.button :href="route('userzone.selections.accommodations.create', $selection)" class="mt-4">Add your first accommodation</x-ui.button>
-                </div>
+                @if ($selectedCriteria !== [])
+                    <div role="status" class="col-span-full rounded-2xl bg-surface p-5 sm:p-6">
+                        <p class="font-medium">No accommodations match the selected criteria.</p>
+                        <p class="mt-2 text-sm text-muted">Uncheck a filter above to see more places.</p>
+                    </div>
+                @else
+                    <div class="col-span-full rounded-2xl bg-surface p-5 sm:p-6">
+                        <h3 class="text-xl font-semibold">No accommodations yet</h3>
+                        <p class="mt-2 max-w-lg text-sm leading-relaxed text-muted">Found a place you like? Add its link to keep the details here and compare it with your next find.</p>
+                        <x-ui.button :href="route('userzone.selections.accommodations.create', $selection)" class="mt-4">Add your first accommodation</x-ui.button>
+                    </div>
+                @endif
             @endforelse
-            @if ($selection->accommodations->isNotEmpty())
-                <div x-show="!Object.values(results).some(criteria => matches(criteria))" style="display: none" role="status" class="col-span-full rounded-2xl bg-surface p-5 sm:p-6">
-                    <p class="font-medium">No accommodations match the selected criteria.</p>
-                    <p class="mt-2 text-sm text-muted">Uncheck a filter above to see more places.</p>
-                </div>
-            @endif
         </div>
     </div>
 </x-base-layout>
