@@ -1,5 +1,5 @@
 <x-base-layout>
-    <div class="mx-auto w-full max-w-md rounded-lg bg-white px-6 py-4 text-gray-900 shadow-md">
+    <div class="mx-auto w-full max-w-md rounded-2xl bg-surface p-6 text-ink sm:p-8">
         {{ $slot }}
     </div>
 </x-base-layout>

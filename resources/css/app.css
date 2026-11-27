@@ -6,9 +6,16 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans:
-        Figtree, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: ui-sans-serif, system-ui, sans-serif;
+    --color-canvas: #FAF7F1;
+    --color-surface: #FFFDFA;
+    --color-soft: #F0EAF2;
+    --color-chrome: #F0E9EE;
+    --color-ink: #43263D;
+    --color-muted: #776875;
+    --color-line: #DED4DC;
+    --color-success: #41583C;
+    --color-success-soft: #E4ECD8;
 }
 
 /*
@@ -20,6 +27,11 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+    a,
+    button {
+        text-decoration-skip-ink: none;
+    }
+
     *,
     ::after,
     ::before,

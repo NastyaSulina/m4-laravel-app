@@ -1,12 +1,12 @@
-<x-base-layout title="Edit criterion" class="bg-[#F8F3E9]!">
-    <div class="mx-auto max-w-2xl text-[#43263D]">
-        <x-ui.button :href="route('userzone.selections.criteria.index', $selection)" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to criteria</x-ui.button>
+<x-base-layout title="Edit criterion">
+    <div class="max-w-2xl text-ink">
+        <x-ui.button :href="route('userzone.selections.criteria.index', $selection)" variant="tertiary" class="mb-6 gap-2">← Back to criteria</x-ui.button>
 
-        <h1 class="mb-6 font-serif text-3xl font-semibold leading-tight">Edit criterion</h1>
+        <h1 class="mb-6 text-3xl font-semibold leading-tight tracking-tight">Edit criterion</h1>
 
         <form
             action="{{ route('userzone.selections.criteria.update', [$selection, $criterion]) }}" method="post"
-            class="flex flex-col gap-4"
+            class="flex flex-col gap-6 rounded-2xl bg-surface p-5 sm:p-6"
         >
             @method('PUT')
             @csrf

@@ -6,22 +6,22 @@
     'required' => false,
 ])
 
-<div class="flex flex-col gap-1">
-    <label for="{{ $id }}" class="text-sm font-medium text-[#43263D]">
+<div class="flex flex-col gap-2">
+    <label for="{{ $id }}" class="text-sm font-medium text-ink">
         {{ $label }}
         @if ($required)
             <span class="text-red-600" title="Required" aria-hidden="true">*</span>
         @else
-            <span class="font-normal text-[#43263D]/60">(optional)</span>
+            <span class="font-normal text-muted">(optional)</span>
         @endif
     </label>
 
     <textarea
         id="{{ $id }}" name="{{ $name }}" @required($required)
         {{ $attributes->class([
-            'w-full resize-y rounded-md border bg-white px-3 py-2 text-base text-[#43263D] placeholder:text-slate-400 focus:outline-2 focus:outline-[#43263D]',
+            'w-full resize-y rounded-xl border bg-surface px-3.5 py-2.5 text-base text-ink placeholder:text-muted focus:border-ink focus:ring-2 focus:ring-ink/10',
             'border-red-500' => $errors->has($name),
-            'border-[#D8C9EA]' => ! $errors->has($name),
+            'border-line' => ! $errors->has($name),
         ]) }}
     >{{ old($name, $value) }}</textarea>
 

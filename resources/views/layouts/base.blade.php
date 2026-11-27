@@ -18,9 +18,9 @@
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.1/dist/cdn.min.js"></script>
     @endif
 </head>
-<body {{ $attributes->merge(['class' => 'flex min-h-dvh flex-col bg-[#F8F3E9] font-sans text-slate-700 antialiased']) }}>
+<body {{ $attributes->merge(['class' => 'flex min-h-dvh flex-col bg-canvas font-sans text-base leading-relaxed text-ink antialiased']) }}>
     <x-layout.header />
-    <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6">
+    <main class="mx-auto w-full max-w-5xl flex-1 px-5 py-8 sm:px-8 sm:py-10">
         {{ $slot }}
     </main>
     <x-layout.footer />

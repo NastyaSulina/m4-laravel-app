@@ -1,15 +1,15 @@
-<x-base-layout title="Edit selection" class="bg-[#F8F3E9]!">
-    <div class="max-w-2xl text-[#43263D]">
-        <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to selection</x-ui.button>
+<x-base-layout title="Edit selection">
+    <div class="max-w-2xl text-ink">
+        <x-ui.button :href="route('userzone.selections.show', $selection)" variant="tertiary" class="mb-6 gap-2">← Back to selection</x-ui.button>
 
-        <h1 class="mb-6 font-serif text-3xl font-semibold leading-tight">Edit selection</h1>
+        <h1 class="mb-6 text-3xl font-semibold leading-tight tracking-tight">Edit selection</h1>
 
-        <form action="{{ route('userzone.selections.update', $selection) }}" method="post" class="flex flex-col gap-4">
+        <form action="{{ route('userzone.selections.update', $selection) }}" method="post" class="flex flex-col gap-6 rounded-2xl bg-surface p-5 sm:p-6">
             @method('PUT')
             @csrf
 
             <x-form.textinput name="title" label="Title" :value="$selection->title" minlength="3" maxlength="255" required />
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <x-form.select
                     name="search_type" label="Search type" :value="$selection->search_type"
                     :options="['' => 'Choose search type', 'short_stay' => 'Short stay', 'long_term' => 'Long-term rental']"
@@ -21,7 +21,7 @@
                     required
                 />
             </div>
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <x-form.textinput name="start_date" label="Check-in date" type="date" :value="$selection->start_date" />
                 <x-form.textinput name="end_date" label="Check-out date" type="date" :value="$selection->end_date" />
             </div>

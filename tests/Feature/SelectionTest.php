@@ -41,7 +41,18 @@ test('selection creation accepts status but ignores supplied ownership and id', 
     ]);
 
     get(route('userzone.selections.criteria.index', $selection))->assertOk()
+        ->assertSee('action="'.route('userzone.selections.criteria.store', $selection).'"', false)
         ->assertSee(route('userzone.selections.show', $selection));
+});
+
+test('an empty selection offers accommodation and criteria actions without empty filters', function () {
+    $selection = Selection::factory()->create();
+    actingAs($selection->owner);
+
+    get(route('userzone.selections.show', $selection))->assertOk()
+        ->assertSee('href="'.route('userzone.selections.accommodations.create', $selection).'"', false)
+        ->assertSee('href="'.route('userzone.selections.criteria.index', $selection).'"', false)
+        ->assertDontSee('name="criteria[]"', false);
 });
 
 test('selection update accepts status but ignores protected fields and clears omitted dates', function () {

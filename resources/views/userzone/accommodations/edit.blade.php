@@ -1,18 +1,18 @@
-<x-base-layout title="Edit accommodation" class="bg-[#F8F3E9]!">
-    <div class="max-w-2xl text-[#43263D]">
-        <x-ui.button :href="route('userzone.selections.accommodations.show', [$selection, $accommodation])" variant="tertiary" class="mb-6 gap-2 rounded-none! border-b border-current no-underline!"><span>←</span> Back to accommodation</x-ui.button>
+<x-base-layout title="Edit accommodation">
+    <div class="max-w-2xl text-ink">
+        <x-ui.button :href="route('userzone.selections.accommodations.show', [$selection, $accommodation])" variant="tertiary" class="mb-6 gap-2">← Back to accommodation</x-ui.button>
 
-        <h1 class="mb-2 font-serif text-3xl font-semibold leading-tight">Edit accommodation</h1>
-        <p class="mb-6 break-words text-sm leading-relaxed text-[#43263D]/75">In {{ $selection->title }}</p>
+        <h1 class="mb-2 text-3xl font-semibold leading-tight tracking-tight">Edit accommodation</h1>
+        <p class="mb-6 break-words text-sm leading-relaxed text-muted">In {{ $selection->title }}</p>
 
-        <form action="{{ route('userzone.selections.accommodations.update', [$selection, $accommodation]) }}" method="post" enctype="multipart/form-data" class="flex flex-col gap-4">
+        <form action="{{ route('userzone.selections.accommodations.update', [$selection, $accommodation]) }}" method="post" enctype="multipart/form-data" class="flex flex-col gap-6 rounded-2xl bg-surface p-5 sm:p-6">
             @method('PUT')
             @csrf
 
             <x-form.textinput name="title" :value="$accommodation->title" label="Title" minlength="3" maxlength="255" required />
             <x-form.textinput name="source_url" :value="$accommodation->source_url" label="Source URL" type="url" maxlength="2048" required />
             <x-form.textinput name="address" :value="$accommodation->address" label="Address" maxlength="255" required />
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <x-form.select
                     name="status" label="Status" :value="$accommodation->status"
                     :options="['considering' => 'Considering', 'selected' => 'Selected', 'rejected' => 'Rejected']"
@@ -24,12 +24,12 @@
                     required
                 />
             </div>
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <x-form.textarea name="note" :value="$accommodation->note" label="Note" rows="3" maxlength="5000" />
                 <div class="flex min-w-0 flex-col gap-2">
                     <img
                         src="{{ $accommodation->getFirstMediaUrl('images', 'thumbnail') }}" alt="{{ $accommodation->title }}"
-                        width="128" height="96" class="h-16 w-20 rounded-lg border border-[#D8C9EA] bg-[#D8C9EA]/20 object-cover"
+                        width="128" height="96" class="h-20 w-28 rounded-xl bg-soft object-cover"
                     >
                     <x-form.fileinput name="image" label="Image" accept="image/*" />
                 </div>

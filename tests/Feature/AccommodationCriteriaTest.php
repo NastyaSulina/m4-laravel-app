@@ -11,6 +11,16 @@ use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\get;
 use function Pest\Laravel\put;
 
+test('an accommodation without criteria offers criteria setup instead of an empty save form', function () {
+    $accommodation = Accommodation::factory()->create();
+    $selection = $accommodation->selection;
+    actingAs($selection->owner);
+
+    get(route('userzone.selections.accommodations.criteria.edit', [$selection, $accommodation]))->assertOk()
+        ->assertSee('href="'.route('userzone.selections.criteria.index', $selection).'"', false)
+        ->assertDontSee('action="'.route('userzone.selections.accommodations.criteria.update', [$selection, $accommodation]).'"', false);
+});
+
 test('selection provides only met criterion IDs for client filtering', function () {
     $selection = Selection::factory()->create();
     $criteria = Criterion::factory(2)->for($selection)->create();

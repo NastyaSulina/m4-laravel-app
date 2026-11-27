@@ -1,16 +1,17 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
+    <h1 class="mb-6 text-3xl font-semibold leading-tight tracking-tight">Confirm your password</h1>
+    <div class="mb-6 text-sm leading-relaxed text-muted">
         This is a secure area of the application. Please confirm your password before continuing.
     </div>
 
-    <form method="POST" action="{{ route('password.confirm') }}">
+    <form class="flex flex-col gap-5" method="POST" action="{{ route('password.confirm') }}">
         @csrf
 
         <!-- Password -->
         <div>
-           breeze. <x-breeze.input-label for="password" value="Password" />
+            <x-breeze.input-label for="password" value="Password" />
 
-            <x-breeze.text-input id="password" class="block mt-1 w-full"
+            <x-breeze.text-input id="password" class="mt-2 block w-full"
                             type="password"
                             name="password"
                             required autocomplete="current-password" />
@@ -18,7 +19,7 @@
             <x-breeze.input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <div class="flex justify-end mt-4">
+        <div class="flex justify-end pt-1">
             <x-breeze.primary-button>
                 Confirm
             </x-breeze.primary-button>

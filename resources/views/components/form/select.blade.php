@@ -7,13 +7,13 @@
     'required' => false,
 ])
 
-<div class="flex flex-col gap-1">
-    <label for="{{ $id }}" class="text-sm font-medium text-[#43263D]">
+<div class="flex flex-col gap-2">
+    <label for="{{ $id }}" class="text-sm font-medium text-ink">
         {{ $label }}
         @if ($required)
             <span class="text-red-600" title="Required" aria-hidden="true">*</span>
         @else
-            <span class="font-normal text-[#43263D]/60">(optional)</span>
+            <span class="font-normal text-muted">(optional)</span>
         @endif
     </label>
 
@@ -21,16 +21,16 @@
         <select
             id="{{ $id }}" name="{{ $name }}" @required($required)
             {{ $attributes->class([
-                'w-full appearance-none rounded-md border bg-white bg-none py-2 pl-3 pr-10 text-base text-[#43263D] focus:outline-2 focus:outline-[#43263D]',
+                'w-full appearance-none rounded-xl border bg-surface bg-none py-2.5 pl-3.5 pr-10 text-base text-ink focus:border-ink focus:ring-2 focus:ring-ink/10',
                 'border-red-500' => $errors->has($name),
-                'border-[#D8C9EA]' => ! $errors->has($name),
+                'border-line' => ! $errors->has($name),
             ]) }}
         >
             @foreach ($options as $optionValue => $optionLabel)
                 <option value="{{ $optionValue }}" @selected(old($name, $value) == $optionValue)>{{ $optionLabel }}</option>
             @endforeach
         </select>
-        <svg class="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-[#43263D]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <svg class="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
     </div>
